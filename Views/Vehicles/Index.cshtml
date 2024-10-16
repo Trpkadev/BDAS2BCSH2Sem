@@ -1,0 +1,66 @@
+﻿@model IEnumerable<BCSH2BDAS2.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RokVyroby)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NajeteKilometry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kapacita)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaKlimatizaci)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdGaraz)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdModel)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RokVyroby)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NajeteKilometry)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kapacita)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaKlimatizaci)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdGaraz)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdModel)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdVozidlo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdVozidlo">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdVozidlo">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BCSH2BDAS2.Models;
 
 [Table("TARIFNI_PASMA")]
-public class TarifniPasmo
+public class TariffZone
 {
     [Key]
     [Column("ID_PASMO")]

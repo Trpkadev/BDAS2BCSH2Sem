@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BCSH2BDAS2.Models;
 
 [Table("UDRZBY")]
-public class Udrzba
+public class Maintenance
 {
     [Key]
     [Column("ID_UDRZBA")]

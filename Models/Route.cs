@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BCSH2BDAS2.Models;
 
 [Table("LINKY")]
-public class Linka
+public class Route
 {
     [Key]
     [Column("ID_LINKA")]

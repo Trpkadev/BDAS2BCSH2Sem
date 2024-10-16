@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BCSH2BDAS2.Models;
 
 [Table("TYPY_VOZIDEL")]
-public class TypVozidla
+public class VehicleType
 {
     [Key]
     [Column("ID_TYP_VOZIDLA")]

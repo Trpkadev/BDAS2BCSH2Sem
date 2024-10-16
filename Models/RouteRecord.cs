@@ -1,17 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BCSH2BDAS2.Models;
 
-[PrimaryKey(nameof(IdZastavka), nameof(IdSpoj))]
-[Table("JIZDNI_RADY")]
-public class JizdniRad
+[Table("ZAZNAMY_TRASY")]
+public class RouteRecord
 {
+    [Key]
+    [Column("ID_ZAZNAM")]
+    public int IdZaznam { get; set; }
     [Column("CAS_PRIJEZDU")]
-    public DateTime? CasPrijezdu { get; set; }
+    public DateTime CasPrijezdu { get; set; }
     [Column("CAS_ODJEZDU")]
     public DateTime CasOdjezdu { get; set; }
+    [Column("ID_VOZIDLO")]
+    public int IdVozidlo { get; set; }
     [Column("ID_ZASTAVKA")]
     public int IdZastavka { get; set; }
     [Column("ID_SPOJ")]

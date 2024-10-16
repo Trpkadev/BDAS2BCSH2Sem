@@ -3,12 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BCSH2BDAS2.Models;
 
-[Table("ZNACKY")]
-public class Znacka
+[Table("GARAZE")]
+public class Garage
 {
     [Key]
-    [Column("ID_ZNACKA")]
-    public int IdZnacka { get; set; }
+    [Column("ID_GARAZ")]
+    public int IdGaraz { get; set; }
     [Column("NAZEV")]
     public required string Nazev { get; set; }
+    [Column("KAPACITA")]
+    public int Kapacita { get; set; }
 }

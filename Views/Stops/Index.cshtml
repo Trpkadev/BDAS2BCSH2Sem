@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BCSH2BDAS2.Models.Stop>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nazev)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SouradniceX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SouradniceY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPasmo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nazev)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SouradniceX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SouradniceY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPasmo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdZastavka">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdZastavka">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdZastavka">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

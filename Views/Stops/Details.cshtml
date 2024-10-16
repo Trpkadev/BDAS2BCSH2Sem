@@ -1,0 +1,43 @@
+﻿@model BCSH2BDAS2.Models.Stop
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Zastavka</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazev)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nazev)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SouradniceX)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SouradniceX)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SouradniceY)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SouradniceY)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdPasmo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdPasmo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.IdZastavka">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
