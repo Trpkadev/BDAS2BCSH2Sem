@@ -90,20 +90,18 @@ public class StopsController(TransportationContext context) : Controller
         return StatusCode(200, new ViewInitModel(StrCls.Instance.TitleCreate));
     }
 
-    //// POST: Stops/Create
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create([Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Stop zastavka)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (ID_ZASTAVKA, NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3}, {4})", zastavka.IdZastavka, zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(zastavka);
-    //}
+
+    [Route("CreateSubmit")]
+    [HttpPost]
+    public async Task<IActionResult> CreateSubmit([FromBody] Stop zastavka)
+    {
+        if (ModelState.IsValid)
+        {
+            await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (ID_ZASTAVKA, NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3}, {4})", zastavka.IdZastavka, zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+            return RedirectToAction(nameof(Index));
+        }
+        return View(zastavka);
+    }
 
     //// POST: Stops/Edit/5
     //// To protect from overposting attacks, enable the specific properties you want to bind to.
