@@ -1,37 +1,30 @@
-﻿@model BCSH2BDAS2.Models.Stop
-
-@{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Create</h1>
-
+﻿<h1>Create</h1>
 <h4>Zastavka</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* TODO: Handle submit with JS *@
+        <form href="CreateStop" method="post" onsubmit="return validateCreateForm()">
+            <div id="ErrorDiv" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Nazev" class="control-label"></label>
-                <input asp-for="Nazev" class="form-control" />
-                <span asp-validation-for="Nazev" class="text-danger"></span>
+                <label for="Nazev" class="control-label">Nazev</label>
+                <input id="Nazev" class="form-control" />
+                <span id="NazevError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SouradniceX" class="control-label"></label>
-                <input asp-for="SouradniceX" class="form-control" />
-                <span asp-validation-for="SouradniceX" class="text-danger"></span>
+                <label for="SouradniceX" class="control-label">SouradniceX</label>
+                <input id="SouradniceX" class="form-control" />
+                <span id="SouradniceXError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SouradniceY" class="control-label"></label>
-                <input asp-for="SouradniceY" class="form-control" />
-                <span asp-validation-for="SouradniceY" class="text-danger"></span>
+                <label for="SouradniceY" class="control-label">SouradniceY</label>
+                <input id="SouradniceY" class="form-control" />
+                <span id="SouradniceYError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdPasmo" class="control-label"></label>
-                <input asp-for="IdPasmo" class="form-control" />
-                <span asp-validation-for="IdPasmo" class="text-danger"></span>
+                <label for="IdPasmo" class="control-label">IdPasmo</label>
+                <input id="IdPasmo" class="form-control" />
+                <span id="IdPasmoError" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -41,6 +34,23 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="/Stops">Back to List</a>
 </div>
 
+<script>
+        window.onload = function () {
+                                $.ajax({
+            url: "EditModel", // URL
+            type: "Post",
+            data: { id:5 },
+            statusCode: {
+                200: (data) => {
+                    console.log(data)
+                    document.title = "BCSH2BDAS2 - " + data.titleName
+                },
+                400: (data) => console.log("Error fetching model: " + data),
+                500: (data) => console.log("Error fetching model: " + data)
+            }
+        });
+    };
+</script>

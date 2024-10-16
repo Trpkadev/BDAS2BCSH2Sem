@@ -9,10 +9,13 @@ public class Route
     [Key]
     [Column("ID_LINKA")]
     public int IdLinka { get; set; }
+
     [Column("CISLO")]
     public int Cislo { get; set; }
+
     [Column("NAZEV")]
-    public required string Nazev { get; set; }
+    public string Nazev { get; set; }
+
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 }

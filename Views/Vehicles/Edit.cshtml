@@ -1,48 +1,41 @@
-﻿@model BCSH2BDAS2.Models.Vehicle
-
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Edit</h1>
+﻿<h1>Edit</h1>
 
 <h4>Vozidlo</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdVozidlo" />
+        @* TODO: Handle submit with JS *@
+        <form href="EditVehicle" onsubmit="return validateEditForm()">
+            <div id="ErrorDiv" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="RokVyroby" class="control-label"></label>
-                <input asp-for="RokVyroby" class="form-control" />
-                <span asp-validation-for="RokVyroby" class="text-danger"></span>
+                <label for="RokVyroby" class="control-label">RokVyroby</label>
+                <input id="RokVyroby" class="form-control" />
+                <span id="RokVyrobyError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NajeteKilometry" class="control-label"></label>
-                <input asp-for="NajeteKilometry" class="form-control" />
-                <span asp-validation-for="NajeteKilometry" class="text-danger"></span>
+                <label for="NajeteKilometry" class="control-label">NajeteKilometry</label>
+                <input id="NajeteKilometry" class="form-control" />
+                <span id="NajeteKilometryError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Kapacita" class="control-label"></label>
-                <input asp-for="Kapacita" class="form-control" />
-                <span asp-validation-for="Kapacita" class="text-danger"></span>
+                <label for="Kapacita" class="control-label">Kapacita</label>
+                <input id="Kapacita" class="form-control" />
+                <span id="KapacitaError" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="MaKlimatizaci" /> @Html.DisplayNameFor(model => model.MaKlimatizaci)
+                    <input class="form-check-input" for="MaKlimatizaci" /> Má Klimatizaci
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="IdGaraz" class="control-label"></label>
-                <input asp-for="IdGaraz" class="form-control" />
-                <span asp-validation-for="IdGaraz" class="text-danger"></span>
+                <label for="IdGaraz" class="control-label"></label>
+                <input id="IdGaraz" class="form-control" />
+                <span id="IdGarazError" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdModel" class="control-label"></label>
-                <input asp-for="IdModel" class="form-control" />
-                <span asp-validation-for="IdModel" class="text-danger"></span>
+                <label for="IdModel" class="control-label"></label>
+                <input id="IdModel" class="form-control" />
+                <span id="IdModelError" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -52,9 +45,5 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="/Vehicles">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

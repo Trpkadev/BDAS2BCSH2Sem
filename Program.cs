@@ -1,4 +1,4 @@
-using BCSH2BDAS2.Models;
+using BCSH2BDAS2.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2;
@@ -12,10 +12,10 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-		builder.Services.AddDbContext<TransportationContext>(options =>
-			options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<TransportationContext>(options =>
+            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-		var app = builder.Build();
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

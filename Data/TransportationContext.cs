@@ -1,16 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BCSH2BDAS2.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace BCSH2BDAS2.Models
+namespace BCSH2BDAS2.Data
 {
-	public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
+    public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
     {
         public DbSet<Cleaning> Cleaning { get; set; }
         public DbSet<Garage> Garages { get; set; }
         public DbSet<Timetable> Timetables { get; set; }
-        public DbSet<Route> Routes { get; set; }
+        public DbSet<Models.Route> Routes { get; set; }
         public DbSet<Model> Models { get; set; }
         public DbSet<Repair> Repairs { get; set; }
-        public DbSet<Spoj> Spoje { get; set; } // TODO: v angličině?
+        public DbSet<Connection> Connections { get; set; }
         public DbSet<TariffZone> TariffZones { get; set; }
         public DbSet<VehicleType> VehicleTypes { get; set; }
         public DbSet<Maintenance> Maintanences { get; set; }
@@ -31,7 +32,9 @@ namespace BCSH2BDAS2.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+#if DEBUG
             optionsBuilder.LogTo(Console.WriteLine);
+#endif
         }
     }
 }

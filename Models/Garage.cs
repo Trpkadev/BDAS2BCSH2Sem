@@ -9,8 +9,10 @@ public class Garage
     [Key]
     [Column("ID_GARAZ")]
     public int IdGaraz { get; set; }
+
     [Column("NAZEV")]
-    public required string Nazev { get; set; }
+    public string Nazev { get; set; }
+
     [Column("KAPACITA")]
     public int Kapacita { get; set; }
 }

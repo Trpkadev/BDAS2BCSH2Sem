@@ -9,8 +9,10 @@ public class Maintenance
     [Key]
     [Column("ID_UDRZBA")]
     public int IdUdrzba { get; set; }
+
     [Column("DATUM")]
     public DateTime Datum { get; set; }
+
     [Column("ID_VOZIDLO")]
     public int IdVozidlo { get; set; }
 }

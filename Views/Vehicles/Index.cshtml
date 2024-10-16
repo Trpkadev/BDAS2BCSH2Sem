@@ -1,19 +1,12 @@
-﻿@model IEnumerable<BCSH2BDAS2.Models.Vehicle>
-
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Index</h1>
+﻿<h1>Vehicles Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="Vehicles/Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.RokVyroby)
             </th>
             <th>
@@ -31,11 +24,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.IdModel)
             </th>
-            <th></th>
+            <th></th> *@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @* @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RokVyroby)
@@ -56,11 +49,11 @@
                 @Html.DisplayFor(modelItem => item.IdModel)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdVozidlo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdVozidlo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdVozidlo">Delete</a>
+                <a asp-href="Edit" asp-route-id="@item.IdVozidlo">Edit</a> |
+                <a asp-href="Details" asp-route-id="@item.IdVozidlo">Details</a> |
+                <a asp-href="Delete" asp-route-id="@item.IdVozidlo">Delete</a>
             </td>
         </tr>
-}
-    </tbody>
+} *@  
+</tbody>
 </table>
