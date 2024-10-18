@@ -1,13 +1,15 @@
-﻿const nazevInput = $("#nazevInput")[0]
-const souradniceXInput = $("#souradniceXInput")[0]
-const souradniceYInput = $("#souradniceYInput")[0]
-const idPasmoInput = $("#idPasmoInput")[0]
+﻿var nazevInput, souradniceXInput, souradniceYInput, idPasmoInput
+const id = Number(sessionStorage.getItem("itemId"))
 
 window.onload = () => {
+    nazevInput = $("#nazevInput")[0]
+    souradniceXInput = $("#souradniceXInput")[0]
+    souradniceYInput = $("#souradniceYInput")[0]
+    idPasmoInput = $("#idPasmoInput")[0]
     $.ajax({
-        url: "EditModel", // URL
+        url: "EditModel",
         type: "Post",
-        data: { id: Number(sessionStorage.getItem("itemId")) },
+        data: { id: id },
         statusCode: {
             200: (data) => {
                 const item = data.model
@@ -30,13 +32,12 @@ function SubmitEditForm() {
     //TODO error handling / error alerting
     if (nazev.length > 0 && souradniceX && souradniceY && idPasmo)
         $.ajax({
-            url: "EditSubmit", // URL
+            url: "EditSubmit",
             type: "Post",
-            data: { Nazev: nazev, SouradniceX: souradniceX, SouradniceY: souradniceY, IdPasmo: idPasmo },
+            contentType: "application/json",
+            data: JSON.stringify({ IdZastavka: id, Nazev: nazev, SouradniceX: souradniceX, SouradniceY: souradniceY, IdPasmo: idPasmo }),
             statusCode: {
-                200: (data) => {
-                    document.title = "BCSH2BDAS2 - " + data.titleName
-                }
+                200: () => window.location.href = "/Stops"
             }
         });
     return false

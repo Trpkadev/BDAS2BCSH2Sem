@@ -1,4 +1,5 @@
 ﻿window.onload = () => {
+    tbody.innerHTML = ""
     $.ajax({
         url: "Stops/IndexModel", // URL
         type: "Post",
@@ -47,7 +48,9 @@
                     $("#tbody")[0].appendChild(tr)
                 })
                 document.title = "BCSH2BDAS2 - " + data.titleName
-            }
+            },
+            400: (data) => window.alert(data),
+            500: (data) => window.alert(data)
         }
     });
 }

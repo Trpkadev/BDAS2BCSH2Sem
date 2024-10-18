@@ -1,4 +1,6 @@
-﻿<h1>Edit</h1>
+﻿<script src="~/js/stops/edit.js"></script>
+
+<h1>Edit</h1>
 
 <h4>Zastavka</h4>
 <hr />
@@ -26,7 +28,7 @@
             <span id="idPasmoError" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" onclick="SubmitEditForm()" />
+            <input id="submitButton" type="submit" value="Save" class="btn btn-primary" onclick="SubmitEditForm()" />
         </div>
     </div>
 </div>
@@ -34,5 +36,3 @@
 <div>
     <a href="/Stops">Back to List</a>
 </div>
-
-<script src="~/js/stops/edit.js"></script>

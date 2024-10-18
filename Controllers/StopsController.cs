@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
+//TODO Try/catch
+
 [Route("Stops")]
 public class StopsController(TransportationContext context) : Controller
 {
@@ -54,8 +56,10 @@ public class StopsController(TransportationContext context) : Controller
 
     [Route("DetailsModel")]
     [HttpPost]
-    public async Task<IActionResult> DetailsModel(int id)
+    public async Task<IActionResult> DetailsModel(int id = -1)
     {
+        if (id == -1)
+            return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
         Stop? zastavka = await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
             return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDetails));
@@ -64,9 +68,11 @@ public class StopsController(TransportationContext context) : Controller
 
     [Route("DeleteModel")]
     [HttpPost]
-    public async Task<IActionResult> DeleteModel(int id)
+    public async Task<IActionResult> DeleteModel(int id = -1)
     {
-        var zastavka = await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        if (id == -1)
+            return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
+        Stop? zastavka = await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
             return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
 
@@ -75,8 +81,10 @@ public class StopsController(TransportationContext context) : Controller
 
     [Route("EditModel")]
     [HttpPost]
-    public async Task<IActionResult> EditModel(int id)
+    public async Task<IActionResult> EditModel(int id = -1)
     {
+        if (id == -1)
+            return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
         Stop? zastavka = await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
             return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleEdit, StrCls.Instance.TitleEdit));
@@ -90,69 +98,33 @@ public class StopsController(TransportationContext context) : Controller
         return StatusCode(200, new ViewInitModel(StrCls.Instance.TitleCreate));
     }
 
-
     [Route("CreateSubmit")]
     [HttpPost]
     public async Task<IActionResult> CreateSubmit([FromBody] Stop zastavka)
     {
-        if (ModelState.IsValid)
-        {
-            await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (ID_ZASTAVKA, NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3}, {4})", zastavka.IdZastavka, zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
-            return RedirectToAction(nameof(Index));
-        }
-        return View(zastavka);
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3})", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+        return StatusCode(200);
     }
 
-    //// POST: Stops/Edit/5
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, [Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Stop zastavka)
-    //{
-    //    if (id != zastavka.IdZastavka)
-    //    {
-    //        return NotFound();
-    //    }
+    [Route("DeleteSubmit")]
+    [HttpPost]
+    public async Task<IActionResult> DeleteSubmit(int id = -1)
+    {
+        if (id == -1)
+            return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
+        await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
+        return StatusCode(200);
+    }
 
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!ZastavkaExists(zastavka.IdZastavka))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(zastavka);
-    //}
-
-    //// POST: Stops/Delete/5
-    //[HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> DeleteConfirmed(int id)
-    //{
-    //    var zastavka = await _context.Stops.FindAsync(id);
-    //    if (zastavka != null)
-    //    {
-    //        await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
-    //    }
-
-    //    return RedirectToAction(nameof(Index));
-    //}
-
-    //private bool ZastavkaExists(int id)
-    //{
-    //    return _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).Any();
-    //}
+    [Route("EditSubmit")]
+    [HttpPost]
+    public async Task<IActionResult> EditSubmit([FromBody] Stop zastavka)
+    {
+        if (!ModelState.IsValid)
+            return StatusCode(404, new ViewInitModel(StrCls.Instance.TitleDelete));
+        await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
+        return StatusCode(200);
+    }
 }
