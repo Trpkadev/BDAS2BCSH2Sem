@@ -1,38 +1,33 @@
-﻿<script src="~/js/stops/edit.js"></script>
-
-<h1>Edit</h1>
+﻿<h1>Edit</h1>
 
 <h4>Zastavka</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        @* TODO: Handle submit with JS *@
-        <form href="EditStop" onsubmit="return validateEditForm()">
-            <div id="ErrorDiv" class="text-danger"></div>
-            <div class="form-group">
-                <label for="Nazev" class="control-label"></label>
-                <input id="Nazev" class="form-control" />
-                <span id="NazevError" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="SouradniceX" class="control-label"></label>
-                <input id="SouradniceX" class="form-control" />
-                <span id="SouradniceXError" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="SouradniceY" class="control-label"></label>
-                <input id="SouradniceY" class="form-control" />
-                <span id="SouradniceYError" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="IdPasmo" class="control-label"></label>
-                <input id="IdPasmo" class="form-control" />
-                <span id="IdPasmoError" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        <div id="errorDiv" class="text-danger"></div>
+        <div class="form-group">
+            <label for="nazevInput" class="control-label">Nazev</label>
+            <input id="nazevInput" class="form-control" />
+            <span id="nazevError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="souradniceXInput" class="control-label">SouradniceX</label>
+            <input id="souradniceXInput" class="form-control" />
+            <span id="souradniceXError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="souradniceYInput" class="control-label">SouradniceY</label>
+            <input id="souradniceYInput" class="form-control" />
+            <span id="souradniceYError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="idPasmoInput" class="control-label">IdPasmo</label>
+            <input id="idPasmoInput" class="form-control" />
+            <span id="idPasmoError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" onclick="SubmitEditForm()" />
+        </div>
     </div>
 </div>
 
@@ -40,3 +35,4 @@
     <a href="/Stops">Back to List</a>
 </div>
 
+<script src="~/js/stops/edit.js"></script>

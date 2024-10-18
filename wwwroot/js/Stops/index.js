@@ -2,7 +2,6 @@
     $.ajax({
         url: "Stops/IndexModel", // URL
         type: "Post",
-        contentType: "application/json",
         statusCode: {
             200: (data) => {
                 console.log(data)
@@ -24,7 +23,18 @@
                     buttonDetails.innerHTML = "Details"
                     buttonDelete.innerHTML = "Delete"
 
-                    //TODO Button handlers
+                    buttonEdit.onclick = () => {
+                        sessionStorage.setItem("itemId", item.idZastavka)
+                        window.location.href = "Stops/Edit"
+                    }
+                    buttonDetails.onclick = () => {
+                        sessionStorage.setItem("itemId", item.idZastavka)
+                        window.location.href = "Stops/Details"
+                    }
+                    buttonDelete.onclick = () => {
+                        sessionStorage.setItem("itemId", item.idZastavka)
+                        window.location.href = "Stops/Delete"
+                    }
 
                     tdButtons.appendChild(buttonEdit)
                     tdButtons.appendChild(buttonDetails)

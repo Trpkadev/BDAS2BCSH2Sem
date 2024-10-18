@@ -1,4 +1,5 @@
 using BCSH2BDAS2.Data;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2;
@@ -12,10 +13,16 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddDbContext<TransportationContext>(options =>
-            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+        builder.Services.AddDbContext<TransportationContext>(options => options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+        });
         var app = builder.Build();
+
+        app.UseResponseCompression();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
