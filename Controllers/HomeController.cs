@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BCSH2BDAS2.Controllers
-{
-    public class HomeController : Controller
-    {
-        public HomeController() { }
+namespace BCSH2BDAS2.Controllers;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+public class HomeController : Controller
+{
+    public HomeController()
+    { }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 }
