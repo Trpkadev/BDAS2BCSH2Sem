@@ -9,12 +9,16 @@ public class Stop
     [Key]
     [Column("ID_ZASTAVKA")]
     public int IdZastavka { get; set; }
+
     [Column("NAZEV")]
-    public required string Nazev { get; set; }
+    public string Nazev { get; set; }
+
     [Column("SOURADNICE_X")]
     public double SouradniceX { get; set; }
+
     [Column("SOURADNICE_Y")]
     public double SouradniceY { get; set; }
+
     [Column("ID_PASMO")]
     public int IdPasmo { get; set; }
 }

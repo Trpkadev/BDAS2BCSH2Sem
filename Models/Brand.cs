@@ -9,6 +9,7 @@ public class Brand
     [Key]
     [Column("ID_ZNACKA")]
     public int IdZnacka { get; set; }
+
     [Column("NAZEV")]
-    public required string Nazev { get; set; }
+    public string Nazev { get; set; }
 }

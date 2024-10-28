@@ -2,7 +2,7 @@
 
 namespace BCSH2BDAS2.Models
 {
-	public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
+    public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
     {
         public DbSet<Cleaning> Cleaning { get; set; }
         public DbSet<Garage> Garages { get; set; }
