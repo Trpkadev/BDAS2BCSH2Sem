@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
-public class VehiclesController : Controller
+public class VehiclesController(TransportationContext context) : Controller
 {
-    private readonly TransportationContext _context;
-
-    public VehiclesController(TransportationContext context)
-    {
-        _context = context;
-    }
+    private readonly TransportationContext _context = context;
 
     // GET: Vehicles
     public async Task<IActionResult> Index()
@@ -23,17 +18,13 @@ public class VehiclesController : Controller
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var vozidlo = await _context.Vozidla
             .FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
 
         if (vozidlo == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         return View(vozidlo);
     }
@@ -63,15 +54,12 @@ public class VehiclesController : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var vozidlo = await _context.Vozidla.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
         if (vozidlo == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
+
         return View(vozidlo);
     }
 
@@ -83,9 +71,7 @@ public class VehiclesController : Controller
     public async Task<IActionResult> Edit(int id, [Bind("IdVozidlo,RokVyroby,NajeteKilometry,Kapacita,MaKlimatizaci,IdGaraz,IdModel")] Vozidlo vozidlo)
     {
         if (id != vozidlo.IdVozidlo)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         if (ModelState.IsValid)
         {
@@ -96,13 +82,8 @@ public class VehiclesController : Controller
             catch (DbUpdateConcurrencyException)
             {
                 if (!VozidloExists(vozidlo.IdVozidlo))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    return StatusCode(404);
+                return StatusCode(500);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -113,16 +94,12 @@ public class VehiclesController : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var vozidlo = await _context.Vozidla
             .FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
         if (vozidlo == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         return View(vozidlo);
     }
@@ -134,9 +111,7 @@ public class VehiclesController : Controller
     {
         var vozidlo = await _context.Vozidla.FindAsync(id);
         if (vozidlo != null)
-        {
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id);
-        }
 
         return RedirectToAction(nameof(Index));
     }

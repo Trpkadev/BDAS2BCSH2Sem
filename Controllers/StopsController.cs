@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
-public class StopsController : Controller
+public class StopsController(TransportationContext context) : Controller
 {
-    private readonly TransportationContext _context;
-
-    public StopsController(TransportationContext context)
-    {
-        _context = context;
-    }
+    private readonly TransportationContext _context = context;
 
     // GET: Stops
     public async Task<IActionResult> Index()
@@ -23,16 +18,12 @@ public class StopsController : Controller
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var zastavka = await _context.Zastavky
             .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         return View(zastavka);
     }
@@ -62,15 +53,12 @@ public class StopsController : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
+
         return View(zastavka);
     }
 
@@ -82,28 +70,21 @@ public class StopsController : Controller
     public async Task<IActionResult> Edit(int id, [Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Zastavka zastavka)
     {
         if (id != zastavka.IdZastavka)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         if (ModelState.IsValid)
         {
             try
             {
                 await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!ZastavkaExists(zastavka.IdZastavka))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    return StatusCode(404);
+                return StatusCode(500);
             }
-            return RedirectToAction(nameof(Index));
         }
         return View(zastavka);
     }
@@ -112,16 +93,12 @@ public class StopsController : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         var zastavka = await _context.Zastavky
             .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
-        {
-            return NotFound();
-        }
+            return StatusCode(404);
 
         return View(zastavka);
     }
@@ -133,9 +110,7 @@ public class StopsController : Controller
     {
         var zastavka = await _context.Zastavky.FindAsync(id);
         if (zastavka != null)
-        {
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
-        }
 
         return RedirectToAction(nameof(Index));
     }
