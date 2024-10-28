@@ -20,7 +20,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<Znacka> Znacky { get; set; }
     public DbSet<Uzivatel> Uzivatele { get; set; }
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("ST69612");
         modelBuilder.Entity<Udrzba>()

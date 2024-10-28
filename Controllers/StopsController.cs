@@ -108,7 +108,7 @@ public class StopsController(TransportationContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var zastavka = await _context.Zastavky.FindAsync(id);
+        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka != null)
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
 

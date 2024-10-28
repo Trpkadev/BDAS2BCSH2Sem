@@ -17,6 +17,8 @@ public class VehiclesController(TransportationContext context) : Controller
     // GET: Vehicles/Details/5
     public async Task<IActionResult> Details(int? id)
     {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
         if (id == null)
             return StatusCode(404);
 
@@ -53,6 +55,8 @@ public class VehiclesController(TransportationContext context) : Controller
     // GET: Vehicles/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
         if (id == null)
             return StatusCode(404);
 
@@ -93,6 +97,8 @@ public class VehiclesController(TransportationContext context) : Controller
     // GET: Vehicles/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
         if (id == null)
             return StatusCode(404);
 
@@ -109,7 +115,9 @@ public class VehiclesController(TransportationContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var vozidlo = await _context.Vozidla.FindAsync(id);
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+        var vozidlo = await _context.Vozidla.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
         if (vozidlo != null)
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id);
 
