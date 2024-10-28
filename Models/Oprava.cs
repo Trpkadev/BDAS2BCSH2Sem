@@ -2,7 +2,7 @@
 
 namespace BCSH2BDAS2.Models;
 
-public class Repair : Maintenance
+public class Oprava : Udrzba
 {
     [Column("POPIS_UKONU")]
     public string PopisUkonu { get; set; }

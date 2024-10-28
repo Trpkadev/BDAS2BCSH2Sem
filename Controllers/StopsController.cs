@@ -16,7 +16,7 @@ public class StopsController : Controller
     // GET: Stops
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY").ToListAsync());
+        return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY").ToListAsync());
     }
 
     // GET: Stops/Details/5
@@ -27,7 +27,7 @@ public class StopsController : Controller
             return NotFound();
         }
 
-        var zastavka = await _context.Stops
+        var zastavka = await _context.Zastavky
             .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
         {
@@ -48,7 +48,7 @@ public class StopsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Stop zastavka)
+    public async Task<IActionResult> Create([Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Zastavka zastavka)
     {
         if (ModelState.IsValid)
         {
@@ -66,7 +66,7 @@ public class StopsController : Controller
             return NotFound();
         }
 
-        var zastavka = await _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
         {
             return NotFound();
@@ -79,7 +79,7 @@ public class StopsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Stop zastavka)
+    public async Task<IActionResult> Edit(int id, [Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Zastavka zastavka)
     {
         if (id != zastavka.IdZastavka)
         {
@@ -116,7 +116,7 @@ public class StopsController : Controller
             return NotFound();
         }
 
-        var zastavka = await _context.Stops
+        var zastavka = await _context.Zastavky
             .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
         {
@@ -131,7 +131,7 @@ public class StopsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var zastavka = await _context.Stops.FindAsync(id);
+        var zastavka = await _context.Zastavky.FindAsync(id);
         if (zastavka != null)
         {
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
@@ -142,6 +142,6 @@ public class StopsController : Controller
 
     private bool ZastavkaExists(int id)
     {
-        return _context.Stops.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).Any();
+        return _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).Any();
     }
 }

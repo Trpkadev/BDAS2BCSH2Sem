@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BCSH2BDAS2.Models;
 
-[Table("TARIFNI_PASMA")]
-public class TariffZone
+[Table("TYPY_VOZIDEL")]
+public class TypVozidla
 {
     [Key]
-    [Column("ID_PASMO")]
-    public int IdPasmo { get; set; }
+    [Column("ID_TYP_VOZIDLA")]
+    public int IdTypVozidla { get; set; }
 
     [Column("NAZEV")]
     public string Nazev { get; set; }

@@ -4,29 +4,29 @@ namespace BCSH2BDAS2.Models;
 
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
-    public DbSet<Cleaning> Cleaning { get; set; }
-    public DbSet<Garage> Garages { get; set; }
-    public DbSet<Timetable> Timetables { get; set; }
-    public DbSet<Route> Routes { get; set; }
-    public DbSet<Model> Models { get; set; }
-    public DbSet<Repair> Repairs { get; set; }
-    public DbSet<Spoj> Spoje { get; set; } // TODO: v angličině?
-    public DbSet<TariffZone> TariffZones { get; set; }
-    public DbSet<VehicleType> VehicleTypes { get; set; }
-    public DbSet<Maintenance> Maintanences { get; set; }
-    public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<Stop> Stops { get; set; }
-    public DbSet<RouteRecord> RouteRecords { get; set; }
-    public DbSet<Brand> Brands { get; set; }
+    public DbSet<Cisteni> Cisteni { get; set; }
+    public DbSet<Garaz> Garaze { get; set; }
+    public DbSet<JizniRad> JizdniRady { get; set; }
+    public DbSet<Linka> Linky { get; set; }
+    public DbSet<Model> Modely { get; set; }
+    public DbSet<Oprava> Opravy { get; set; }
+    public DbSet<Spoj> Spoje { get; set; }
+    public DbSet<TarifniZona> TarifniZony { get; set; }
+    public DbSet<TypVozidla> TypyVozidel { get; set; }
+    public DbSet<Udrzba> Udrzby { get; set; }
+    public DbSet<Vozidlo> Vozidla { get; set; }
+    public DbSet<Zastavka> Zastavky { get; set; }
+    public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
+    public DbSet<Znacka> Znacky { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("ST69612");
-        modelBuilder.Entity<Maintenance>()
+        modelBuilder.Entity<Udrzba>()
             .HasDiscriminator<char>("TYP_UDRZBY")
-            .HasValue<Cleaning>('c')
-            .HasValue<Repair>('o')
-            .HasValue<Maintenance>('x');
+            .HasValue<Cisteni>('c')
+            .HasValue<Oprava>('o')
+            .HasValue<Udrzba>('x');
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

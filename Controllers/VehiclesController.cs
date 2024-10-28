@@ -16,7 +16,7 @@ public class VehiclesController : Controller
     // GET: Vehicles
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Vehicles.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA").ToListAsync());
+        return View(await _context.Vozidla.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA").ToListAsync());
     }
 
     // GET: Vehicles/Details/5
@@ -27,7 +27,7 @@ public class VehiclesController : Controller
             return NotFound();
         }
 
-        var vozidlo = await _context.Vehicles
+        var vozidlo = await _context.Vozidla
             .FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
 
         if (vozidlo == null)
@@ -49,7 +49,7 @@ public class VehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("IdVozidlo,RokVyroby,NajeteKilometry,Kapacita,MaKlimatizaci,IdGaraz,IdModel")] Vehicle vozidlo)
+    public async Task<IActionResult> Create([Bind("IdVozidlo,RokVyroby,NajeteKilometry,Kapacita,MaKlimatizaci,IdGaraz,IdModel")] Vozidlo vozidlo)
     {
         if (ModelState.IsValid)
         {
@@ -67,7 +67,7 @@ public class VehiclesController : Controller
             return NotFound();
         }
 
-        var vozidlo = await _context.Vehicles.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
+        var vozidlo = await _context.Vozidla.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
         if (vozidlo == null)
         {
             return NotFound();
@@ -80,7 +80,7 @@ public class VehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("IdVozidlo,RokVyroby,NajeteKilometry,Kapacita,MaKlimatizaci,IdGaraz,IdModel")] Vehicle vozidlo)
+    public async Task<IActionResult> Edit(int id, [Bind("IdVozidlo,RokVyroby,NajeteKilometry,Kapacita,MaKlimatizaci,IdGaraz,IdModel")] Vozidlo vozidlo)
     {
         if (id != vozidlo.IdVozidlo)
         {
@@ -117,7 +117,7 @@ public class VehiclesController : Controller
             return NotFound();
         }
 
-        var vozidlo = await _context.Vehicles
+        var vozidlo = await _context.Vozidla
             .FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
         if (vozidlo == null)
         {
@@ -132,7 +132,7 @@ public class VehiclesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var vozidlo = await _context.Vehicles.FindAsync(id);
+        var vozidlo = await _context.Vozidla.FindAsync(id);
         if (vozidlo != null)
         {
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id);
@@ -143,6 +143,6 @@ public class VehiclesController : Controller
 
     private bool VozidloExists(int id)
     {
-        return _context.Vehicles.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).Any();
+        return _context.Vozidla.FromSqlRaw("SELECT * FROM ST69612.VOZIDLA WHERE ID_VOZIDLO = {0}", id).Any();
     }
 }

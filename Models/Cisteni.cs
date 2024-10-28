@@ -2,7 +2,7 @@
 
 namespace BCSH2BDAS2.Models;
 
-public class Cleaning : Maintenance
+public class Cisteni : Udrzba
 {
     [Column("UMYTO_V_MYCCE")]
     public bool UmytoVMycce { get; set; }
