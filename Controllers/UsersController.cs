@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Core;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -9,48 +10,49 @@ public class UsersController(TransportationContext context) : Controller
 {
     private readonly TransportationContext _context = context;
 
-    // Login
+    [HttpGet]
+    [Route("Login")]
     public IActionResult Login()
     {
         return View();
     }
 
-    [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Login(string username, string password)
+    [HttpPost]
+    [Route("LoginSubmit")]
+    public IActionResult Login([FromForm] Uzivatel uzivatel)
     {
-        if (Authentification.Login(username, password))
-        {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+        if (Authentification.Login(uzivatel.Jmeno, uzivatel.Heslo))
             return RedirectToAction("Index", "Home");
-        }
         else
-        {
             return View();
-        }
     }
 
-    // Logout
+    [HttpPost]
+    [Route("LogoutSubmit")]
     public IActionResult Logout()
     {
         Authentification.Logout();
         return RedirectToAction("Index", "Home");
     }
 
-    // Register
+    [HttpGet]
+    [Route("Register")]
     public IActionResult Register()
     {
         return View();
     }
 
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public IActionResult Register([Bind("IdUzivatel,Username,Password,Email,Role")] Uzivatel uzivatel)
-    //{
-    //	if (ModelState.IsValid)
-    //	{
-    //		_context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.UZIVATELE (ID_UZIVATEL, USERNAME, PASSWORD, EMAIL, ROLE) VALUES ({0}, {1}, {2}, {3}, {4})", uzivatel.IdUzivatel, uzivatel.Username, uzivatel.Password, uzivatel.Email, uzivatel.Role);
-    //		return RedirectToAction(nameof(Login));
-    //	}
-    //	return View(uzivatel);
-    //}
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("RegisterSubmit")]
+    public IActionResult Register([FromForm] Uzivatel uzivatel)
+    {
+        if (!ModelState.IsValid)
+            return View(uzivatel);
+        _context.Uzivatele.FromSqlRaw("INSERT INTO ST69612.UZIVATELE (USERNAME, PASSWORD, ID_ROLE) VALUES ({0}, {1}, {2})", uzivatel.Jmeno, uzivatel.Heslo, uzivatel.IdRole);
+        return RedirectToAction(nameof(Login));
+    }
 }

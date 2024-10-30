@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using System.Text.Json.Serialization;
+
 namespace BCSH2BDAS2.Models;
 
 public class Oprava : Udrzba
 {
+    [JsonRequired]
     [Column("POPIS_UKONU")]
-    public string PopisUkonu { get; set; }
+    public string PopisUkonu { get; set; } = string.Empty;
 
+    [JsonRequired]
     [Column("CENA")]
     public int Cena { get; set; }
 }

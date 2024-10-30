@@ -16,7 +16,7 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7272",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Release"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     }
   }

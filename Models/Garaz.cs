@@ -1,18 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using System.Text.Json.Serialization;
+
 namespace BCSH2BDAS2.Models;
 
 [Table("GARAZE")]
 public class Garaz
 {
     [Key]
+    [JsonRequired]
     [Column("ID_GARAZ")]
     public int IdGaraz { get; set; }
 
+    [JsonRequired]
     [Column("NAZEV")]
-    public string Nazev { get; set; }
+    public string Nazev { get; set; } = string.Empty;
 
+    [JsonRequired]
     [Column("KAPACITA")]
     public int Kapacita { get; set; }
 }

@@ -4,21 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
+[Route("Stops")]
 public class StopsController(TransportationContext context) : Controller
 {
     private readonly TransportationContext _context = context;
 
-    // GET: Stops
+    [HttpGet]
+    [Route("")]
     public async Task<IActionResult> Index()
     {
         return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY").ToListAsync());
     }
 
-    // GET: Stops/Details/5
-    public async Task<IActionResult> Details(int? id)
+    [HttpGet]
+    [Route("Details")]
+    public async Task<IActionResult> Details(int id)
     {
-        if (id == null)
-            return StatusCode(404);
+        if (!ModelState.IsValid)
+            return StatusCode(400);
 
         var zastavka = await _context.Zastavky
             .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
@@ -28,95 +31,87 @@ public class StopsController(TransportationContext context) : Controller
         return View(zastavka);
     }
 
-    // GET: Stops/Create
+    [HttpGet]
+    [Route("Create")]
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: Stops/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Zastavka zastavka)
+    [HttpPost]
+    [Route("CreateSubmit")]
+    public async Task<IActionResult> CreateSubmit([FromForm] Zastavka zastavka)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
+            return View(zastavka);
+        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3})", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    [Route("Edit")]
+    public async Task<IActionResult> Edit(int id)
+    {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+
+        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        if (zastavka == null)
+            return StatusCode(404);
+
+        return View(zastavka);
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("")]
+    public async Task<IActionResult> EditSubmit([FromForm] Zastavka zastavka)
+    {
+        if (!ModelState.IsValid)
+            return View(zastavka);
+        try
         {
-            await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (ID_ZASTAVKA, NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3}, {4})", zastavka.IdZastavka, zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+            await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
             return RedirectToAction(nameof(Index));
         }
-        return View(zastavka);
-    }
-
-    // GET: Stops/Edit/5
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
-            return StatusCode(404);
-
-        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
-        if (zastavka == null)
-            return StatusCode(404);
-
-        return View(zastavka);
-    }
-
-    // POST: Stops/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("IdZastavka,Nazev,SouradniceX,SouradniceY,IdPasmo")] Zastavka zastavka)
-    {
-        if (id != zastavka.IdZastavka)
-            return StatusCode(404);
-
-        if (ModelState.IsValid)
+        catch (DbUpdateConcurrencyException)
         {
-            try
-            {
-                await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ZastavkaExists(zastavka.IdZastavka))
-                    return StatusCode(404);
-                return StatusCode(500);
-            }
+            if (!await ZastavkaExists(zastavka.IdZastavka))
+                return StatusCode(404);
         }
-        return View(zastavka);
+        return StatusCode(500);
     }
 
-    // GET: Stops/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+    [HttpGet]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(int id)
     {
-        if (id == null)
-            return StatusCode(404);
+        if (!ModelState.IsValid)
+            return StatusCode(400);
 
-        var zastavka = await _context.Zastavky
-            .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
         if (zastavka == null)
             return StatusCode(404);
 
         return View(zastavka);
     }
 
-    // POST: Stops/Delete/5
-    [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    [HttpPost]
+    [Route("DeleteSubmit")]
+    public async Task<IActionResult> DeleteSubmit([FromForm] Zastavka zastavka)
     {
-        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
-        if (zastavka != null)
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id);
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+        if (await ZastavkaExists(zastavka.IdZastavka))
+            await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
 
         return RedirectToAction(nameof(Index));
     }
 
-    private bool ZastavkaExists(int id)
+    private async Task<bool> ZastavkaExists(int id)
     {
-        return _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).Any();
+        return await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync() != null;
     }
 }
