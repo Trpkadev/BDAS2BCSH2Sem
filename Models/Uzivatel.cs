@@ -24,4 +24,9 @@ public class Uzivatel
     [JsonRequired]
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
+
+	public override string ToString()
+	{
+		return Jmeno;
+	}
 }

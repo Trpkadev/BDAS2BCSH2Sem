@@ -1,4 +1,4 @@
-﻿using BCSH2BDAS2.Core;
+﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BCSH2BDAS2.Controllers;
 
 [Route("Users")]
-public class UsersController(TransportationContext context) : Controller
+public class UsersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
-    private readonly TransportationContext _context = context;
-
     [HttpGet]
     [Route("Login")]
     public IActionResult Login()
@@ -20,21 +18,21 @@ public class UsersController(TransportationContext context) : Controller
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("LoginSubmit")]
-    public IActionResult Login([FromForm] Uzivatel uzivatel)
-    {
-        if (!ModelState.IsValid)
-            return StatusCode(400);
-        if (Authentification.Login(uzivatel.Jmeno, uzivatel.Heslo))
-            return RedirectToAction("Index", "Home");
-        else
-            return View();
+	public IActionResult Login([FromForm] Uzivatel uzivatel)
+	{
+		if (!ModelState.IsValid)
+			return StatusCode(400);
+		if (LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
+			return RedirectToAction("Index", "Home");
+		else
+            return RedirectToAction("Login");
     }
 
-    [HttpPost]
-    [Route("LogoutSubmit")]
+    [HttpGet]
+    [Route("Logout")]
     public IActionResult Logout()
     {
-        Authentification.Logout();
+        LogoutInternal();
         return RedirectToAction("Index", "Home");
     }
 
@@ -48,11 +46,12 @@ public class UsersController(TransportationContext context) : Controller
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("RegisterSubmit")]
-    public IActionResult Register([FromForm] Uzivatel uzivatel)
+    public async Task<IActionResult> Register([FromForm] Uzivatel uzivatel)
     {
         if (!ModelState.IsValid)
             return View(uzivatel);
-        _context.Uzivatele.FromSqlRaw("INSERT INTO UZIVATELE (USERNAME, PASSWORD, ID_ROLE) VALUES ({0}, {1}, {2})", uzivatel.Jmeno, uzivatel.Heslo, uzivatel.IdRole);
+        var password = OurCryptography.Encrypt(uzivatel.Heslo);
+        await _context.Database.ExecuteSqlRawAsync("INSERT INTO UZIVATELE (JMENO, HESLO, ID_ROLE) VALUES ({0}, {1}, 1)", uzivatel.Jmeno, password);
         return RedirectToAction(nameof(Login));
     }
 }

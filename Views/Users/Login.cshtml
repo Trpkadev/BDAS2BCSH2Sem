@@ -1,25 +1,36 @@
 ﻿@model BCSH2BDAS2.Models.Uzivatel
 @{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Přihlášení";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="LoginSubmit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Jmeno" class="control-label"></label>
-                <input asp-for="Jmeno" class="form-control" />
-                <span asp-validation-for="Jmeno" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Heslo" class="control-label"></label>
-                <input asp-for="Heslo" class="form-control" />
-                <span asp-validation-for="Heslo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="row justify-content-center">
+	<div class="col-md-6 col-lg-4">
+		<div class="card shadow-sm">
+			<div class="card-body">
+				<h3 class="card-title text-center mb-4">Přihlášení</h3>
+				<form asp-action="LoginSubmit">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="form-group mb-3">
+						<label asp-for="Jmeno" class="control-label">Uživatelské jméno</label>
+						<input asp-for="Jmeno" class="form-control" />
+						<span asp-validation-for="Jmeno" class="text-danger"></span>
+					</div>
+
+					<div class="form-group mb-3">
+						<label asp-for="Heslo" class="control-label">Heslo</label>
+						<input asp-for="Heslo" class="form-control" type="password" />
+						<span asp-validation-for="Heslo" class="text-danger"></span>
+					</div>
+
+					<div class="form-group mb-3">
+						<input type="submit" value="Přihlásit se" class="btn btn-primary" />
+					</div>
+
+					<div class="text-center mt-3">
+						<a asp-controller="Users" asp-action="Register">Nemáte účet? Zaregistrujte se.</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>

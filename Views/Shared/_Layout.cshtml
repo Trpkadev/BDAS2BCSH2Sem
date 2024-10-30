@@ -30,17 +30,23 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Stops" asp-action="Index">Zastávky</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav flex-grow-1" style="direction: rtl;">
-                        @if ((int?)ViewData["Role"] > 1)
+                    <ul class="navbar-nav">
+                        @if (ViewData["LoggedUser"] != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                                <span class="nav-link text-dark">Přihlášený uživatel: @ViewData["LoggedUser"]</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Odhlásit se</a>
                             </li>
                         }
-                        @if ((int?)ViewData["Role"] == 0)
+                        else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Přihlásit se</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Zaregistrovat se</a>
                             </li>
                         }
                     </ul>

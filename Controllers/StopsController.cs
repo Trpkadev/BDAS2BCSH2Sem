@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BCSH2BDAS2.Controllers;
 
 [Route("Stops")]
-public class StopsController(TransportationContext context) : Controller
+public class StopsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
-    private readonly TransportationContext _context = context;
-
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()

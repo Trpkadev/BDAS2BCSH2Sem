@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace BCSH2BDAS2.Models;
 
 [Table("TARIFNI_PASMA")]
-public class TarifniZona
+public class TarifniPasmo
 {
     [Key]
     [JsonRequired]

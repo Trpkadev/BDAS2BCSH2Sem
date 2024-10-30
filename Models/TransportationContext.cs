@@ -13,7 +13,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<Model> Modely { get; set; }
     public DbSet<Oprava> Opravy { get; set; }
     public DbSet<Spoj> Spoje { get; set; }
-    public DbSet<TarifniZona> TarifniZony { get; set; }
+    public DbSet<TarifniPasmo> TarifniPasma { get; set; }
     public DbSet<TypVozidla> TypyVozidel { get; set; }
     public DbSet<Udrzba> Udrzby { get; set; }
     public DbSet<Vozidlo> Vozidla { get; set; }
