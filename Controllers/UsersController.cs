@@ -52,7 +52,7 @@ public class UsersController(TransportationContext context) : Controller
     {
         if (!ModelState.IsValid)
             return View(uzivatel);
-        _context.Uzivatele.FromSqlRaw("INSERT INTO ST69612.UZIVATELE (USERNAME, PASSWORD, ID_ROLE) VALUES ({0}, {1}, {2})", uzivatel.Jmeno, uzivatel.Heslo, uzivatel.IdRole);
+        _context.Uzivatele.FromSqlRaw("INSERT INTO UZIVATELE (USERNAME, PASSWORD, ID_ROLE) VALUES ({0}, {1}, {2})", uzivatel.Jmeno, uzivatel.Heslo, uzivatel.IdRole);
         return RedirectToAction(nameof(Login));
     }
 }

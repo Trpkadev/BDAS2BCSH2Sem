@@ -14,8 +14,11 @@ public static class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddDbContext<TransportationContext>(options =>
+#if DEBUG
+            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")));
+#elif RELEASE
             options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+#endif
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
@@ -29,7 +32,6 @@ public static class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
         app.UseHttpsRedirection();

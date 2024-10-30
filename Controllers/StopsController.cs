@@ -13,7 +13,7 @@ public class StopsController(TransportationContext context) : Controller
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY").ToListAsync());
+        return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY").ToListAsync());
     }
 
     [HttpGet]
@@ -23,8 +23,7 @@ public class StopsController(TransportationContext context) : Controller
         if (!ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.Zastavky
-            .FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        var zastavka = await _context.GetZastavkaById(id);
         if (zastavka == null)
             return StatusCode(404);
 
@@ -45,7 +44,7 @@ public class StopsController(TransportationContext context) : Controller
     {
         if (!ModelState.IsValid)
             return View(zastavka);
-        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ST69612.ZASTAVKY (NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3})", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ZASTAVKY (NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3})", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
         return RedirectToAction(nameof(Index));
     }
 
@@ -56,7 +55,7 @@ public class StopsController(TransportationContext context) : Controller
         if (!ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        var zastavka = await _context.GetZastavkaById(id);
         if (zastavka == null)
             return StatusCode(404);
 
@@ -72,12 +71,12 @@ public class StopsController(TransportationContext context) : Controller
             return View(zastavka);
         try
         {
-            await _context.Database.ExecuteSqlRawAsync("UPDATE ST69612.ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
+            await _context.Database.ExecuteSqlRawAsync("UPDATE ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
             return RedirectToAction(nameof(Index));
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await ZastavkaExists(zastavka.IdZastavka))
+            if (await _context.GetZastavkaById(zastavka.IdZastavka) == null)
                 return StatusCode(404);
         }
         return StatusCode(500);
@@ -90,7 +89,7 @@ public class StopsController(TransportationContext context) : Controller
         if (!ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
+        var zastavka = await _context.GetZastavkaById(id);
         if (zastavka == null)
             return StatusCode(404);
 
@@ -104,14 +103,9 @@ public class StopsController(TransportationContext context) : Controller
     {
         if (!ModelState.IsValid)
             return StatusCode(400);
-        if (await ZastavkaExists(zastavka.IdZastavka))
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
+        if (await _context.GetZastavkaById(zastavka.IdZastavka) != null)
+            await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
 
         return RedirectToAction(nameof(Index));
-    }
-
-    private async Task<bool> ZastavkaExists(int id)
-    {
-        return await _context.Zastavky.FromSqlRaw("SELECT * FROM ST69612.ZASTAVKY WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync() != null;
     }
 }
