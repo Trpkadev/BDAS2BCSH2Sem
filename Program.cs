@@ -11,7 +11,12 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews().AddCookieTempDataProvider();
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
 
         builder.Services.AddDbContext<TransportationContext>(options =>
 #if DEBUG
@@ -26,7 +31,6 @@ public static class Program
             options.Providers.Add<GzipCompressionProvider>();
         });
 
-        builder.Services.AddSession();
         builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
@@ -38,13 +42,12 @@ public static class Program
             app.UseHsts();
         }
 
-        app.UseSession();
-
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        app.UseRouting();
 
         app.UseResponseCompression();
-        app.UseRouting();
+        app.UseSession();
 
         app.UseAuthorization();
 

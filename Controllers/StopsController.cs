@@ -1,9 +1,11 @@
-﻿using BCSH2BDAS2.Models;
+﻿using BCSH2BDAS2.Helpers;
+using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
+[GetLoggedInUser]
 [Route("Stops")]
 public class StopsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {

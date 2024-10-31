@@ -17,10 +17,7 @@ public abstract class BaseController : Controller
         {
             var serializedUser = accessor.HttpContext?.Session.GetString("User");
             if (serializedUser != null)
-            {
                 LoggedUser = JsonSerializer.Deserialize<Uzivatel>(serializedUser);
-                ViewData["LoggedUser"] = LoggedUser;
-            }
         }
         catch
         {
@@ -29,7 +26,7 @@ public abstract class BaseController : Controller
     }
 
     protected bool IsLoggedIn => LoggedUser != null;
-    protected Uzivatel? LoggedUser { get; private set; }
+    internal Uzivatel? LoggedUser { get; private set; }
 
     protected static int GetDecryptedId(string encryptedId)
     {
