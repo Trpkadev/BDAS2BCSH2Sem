@@ -8,41 +8,6 @@ namespace BCSH2BDAS2.Controllers;
 public class StopsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> Index()
-    {
-        try
-        {
-            return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY").ToListAsync());
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("Details")]
-    public async Task<IActionResult> Details(string encryptedId)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaById(id);
-            if (zastavka == null)
-                return StatusCode(404);
-
-            return View(zastavka);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Create")]
     public IActionResult Create()
     {
@@ -67,6 +32,68 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return View(zastavka);
             await _context.CreateZastavka(zastavka);
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(string encryptedId)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            int id = GetDecryptedId(encryptedId);
+            var zastavka = await _context.GetZastavkaById(id);
+            if (zastavka == null)
+                return StatusCode(404);
+
+            return View(zastavka);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("DeleteSubmit")]
+    public async Task<IActionResult> DeleteSubmit([FromForm] Zastavka zastavka)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            if (await _context.GetZastavkaById(zastavka.IdZastavka) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Details")]
+    public async Task<IActionResult> Details(string encryptedId)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            int id = GetDecryptedId(encryptedId);
+            var zastavka = await _context.GetZastavkaById(id);
+            if (zastavka == null)
+                return StatusCode(404);
+
+            return View(zastavka);
         }
         catch (Exception)
         {
@@ -117,39 +144,12 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     }
 
     [HttpGet]
-    [Route("Delete")]
-    public async Task<IActionResult> Delete(string encryptedId)
+    [Route("")]
+    public async Task<IActionResult> Index()
     {
         try
         {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaById(id);
-            if (zastavka == null)
-                return StatusCode(404);
-
-            return View(zastavka);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Zastavka zastavka)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            if (await _context.GetZastavkaById(zastavka.IdZastavka) != null)
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
-
-            return RedirectToAction(nameof(Index));
+            return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY").ToListAsync());
         }
         catch (Exception)
         {

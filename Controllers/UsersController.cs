@@ -50,7 +50,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         if (!ModelState.IsValid)
             return View(uzivatel);
-        var password = OurCryptography.Instance.EncryptHash(uzivatel.Heslo);
+        var password = OurCryptography.EncryptHash(uzivatel.Heslo);
         await _context.Database.ExecuteSqlRawAsync("INSERT INTO UZIVATELE (JMENO, HESLO, ID_ROLE) VALUES ({0}, {1}, 1)", uzivatel.Jmeno, password);
         return RedirectToAction(nameof(Login));
     }

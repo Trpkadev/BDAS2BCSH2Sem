@@ -8,9 +8,6 @@ namespace BCSH2BDAS2.Controllers;
 
 public abstract class BaseController : Controller
 {
-    protected Uzivatel? LoggedUser { get; private set; }
-    protected bool IsLoggedIn => LoggedUser != null;
-
     protected readonly TransportationContext _context;
 
     protected BaseController(TransportationContext context, IHttpContextAccessor accessor)
@@ -31,10 +28,18 @@ public abstract class BaseController : Controller
         }
     }
 
+    protected bool IsLoggedIn => LoggedUser != null;
+    protected Uzivatel? LoggedUser { get; private set; }
+
+    protected static int GetDecryptedId(string encryptedId)
+    {
+        return OurCryptography.Instance.DecryptId(encryptedId);
+    }
+
     protected bool LoginInternal(string username, string password)
     {
         username = username.ToLower();
-        password = OurCryptography.Instance.EncryptHash(password);
+        password = OurCryptography.EncryptHash(password);
         var user = _context.Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE WHERE JMENO = {0} AND HESLO = {1}", username, password).FirstOrDefault();
         if (user == null)
             return false;
@@ -48,10 +53,5 @@ public abstract class BaseController : Controller
     {
         LoggedUser = null;
         HttpContext.Session.Remove("User");
-    }
-
-    protected static int GetDecryptedId(string encryptedId)
-    {
-        return OurCryptography.Instance.DecryptId(encryptedId);
     }
 }

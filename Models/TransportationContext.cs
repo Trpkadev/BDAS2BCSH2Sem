@@ -18,26 +18,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<TarifniPasmo> TarifniPasma { get; set; }
     public DbSet<TypVozidla> TypyVozidel { get; set; }
     public DbSet<Udrzba> Udrzby { get; set; }
+    public DbSet<Uzivatel> Uzivatele { get; set; }
     public DbSet<Vozidlo> Vozidla { get; set; }
     public DbSet<Zastavka> Zastavky { get; set; }
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
-    public DbSet<Uzivatel> Uzivatele { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.HasDefaultSchema("ST69612");
-        modelBuilder.Entity<Udrzba>()
-            .HasDiscriminator<char>("TYP_UDRZBY")
-            .HasValue<Cisteni>('c')
-            .HasValue<Oprava>('o')
-            .HasValue<Udrzba>('x');
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.LogTo(Console.WriteLine);
-    }
 
     public async Task CreateVozidlo(Vozidlo vozidlo)
     {
@@ -93,6 +78,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                      END;";
         OracleParameter[] sqlParams = [new OracleParameter("p_id_zastavka", OracleDbType.Int32, id, ParameterDirection.Input)];
         return await GetObjectFromDB<Zastavka>(sql, sqlParams);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.LogTo(Console.WriteLine);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("ST69612");
+        modelBuilder.Entity<Udrzba>()
+            .HasDiscriminator<char>("TYP_UDRZBY")
+            .HasValue<Cisteni>('c')
+            .HasValue<Oprava>('o')
+            .HasValue<Udrzba>('x');
     }
 
     private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[] sqlParams) where T : class

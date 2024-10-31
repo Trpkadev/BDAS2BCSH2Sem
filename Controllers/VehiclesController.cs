@@ -8,41 +8,6 @@ namespace BCSH2BDAS2.Controllers;
 public class VehiclesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> Index()
-    {
-        try
-        {
-            return View(await _context.Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA").ToListAsync());
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("Details")]
-    public async Task<IActionResult> Details(string encryptedId)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloById(id);
-            if (vozidlo == null)
-                return StatusCode(404);
-
-            return View(vozidlo);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Create")]
     public IActionResult Create()
     {
@@ -67,6 +32,67 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return View(vozidlo);
             await _context.CreateVozidlo(vozidlo);
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(string encryptedId)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            int id = GetDecryptedId(encryptedId);
+            var vozidlo = await _context.GetVozidloById(id);
+            if (vozidlo == null)
+                return StatusCode(404);
+
+            return View(vozidlo);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("")]
+    public async Task<IActionResult> DeleteSubmit([FromForm] Vozidlo vozidlo)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Details")]
+    public async Task<IActionResult> Details(string encryptedId)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            int id = GetDecryptedId(encryptedId);
+            var vozidlo = await _context.GetVozidloById(id);
+            if (vozidlo == null)
+                return StatusCode(404);
+
+            return View(vozidlo);
         }
         catch (Exception)
         {
@@ -116,38 +142,12 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     }
 
     [HttpGet]
-    [Route("Delete")]
-    public async Task<IActionResult> Delete(string encryptedId)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloById(id);
-            if (vozidlo == null)
-                return StatusCode(404);
-
-            return View(vozidlo);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
     [Route("")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Vozidlo vozidlo)
+    public async Task<IActionResult> Index()
     {
         try
         {
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
-
-            return RedirectToAction(nameof(Index));
+            return View(await _context.Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA").ToListAsync());
         }
         catch (Exception)
         {
