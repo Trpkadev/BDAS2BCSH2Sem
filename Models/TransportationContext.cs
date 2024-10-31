@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System.Data;
 
 namespace BCSH2BDAS2.Models;
@@ -37,73 +39,118 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         optionsBuilder.LogTo(Console.WriteLine);
     }
 
-    public async Task<Vozidlo?> GetVozidloById(int idVozidlo)
+    public async Task CreateVozidlo(Vozidlo vozidlo)
     {
-        Vozidlo? vozidlo = null;
+        using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = "BEGIN CreateVozidlo(:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel); END;";
+        command.CommandType = CommandType.Text;
 
-        using (var command = Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "BEGIN :result := GetVozidloById(:idVozidlo); END;";
-            command.CommandType = CommandType.Text;
-
-            // Output parameter to receive the returned row
-            var resultParam = new OracleParameter("result", OracleDbType.RefCursor, ParameterDirection.ReturnValue);
-            command.Parameters.Add(resultParam);
-
-            // Input parameter for the ID
-            command.Parameters.Add(new OracleParameter("idVozidlo", idVozidlo));
-
-            await Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-                if (await reader.ReadAsync())
-                    vozidlo = new Vozidlo
-                    {
-                        IdVozidlo = reader.GetInt32(reader.GetOrdinal("ID_VOZIDLO")),
-                        RokVyroby = reader.GetInt16(reader.GetOrdinal("ROK_VYROBY")),
-                        NajeteKilometry = reader.GetInt32(reader.GetOrdinal("NAJETE_KILOMETRY")),
-                        Kapacita = reader.GetInt32(reader.GetOrdinal("KAPACITA")),
-                        MaKlimatizaci = reader.GetBoolean(reader.GetOrdinal("MA_KLIMATIZACI")),
-                        IdGaraz = reader.GetInt32(reader.GetOrdinal("ID_GARAZ")),
-                        IdModel = reader.GetInt32(reader.GetOrdinal("ID_MODEL"))
-                    };
-
-            await Database.CloseConnectionAsync();
-        }
-        return vozidlo;
+        command.Parameters.Add(new OracleParameter("rokVyroby", vozidlo.RokVyroby));
+        command.Parameters.Add(new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry));
+        command.Parameters.Add(new OracleParameter("kapacita", vozidlo.Kapacita));
+        command.Parameters.Add(new OracleParameter("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0));
+        command.Parameters.Add(new OracleParameter("idGaraz", vozidlo.IdGaraz));
+        command.Parameters.Add(new OracleParameter("idModel", vozidlo.IdModel));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
     }
 
-    public async Task<Zastavka?> GetZastavkaById(int idZastavka)
+    public async Task CreateZastavka(Zastavka zastavka)
     {
-        Zastavka? zastavka = null;
+        using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = "BEGIN CreateZastavka(:nazev, :souradniceX, :souradniceY, :idPasmo); END;";
+        command.CommandType = CommandType.Text;
 
-        using (var command = Database.GetDbConnection().CreateCommand())
+        command.Parameters.Add(new OracleParameter("nazev", zastavka.Nazev));
+        command.Parameters.Add(new OracleParameter("souradniceX", zastavka.SouradniceX));
+        command.Parameters.Add(new OracleParameter("souradniceY", zastavka.SouradniceY));
+        command.Parameters.Add(new OracleParameter("idPasmo", zastavka.IdPasmo));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
+    }
+
+    public async Task<Vozidlo?> GetVozidloById(int id)
+    {
+        string sql = @"DECLARE
+                     v_vozidlo_json CLOB;
+                     BEGIN
+                     v_vozidlo_json := GetVozidloById(:p_id_vozidlo);
+                     :p_result := v_vozidlo_json;
+                     END;";
+        OracleParameter[] sqlParams = [new OracleParameter("p_id_vozidlo", OracleDbType.Int32, id, ParameterDirection.Input)];
+        return await GetObjectFromDB<Vozidlo>(sql, sqlParams);
+    }
+
+    public async Task<Zastavka?> GetZastavkaById(int id)
+    {
+
+        string sql = @"DECLARE
+                     v_zastavka_json CLOB;
+                     BEGIN
+                     v_zastavka_json := GetZastavkaById(:p_id_zastavka);
+                     :p_result := v_zastavka_json;
+                     END;";
+        OracleParameter[] sqlParams = [new OracleParameter("p_id_zastavka", OracleDbType.Int32, id, ParameterDirection.Input)];
+        return await GetObjectFromDB<Zastavka>(sql, sqlParams);
+    }
+
+    private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[] sqlParams) where T : class
+    {
+        var connection = Database.GetDbConnection();
+        string? resultJson = null;
+        using (var command = connection.CreateCommand())
         {
-            command.CommandText = "BEGIN :result := GetZastavkaById(:idZastavka); END;";
-            command.CommandType = CommandType.Text;
-
-            // Output parameter to receive the returned row
-            var resultParam = new OracleParameter("result", OracleDbType.RefCursor, ParameterDirection.ReturnValue);
+            command.CommandText = sql;
+            command.Parameters.AddRange(sqlParams);
+            var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
             command.Parameters.Add(resultParam);
 
-            // Input parameter for the ID
-            command.Parameters.Add(new OracleParameter("idZastavka", idZastavka));
-
-            await Database.OpenConnectionAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-                if (await reader.ReadAsync())
-                    zastavka = new Zastavka
-                    {
-                        IdZastavka = reader.GetInt32(reader.GetOrdinal("ID_ZASTAVKA")),
-                        Nazev = reader.GetString(reader.GetOrdinal("NAZEV")),
-                        SouradniceX = reader.GetDouble(reader.GetOrdinal("SOURADNICE_X")),
-                        SouradniceY = reader.GetDouble(reader.GetOrdinal("SOURADNICE_Y")),
-                        IdPasmo = reader.GetInt32(reader.GetOrdinal("ID_PASMO"))
-                    };
-
-            await Database.CloseConnectionAsync();
+            await connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+            if (resultParam.Value != DBNull.Value)
+                resultJson = ((OracleClob)resultParam.Value).Value;
+            await connection.CloseAsync();
         }
-        return zastavka;
+        return resultJson == null ? null : JsonConvert.DeserializeObject<T>(resultJson);
     }
 }
+
+// PRÁCE S KURZOREM
+//public async Task<Vozidlo?> GetVozidloById(int idVozidlo)
+//{
+//    Vozidlo? vozidlo = null;
+
+//    using (var command = Database.GetDbConnection().CreateCommand())
+//    {
+//        command.CommandText = "BEGIN :result := GetVozidloById(:idVozidlo); END;";
+//        command.CommandType = CommandType.Text;
+
+//        // Output parameter to receive the returned row
+//        var resultParam = new OracleParameter("result", OracleDbType.Object, ParameterDirection.ReturnValue);
+//        command.Parameters.Add(resultParam);
+
+//        // Input parameter for the ID
+//        command.Parameters.Add(new OracleParameter("idVozidlo", idVozidlo));
+
+//        await Database.OpenConnectionAsync();
+//        await command.ExecuteNonQueryAsync();
+//        resultParam.Value.ToString();
+//        //using (var reader = await command.ExecuteReaderAsync())
+//        //    if (await reader.ReadAsync())
+//        //        vozidlo = new Vozidlo
+//        //        {
+//        //            IdVozidlo = reader.GetInt32(reader.GetOrdinal("ID_VOZIDLO")),
+//        //            RokVyroby = reader.GetInt16(reader.GetOrdinal("ROK_VYROBY")),
+//        //            NajeteKilometry = reader.GetInt32(reader.GetOrdinal("NAJETE_KILOMETRY")),
+//        //            Kapacita = reader.GetInt32(reader.GetOrdinal("KAPACITA")),
+//        //            MaKlimatizaci = reader.GetBoolean(reader.GetOrdinal("MA_KLIMATIZACI")),
+//        //            IdGaraz = reader.GetInt32(reader.GetOrdinal("ID_GARAZ")),
+//        //            IdModel = reader.GetInt32(reader.GetOrdinal("ID_MODEL"))
+//        //        };
+
+//        await Database.CloseConnectionAsync();
+//    }
+//    return vozidlo;
+//}

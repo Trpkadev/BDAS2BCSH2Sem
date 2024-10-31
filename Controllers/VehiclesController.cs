@@ -47,7 +47,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         if (!ModelState.IsValid)
             return View(vozidlo);
-        await _context.Database.ExecuteSqlRawAsync("INSERT INTO VOZIDLA (ROK_VYROBY, NAJETE_KILOMETRY, KAPACITA, MA_KLIMATIZACI, ID_GARAZ, ID_MODEL) VALUES ({0}, {1}, {2}, {3}, {4}, {5})", vozidlo.RokVyroby, vozidlo.NajeteKilometry, vozidlo.Kapacita, vozidlo.MaKlimatizaci ? 1 : 0, vozidlo.IdGaraz, vozidlo.IdModel);
+        await _context.CreateVozidlo(vozidlo);
         return RedirectToAction(nameof(Index));
     }
 

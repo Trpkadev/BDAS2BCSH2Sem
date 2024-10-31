@@ -11,7 +11,6 @@ END CreateUser;
 /
 
 
-
 CREATE OR REPLACE PROCEDURE CreateZastavka (
     p_Nazev IN VARCHAR2,
     p_SouradniceX IN NUMBER,
@@ -43,29 +42,45 @@ END CreateVozidlo;
 
 
 CREATE OR REPLACE FUNCTION GetVozidloById(p_id_vozidlo IN NUMBER)
-RETURN SYS_REFCURSOR
-IS
-    vozidla_cursor SYS_REFCURSOR;
+RETURN CLOB IS vozidlo_json CLOB;
 BEGIN
-    OPEN vozidla_cursor FOR
-        SELECT *
-        FROM VOZIDLA
-        WHERE ID_VOZIDLO = p_id_vozidlo;
-
-    RETURN vozidla_cursor;
+    SELECT JSON_OBJECT(
+               'IdVozidlo' VALUE ID_VOZIDLO,
+               'RokVyroby' VALUE ROK_VYROBY,
+               'NajeteKilometry' VALUE NAJETE_KILOMETRY,
+               'Kapacita' VALUE KAPACITA,
+               'MaKlimatizaci' VALUE MA_KLIMATIZACI,
+               'IdGaraz' VALUE ID_GARAZ,
+               'IdModel' VALUE ID_MODEL)
+    INTO vozidlo_json
+    FROM VOZIDLA
+    WHERE ID_VOZIDLO = p_id_vozidlo
+    FETCH FIRST 1 ROW ONLY;
+    RETURN vozidlo_json;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
 END;
 /
 
 
 CREATE OR REPLACE FUNCTION GetZastavkaById(p_id_zastavka IN NUMBER)
-RETURN SYS_REFCURSOR
-IS
-    zastavka_cursor SYS_REFCURSOR;
+RETURN CLOB IS zastavka_json CLOB;
 BEGIN
-    OPEN zastavka_cursor FOR
-        SELECT *
-        FROM ZASTAVKY
-        WHERE ID_ZASTAVKA = p_id_zastavka;
-
-    RETURN zastavka_cursor;
+    SELECT JSON_OBJECT(
+               'IdZastavka' VALUE ID_ZASTAVKA,
+               'Nazev' VALUE NAZEV,
+               'SouradniceX' VALUE SOURADNICE_X,
+               'SouradniceY' VALUE SOURADNICE_Y,
+               'IdPasmo' VALUE ID_PASMO)
+    INTO zastavka_json
+    FROM ZASTAVKY
+    WHERE ID_ZASTAVKA = p_id_zastavka
+    FETCH FIRST 1 ROW ONLY;
+    RETURN zastavka_json;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
 END;

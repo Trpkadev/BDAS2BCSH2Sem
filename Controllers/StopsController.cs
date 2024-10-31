@@ -47,7 +47,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         if (!ModelState.IsValid)
             return View(zastavka);
-        await _context.Database.ExecuteSqlRawAsync("INSERT INTO ZASTAVKY (NAZEV, SOURADNICE_X, SOURADNICE_Y, ID_PASMO) VALUES ({0}, {1}, {2}, {3})", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo);
+        await _context.CreateZastavka(zastavka);
         return RedirectToAction(nameof(Index));
     }
 
