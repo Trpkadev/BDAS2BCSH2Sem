@@ -85,7 +85,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<Zastavka?> GetZastavkaById(int id)
     {
-
         string sql = @"DECLARE
                      v_zastavka_json CLOB;
                      BEGIN
@@ -99,12 +98,13 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[] sqlParams) where T : class
     {
         var connection = Database.GetDbConnection();
-        string? resultJson = null;
+        var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+        string resultJson = string.Empty;
+
         using (var command = connection.CreateCommand())
         {
             command.CommandText = sql;
             command.Parameters.AddRange(sqlParams);
-            var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
             command.Parameters.Add(resultParam);
 
             await connection.OpenAsync();
@@ -113,7 +113,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                 resultJson = ((OracleClob)resultParam.Value).Value;
             await connection.CloseAsync();
         }
-        return resultJson == null ? null : JsonConvert.DeserializeObject<T>(resultJson);
+        return JsonConvert.DeserializeObject<T>(resultJson);
     }
 }
 

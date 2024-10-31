@@ -37,9 +37,7 @@ public abstract class BaseController : Controller
         password = OurCryptography.Instance.EncryptHash(password);
         var user = _context.Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE WHERE JMENO = {0} AND HESLO = {1}", username, password).FirstOrDefault();
         if (user == null)
-        {
             return false;
-        }
         LoggedUser = user;
         var serializedUser = JsonSerializer.Serialize(user);
         HttpContext.Session.SetString("User", serializedUser);
@@ -50,5 +48,10 @@ public abstract class BaseController : Controller
     {
         LoggedUser = null;
         HttpContext.Session.Remove("User");
+    }
+
+    protected static int GetDecryptedId(string encryptedId)
+    {
+        return OurCryptography.Instance.DecryptId(encryptedId);
     }
 }
