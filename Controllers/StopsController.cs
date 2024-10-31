@@ -1,6 +1,8 @@
 ﻿using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
+using static BCSH2BDAS2.Helpers.CustomAttributes;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -16,12 +18,15 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
     [HttpGet]
     [Route("Details")]
-    public async Task<IActionResult> Details(int id)
+    [DecryptId]
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Needed for decryption")]
+    public async Task<IActionResult> Details(string encryptedId)
     {
-        if (!ModelState.IsValid)
+        int? id = (int?)HttpContext.Items["decryptedId"];
+        if (id == null || !ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.GetZastavkaById(id);
+        var zastavka = await _context.GetZastavkaById((int)id);
         if (zastavka == null)
             return StatusCode(404);
 
@@ -48,12 +53,15 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
     [HttpGet]
     [Route("Edit")]
-    public async Task<IActionResult> Edit(int id)
+    [DecryptId]
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Needed for decryption")]
+    public async Task<IActionResult> Edit(string encryptedId)
     {
-        if (!ModelState.IsValid)
+        int? id = (int?)HttpContext.Items["decryptedId"];
+        if (id == null || !ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.GetZastavkaById(id);
+        var zastavka = await _context.GetZastavkaById((int)id);
         if (zastavka == null)
             return StatusCode(404);
 
@@ -82,12 +90,15 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
     [HttpGet]
     [Route("Delete")]
-    public async Task<IActionResult> Delete(int id)
+    [DecryptId]
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Needed for decryption")]
+    public async Task<IActionResult> Delete(string encryptedId)
     {
-        if (!ModelState.IsValid)
+        int? id = (int?)HttpContext.Items["decryptedId"];
+        if (id == null || !ModelState.IsValid)
             return StatusCode(400);
 
-        var zastavka = await _context.GetZastavkaById(id);
+        var zastavka = await _context.GetZastavkaById((int)id);
         if (zastavka == null)
             return StatusCode(404);
 

@@ -18,13 +18,13 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("LoginSubmit")]
-	public IActionResult Login([FromForm] Uzivatel uzivatel)
-	{
-		if (!ModelState.IsValid)
-			return StatusCode(400);
-		if (LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
-			return RedirectToAction("Index", "Home");
-		else
+    public IActionResult Login([FromForm] Uzivatel uzivatel)
+    {
+        if (!ModelState.IsValid)
+            return StatusCode(400);
+        if (LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
+            return RedirectToAction("Index", "Home");
+        else
             return RedirectToAction("Login");
     }
 
@@ -50,7 +50,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         if (!ModelState.IsValid)
             return View(uzivatel);
-        var password = OurCryptography.Encrypt(uzivatel.Heslo);
+        var password = OurCryptography.Instance.EncryptHash(uzivatel.Heslo);
         await _context.Database.ExecuteSqlRawAsync("INSERT INTO UZIVATELE (JMENO, HESLO, ID_ROLE) VALUES ({0}, {1}, 1)", uzivatel.Jmeno, password);
         return RedirectToAction(nameof(Login));
     }

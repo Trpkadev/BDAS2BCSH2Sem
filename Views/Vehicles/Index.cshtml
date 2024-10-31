@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BCSH2BDAS2.Models.Vozidlo>
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.Vozidlo>
 
 @{
     ViewData["Title"] = "Index";
@@ -34,32 +35,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RokVyroby)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NajeteKilometry)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kapacita)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaKlimatizaci)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdGaraz)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdModel)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdVozidlo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdVozidlo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdVozidlo">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RokVyroby)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NajeteKilometry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kapacita)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaKlimatizaci)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdGaraz)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdModel)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Edit</a> |
+                    <a asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Details</a> |
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

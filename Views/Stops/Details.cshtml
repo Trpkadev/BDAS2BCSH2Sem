@@ -1,4 +1,5 @@
-﻿@model BCSH2BDAS2.Models.Zastavka
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.Zastavka
 
 @{
     ViewData["Title"] = "Details";
@@ -37,6 +38,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdZastavka">Edit</a> |
+    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdZastavka)">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

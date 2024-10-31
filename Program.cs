@@ -26,10 +26,10 @@ public static class Program
             options.Providers.Add<GzipCompressionProvider>();
         });
 
-		builder.Services.AddSession();
-		builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSession();
+        builder.Services.AddHttpContextAccessor();
 
-		var app = builder.Build();
+        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
@@ -38,9 +38,9 @@ public static class Program
             app.UseHsts();
         }
 
-		app.UseSession();
+        app.UseSession();
 
-		app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseResponseCompression();

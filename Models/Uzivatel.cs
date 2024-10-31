@@ -25,8 +25,8 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
-	public override string ToString()
-	{
-		return Jmeno;
-	}
+    public override string ToString()
+    {
+        return Jmeno;
+    }
 }
