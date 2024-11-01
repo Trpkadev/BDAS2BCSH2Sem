@@ -87,6 +87,27 @@ END;
 /
 
 
+CREATE OR REPLACE FUNCTION GetUzivatelById(p_id_uzivatel IN NUMBER)
+RETURN CLOB IS uzivatel_json CLOB;
+BEGIN
+    SELECT JSON_OBJECT(
+               'IdUzivatel' VALUE ID_UZIVATEL,
+               'Jmeno' VALUE JMENO,
+               'Heslo' VALUE HESLO,
+               'IdRole' VALUE ID_ROLE)
+    INTO uzivatel_json
+    FROM UZIVATELE
+    WHERE ID_UZIVATEL = p_id_uzivatel
+    FETCH FIRST 1 ROW ONLY;
+    RETURN uzivatel_json;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+/
+
+
 CREATE TABLE ROLE (
     ID_ROLE NUMBER PRIMARY KEY,
     NAZEV VARCHAR2(32) NOT NULL

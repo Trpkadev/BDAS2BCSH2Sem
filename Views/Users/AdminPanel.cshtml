@@ -1,0 +1,37 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.Uzivatel>
+@{
+    ViewData["Title"] = "AdminPanel";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Jmeno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdRole)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Jmeno)
+                </td>
+                <td>
+                    @Html.DropDownListFor(modelItem => item.IdRole,
+                             new SelectList(Enumerable.Range(1, 6).Select(modelItem => modelItem.ToString())),
+                             new { @class = "form-control", @disabled = "disabled" })
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -56,6 +56,18 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
+    public async Task<Uzivatel?> GetUzivatelById(int id)
+    {
+        string sql = @"DECLARE
+                     v_uzivatel_json CLOB;
+                     BEGIN
+                     v_uzivatel_json := GetUzivatelById(:p_id_uzivatel);
+                     :p_result := v_uzivatel_json;
+                     END;";
+        OracleParameter[] sqlParams = [new OracleParameter("p_id_uzivatel", OracleDbType.Int32, id, ParameterDirection.Input)];
+        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+    }
+
     public async Task<Vozidlo?> GetVozidloById(int id)
     {
         string sql = @"DECLARE
