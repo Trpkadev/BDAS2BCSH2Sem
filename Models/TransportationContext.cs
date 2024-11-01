@@ -99,7 +99,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+#if DEBUG
+        modelBuilder.HasDefaultSchema("ST69642");
+#elif RELEASE
         modelBuilder.HasDefaultSchema("ST69612");
+#endif
         modelBuilder.Entity<Udrzba>()
             .HasDiscriminator<char>("TYP_UDRZBY")
             .HasValue<Cisteni>('c')
