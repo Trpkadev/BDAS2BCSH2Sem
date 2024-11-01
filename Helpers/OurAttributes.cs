@@ -12,6 +12,7 @@ public class GetLoggedInUserAttribute : ActionFilterAttribute
             return;
         BaseController baseController = (BaseController)context.Controller;
         baseController.ViewData["LoggedUser"] = baseController.LoggedUser;
+        baseController.ViewData["ActingUser"] = baseController.ActingUser;
         base.OnActionExecuting(context);
     }
 }

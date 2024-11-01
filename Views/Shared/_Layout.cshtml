@@ -24,13 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
-                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["LoggedUser"])?.IdRole)) >= 0)
+                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["ActingUser"])?.IdRole)) >= 0)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
                             </li>
                         }
-                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["LoggedUser"])?.IdRole)) >= 0)
+                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["ActingUser"])?.IdRole)) >= 0)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Stops" asp-action="Index">Zastávky</a>
@@ -46,9 +46,21 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="AdminPanel">Admin Panel</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Přihlášený uživatel: @ViewData["LoggedUser"]</span>
-                            </li>
+                            @if (ViewData["LoggedUser"].Equals(ViewData["ActingUser"]))
+                            {
+                                <li class="nav-item">
+                                    <span class="nav-link text-dark">Přihlášený uživatel: @ViewData["LoggedUser"]</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <span class="nav-link text-dark">
+                                        Jednáte za uživatele: @ViewData["ActingUser"]
+                                        (<a asp-area="" asp-controller="Users" asp-action="StopActingBehalf">Zrušit</a>)
+                                    </span>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Odhlásit se</a>
                             </li>
@@ -71,7 +83,7 @@
         @RenderBody()
     </main>
     <footer class="border-top footer text-muted">
-        <p>©2024 Hrubeš & Šimek</p>
+        <p>© 2024 Hrubeš & Šimek</p>
     </footer>
 </body>
 </html>

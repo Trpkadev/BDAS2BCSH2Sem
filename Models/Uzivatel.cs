@@ -25,7 +25,18 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
-    public override string ToString()
+	public bool HasAtleastRole(Role role) => IdRole >= (int)role;
+
+	public override bool Equals(object? obj)
+	{
+		return obj is Uzivatel uzivatel &&
+			   IdUzivatel == uzivatel.IdUzivatel &&
+			   Jmeno == uzivatel.Jmeno &&
+			   Heslo == uzivatel.Heslo &&
+			   IdRole == uzivatel.IdRole;
+	}
+
+	public override string ToString()
     {
         return Jmeno;
     }
