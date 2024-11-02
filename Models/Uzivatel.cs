@@ -25,19 +25,24 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
-	public bool HasAtleastRole(Role role) => IdRole >= (int)role;
+    public bool HasAtleastRole(Role role) => IdRole >= (int)role;
 
-	public override bool Equals(object? obj)
-	{
-		return obj is Uzivatel uzivatel &&
-			   IdUzivatel == uzivatel.IdUzivatel &&
-			   Jmeno == uzivatel.Jmeno &&
-			   Heslo == uzivatel.Heslo &&
-			   IdRole == uzivatel.IdRole;
-	}
+    public override bool Equals(object? obj)
+    {
+        return obj is Uzivatel uzivatel &&
+               IdUzivatel == uzivatel.IdUzivatel &&
+               Jmeno == uzivatel.Jmeno &&
+               Heslo == uzivatel.Heslo &&
+               IdRole == uzivatel.IdRole;
+    }
 
-	public override string ToString()
+    public override string ToString()
     {
         return Jmeno;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(IdUzivatel, Jmeno, Heslo, IdRole);
     }
 }

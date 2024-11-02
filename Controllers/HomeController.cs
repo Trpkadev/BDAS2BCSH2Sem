@@ -8,7 +8,37 @@ namespace BCSH2BDAS2.Controllers;
 [Route("")]
 public class HomeController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
+    [HttpGet]
+    [Route("")]
     public IActionResult Index()
+    {
+        try
+        {
+            return View();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Plan")]
+    public IActionResult Plan()
+    {
+        try
+        {
+            return View();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Timetable")]
+    public IActionResult Timetable()
     {
         try
         {

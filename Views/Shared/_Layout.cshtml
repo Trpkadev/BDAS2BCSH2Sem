@@ -24,13 +24,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
-                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["ActingUser"])?.IdRole)) >= 0)
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Timetable">Spojení</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Plan">Jízdní řády</a>
+                        </li>
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.Dispatcher) == true)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
                             </li>
                         }
-                        @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["ActingUser"])?.IdRole)) >= 0)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.Dispatcher) == true)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Stops" asp-action="Index">Zastávky</a>
@@ -40,13 +46,13 @@
                     <ul class="navbar-nav">
                         @if (ViewData["LoggedUser"] != null)
                         {
-                            @if (Array.IndexOf(new[] { 6, 7 }, (((Uzivatel?)ViewData["LoggedUser"])?.IdRole)) >= 0)
+                            @if (((Uzivatel?)ViewData["LoggedUser"])?.HasAtleastRole(Role.Admin) == true)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="AdminPanel">Admin Panel</a>
                                 </li>
                             }
-                            @if (ViewData["LoggedUser"].Equals(ViewData["ActingUser"]))
+                            @if (ViewData["LoggedUser"]?.Equals(ViewData["ActingUser"]) == true)
                             {
                                 <li class="nav-item">
                                     <span class="nav-link text-dark">Přihlášený uživatel: @ViewData["LoggedUser"]</span>

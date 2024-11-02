@@ -157,28 +157,28 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
-			return RedirectToAction("AdminPanel");
-		}
+            return RedirectToAction("AdminPanel");
+        }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
 
-	[HttpGet]
-	[Route("StopActingBehalf")]
-	public IActionResult StopActingBehalf()
-	{
-		try
-		{
-			if (!ModelState.IsValid)
-				return StatusCode(400);
-			ActBehalfInternal(null);
-			return RedirectToAction("AdminPanel");
-		}
-		catch (Exception)
-		{
-			return StatusCode(500);
-		}
-	}
+    [HttpGet]
+    [Route("StopActingBehalf")]
+    public IActionResult StopActingBehalf()
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            ActBehalfInternal(null);
+            return RedirectToAction("AdminPanel");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
 }
