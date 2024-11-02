@@ -135,13 +135,12 @@ END;
 /
 
 
-insert into ROLE (NAZEV) VALUES ('Neprihlaseny');
-insert into ROLE (NAZEV) VALUES ('Prihlaseny');
-insert into ROLE (NAZEV) VALUES ('Udrzbar');
-insert into ROLE (NAZEV) VALUES ('Dispatch');
-insert into ROLE (NAZEV) VALUES ('Manager');
-insert into ROLE (NAZEV) VALUES ('IT Admin');
-insert into ROLE (NAZEV) VALUES ('Majitel');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (0,'Neprihlaseny');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (1,'Prihlaseny');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (2,'Udrzbar');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (3,'Dispatch');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (4,'IT Admin');
+insert into ROLE (ID_ROLE,NAZEV) VALUES (5,'Majitel');
 /
 
 

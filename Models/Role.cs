@@ -2,6 +2,7 @@
 
 public enum Role
 {
+    UserNotLoggedIn = 0,
     User = 1,
     Maintainer = 2,
     Dispatcher = 3,
