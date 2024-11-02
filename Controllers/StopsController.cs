@@ -15,6 +15,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             return View();
         }
         catch (Exception)
@@ -30,6 +32,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zastavka);
             await _context.CreateZastavka(zastavka);
@@ -47,6 +51,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -69,6 +75,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             if (await _context.GetZastavkaById(zastavka.IdZastavka) != null)
@@ -88,6 +96,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -109,6 +119,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -131,6 +143,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zastavka);
             await _context.Database.ExecuteSqlRawAsync("UPDATE ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
@@ -151,6 +165,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
             return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY").ToListAsync());
         }
         catch (Exception)

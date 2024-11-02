@@ -15,6 +15,10 @@ body {
     max-height: 100vh;
 }
 
+header {
+    padding: 0 10vw;
+}
+
 main {
     max-height: 100%;
     overflow-y: auto;
@@ -23,4 +27,8 @@ main {
 p {
     margin: 0;
     padding: 0.2rem;
+}
+
+th, td, select {
+    text-align: center;
 }

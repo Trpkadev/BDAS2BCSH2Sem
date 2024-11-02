@@ -15,7 +15,8 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            //SELECT* FROM UZIVATELE JOIN ROLE ON(UZIVATELE.ID_ROLE = ROLE.ID_ROLE)
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
             return View(_context.Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE"));
         }
         catch (Exception)
@@ -30,6 +31,8 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -52,6 +55,8 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             if (await _context.GetZastavkaById(uzivatel.IdUzivatel) != null)
@@ -89,9 +94,9 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             if (LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index), "Home");
             else
-                return RedirectToAction("Login");
+                return RedirectToAction(nameof(Login));
         }
         catch (Exception)
         {
@@ -105,8 +110,10 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (LoggedUser == null)
+                return RedirectToAction(nameof(Index), "Home");
             LogoutInternal();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index), "Home");
         }
         catch (Exception)
         {
@@ -153,11 +160,13 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
-            return RedirectToAction("AdminPanel");
+            return RedirectToAction(nameof(AdminPanel));
         }
         catch (Exception)
         {
@@ -171,10 +180,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             ActBehalfInternal(null);
-            return RedirectToAction("AdminPanel");
+            return RedirectToAction(nameof(AdminPanel));
         }
         catch (Exception)
         {

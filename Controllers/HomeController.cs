@@ -28,6 +28,8 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasAtleastRole(Role.User))
+                return RedirectToAction(nameof(Index));
             return View();
         }
         catch (Exception)
@@ -42,6 +44,8 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     {
         try
         {
+            if (ActingUser == null || !ActingUser.HasAtleastRole(Role.User))
+                return RedirectToAction(nameof(Index));
             return View();
         }
         catch (Exception)

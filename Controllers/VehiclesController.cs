@@ -15,6 +15,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             return View();
         }
         catch (Exception)
@@ -30,6 +32,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(vozidlo);
             await _context.CreateVozidlo(vozidlo);
@@ -47,6 +51,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -69,6 +75,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
@@ -87,6 +95,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -108,6 +118,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
@@ -130,6 +142,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
             await _context.Database.ExecuteSqlRawAsync("UPDATE VOZIDLA SET ROK_VYROBY = {0}, NAJETE_KILOMETRY = {1}, KAPACITA = {2}, MA_KLIMATIZACI = {3}, ID_GARAZ = {4}, ID_MODEL = {5} WHERE ID_VOZIDLO = {6}", vozidlo.RokVyroby, vozidlo.NajeteKilometry, vozidlo.Kapacita, vozidlo.MaKlimatizaci ? 1 : 0, vozidlo.IdGaraz, vozidlo.IdModel, vozidlo.IdVozidlo);
@@ -149,6 +163,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
+            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
             return View(await _context.Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA").ToListAsync());
         }
         catch (Exception)

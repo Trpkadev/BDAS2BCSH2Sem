@@ -25,7 +25,15 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
-    public bool HasAtleastRole(Role role) => IdRole >= (int)role;
+    public Role Role => (Role)IdRole;
+
+    public bool HasAtleastRole(Role role) => Role >= role;
+
+    public bool HasMaintainerRights() => Role == Role.Maintainer || Role >= Role.Admin;
+
+    public bool HasDispatchRights() => Role >= Role.Dispatcher;
+
+    public bool HasAdminRights() => Role >= Role.Admin;
 
     public override bool Equals(object? obj)
     {
