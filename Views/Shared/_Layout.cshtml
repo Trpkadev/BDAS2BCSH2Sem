@@ -25,10 +25,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Timetable">Spojení</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Plan">Spojení</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Plan">Jízdní řády</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Timetable">Jízdní řády</a>
                         </li>
                         @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.Dispatcher) == true)
                         {
