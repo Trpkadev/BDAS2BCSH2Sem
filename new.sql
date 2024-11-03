@@ -162,3 +162,105 @@ END;
   ALTER TABLE "UZIVATELE" ADD CONSTRAINT "UZIVATEL_JMENO_UQ" UNIQUE ("JMENO") 
   /
 
+
+  CREATE OR REPLACE
+FUNCTION GetUzivatelByJmenoHash(p_jmeno_uzivatel VARCHAR2,p_hash_uzivatel VARCHAR2)
+RETURN CLOB IS
+    uzivatel_json CLOB;
+BEGIN
+    SELECT JSON_OBJECT(
+        'IdUzivatel' VALUE ID_UZIVATEL,
+        'Jmeno' VALUE JMENO,
+        'Heslo' VALUE HESLO,
+        'IdRole' VALUE UZIVATELE.ID_ROLE,
+        'RoleNazev' VALUE ROLE.NAZEV)           
+    INTO uzivatel_json
+    FROM UZIVATELE
+    JOIN ROLE ON UZIVATELE.ID_ROLE = ROLE.ID_ROLE
+    WHERE JMENO = p_jmeno_uzivatel AND HESLO = p_hash_uzivatel;
+    RETURN uzivatel_json;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+/
+
+
+CREATE OR REPLACE
+FUNCTION GetUzivatele
+RETURN CLOB IS
+    uzivatele_json CLOB;
+BEGIN
+    SELECT JSON_ARRAYAGG(
+               JSON_OBJECT(
+                   'IdUzivatel' VALUE ID_UZIVATEL,
+                   'Jmeno' VALUE JMENO,
+                   'Heslo' VALUE HESLO,
+                   'IdRole' VALUE UZIVATELE.ID_ROLE,
+                   'RoleNazev' VALUE ROLE.NAZEV) RETURNS CLOB
+           )
+    INTO uzivatele_json
+    FROM UZIVATELE
+    JOIN ROLE ON UZIVATELE.ID_ROLE = ROLE.ID_ROLE;
+
+    RETURN uzivatele_json;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+/
+
+
+CREATE OR REPLACE
+FUNCTION GetVozidla
+RETURN CLOB IS vozidla_json CLOB;
+BEGIN
+    SELECT JSON_ARRAYAGG(
+               JSON_OBJECT(
+               'IdVozidlo' VALUE ID_VOZIDLO,
+               'RokVyroby' VALUE ROK_VYROBY,
+               'NajeteKilometry' VALUE NAJETE_KILOMETRY,
+               'Kapacita' VALUE VOZIDLA.KAPACITA,
+               'MaKlimatizaci' VALUE MA_KLIMATIZACI,
+               'IdGaraz' VALUE VOZIDLA.ID_GARAZ,
+               'IdModel' VALUE VOZIDLA.ID_MODEL,
+               'GarazNazev' VALUE GARAZE.NAZEV,
+               'ModelNazev' VALUE MODELY.NAZEV) RETURNS CLOB
+               )
+    INTO vozidla_json
+    FROM VOZIDLA
+    JOIN GARAZE ON VOZIDLA.ID_GARAZ = GARAZE.ID_GARAZ
+    JOIN MODELY ON VOZIDLA.ID_MODEL = MODELY.ID_MODEL;
+    RETURN vozidla_json;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;
+/
+
+
+CREATE OR REPLACE
+FUNCTION GetZastavky
+RETURN CLOB IS zastavky_json CLOB;
+BEGIN
+    SELECT JSON_ARRAYAGG(
+               JSON_OBJECT(
+               'IdZastavka' VALUE ID_ZASTAVKA,
+               'Nazev' VALUE ZASTAVKY.NAZEV,
+               'SouradniceX' VALUE SOURADNICE_X,
+               'SouradniceY' VALUE SOURADNICE_Y,
+               'IdPasmo' VALUE ZASTAVKY.ID_PASMO,
+               'PasmoNazev' VALUE TARIFNI_PASMA.NAZEV) RETURNS CLOB
+               )
+    INTO zastavky_json
+    FROM ZASTAVKY
+    JOIN TARIFNI_PASMA ON ZASTAVKY.ID_PASMO = TARIFNI_PASMA.ID_PASMO;
+    RETURN zastavky_json;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+END;

@@ -36,7 +36,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zastavka);
-            await _context.CreateZastavka(zastavka);
+            await _context.CreateZastavkaAsync(zastavka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -56,7 +56,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaById(id);
+            var zastavka = await _context.GetZastavkaByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -79,7 +79,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetZastavkaById(zastavka.IdZastavka) != null)
+            if (await _context.GetZastavkaByIdAsync(zastavka.IdZastavka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
 
             return RedirectToAction(nameof(Index));
@@ -101,7 +101,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaById(id);
+            var zastavka = await _context.GetZastavkaByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -124,7 +124,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaById(id);
+            var zastavka = await _context.GetZastavkaByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -152,7 +152,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            if (await _context.GetZastavkaById(zastavka.IdZastavka) == null)
+            if (await _context.GetZastavkaByIdAsync(zastavka.IdZastavka) == null)
                 return StatusCode(404);
         }
 
@@ -167,7 +167,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY").ToListAsync());
+            return View(await _context.GetZastavkyAsync());
         }
         catch (Exception)
         {

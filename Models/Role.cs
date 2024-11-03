@@ -1,5 +1,6 @@
 ﻿namespace BCSH2BDAS2.Models;
 
+//TODO Load values from DB instead of hardcoding
 public enum Role
 {
     UserNotLoggedIn = 0,

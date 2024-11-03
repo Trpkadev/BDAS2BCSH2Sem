@@ -24,39 +24,37 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
 
-    public async Task CreateVozidlo(Vozidlo vozidlo)
+    public async Task CreateUzivatelAsync(Uzivatel uzivatel)
     {
-        using var command = Database.GetDbConnection().CreateCommand();
-        command.CommandText = "BEGIN CreateVozidlo(:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel); END;";
-        command.CommandType = CommandType.Text;
-
-        command.Parameters.Add(new OracleParameter("rokVyroby", vozidlo.RokVyroby));
-        command.Parameters.Add(new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry));
-        command.Parameters.Add(new OracleParameter("kapacita", vozidlo.Kapacita));
-        command.Parameters.Add(new OracleParameter("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0));
-        command.Parameters.Add(new OracleParameter("idGaraz", vozidlo.IdGaraz));
-        command.Parameters.Add(new OracleParameter("idModel", vozidlo.IdModel));
-        await Database.OpenConnectionAsync();
-        await command.ExecuteNonQueryAsync();
-        await Database.CloseConnectionAsync();
+        string sql = "BEGIN CreateUzivatel(:jmeno, :heslo); END;";
+        OracleParameter[] sqlParams = [ new OracleParameter("jmeno", uzivatel.Jmeno),
+                                        new OracleParameter("heslo", uzivatel.Heslo)];
+        await CreateInDb(sql, sqlParams);
     }
 
-    public async Task CreateZastavka(Zastavka zastavka)
+    public async Task CreateVozidloAsync(Vozidlo vozidlo)
     {
-        using var command = Database.GetDbConnection().CreateCommand();
-        command.CommandText = "BEGIN CreateZastavka(:nazev, :souradniceX, :souradniceY, :idPasmo); END;";
-        command.CommandType = CommandType.Text;
-
-        command.Parameters.Add(new OracleParameter("nazev", zastavka.Nazev));
-        command.Parameters.Add(new OracleParameter("souradniceX", zastavka.SouradniceX));
-        command.Parameters.Add(new OracleParameter("souradniceY", zastavka.SouradniceY));
-        command.Parameters.Add(new OracleParameter("idPasmo", zastavka.IdPasmo));
-        await Database.OpenConnectionAsync();
-        await command.ExecuteNonQueryAsync();
-        await Database.CloseConnectionAsync();
+        string sql = "BEGIN CreateVozidlo(:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel); END;";
+        OracleParameter[] sqlParams = [ new OracleParameter("rokVyroby", vozidlo.RokVyroby),
+                                        new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry),
+                                        new OracleParameter("kapacita", vozidlo.Kapacita),
+                                        new OracleParameter("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
+                                        new OracleParameter("idGaraz", vozidlo.IdGaraz),
+                                        new OracleParameter("idModel", vozidlo.IdModel)];
+        await CreateInDb(sql, sqlParams);
     }
 
-    public async Task<Uzivatel?> GetUzivatelById(int id)
+    public async Task CreateZastavkaAsync(Zastavka zastavka)
+    {
+        string sql = "BEGIN CreateZastavka(:nazev, :souradniceX, :souradniceY, :idPasmo); END;";
+        OracleParameter[] sqlParams = [ new OracleParameter("nazev", zastavka.Nazev),
+                                        new OracleParameter("souradniceX", zastavka.SouradniceX),
+                                        new OracleParameter("souradniceY", zastavka.SouradniceY),
+                                        new OracleParameter("idPasmo", zastavka.IdPasmo)];
+        await CreateInDb(sql, sqlParams);
+    }
+
+    public async Task<Uzivatel?> GetUzivatelByIdAsync(int id)
     {
         string sql = @"DECLARE
                      v_uzivatel_json CLOB;
@@ -68,7 +66,45 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
     }
 
-    public async Task<Vozidlo?> GetVozidloById(int id)
+    public async Task<Uzivatel?> GetUzivatelByNamePwdAsync(string name, string pwdHash)
+    {
+        string sql = @"DECLARE
+                     v_uzivatel_json CLOB;
+                     BEGIN
+                     v_uzivatel_json := GetUzivatelByJmenoHash(:p_jmeno_uzivatel,:p_hash_uzivatel);
+                     :p_result := v_uzivatel_json;
+                     END;";
+        OracleParameter[] sqlParams = [ new OracleParameter("p_jmeno_uzivatel", OracleDbType.Varchar2, name, ParameterDirection.Input),
+                                        new OracleParameter("p_hash_uzivatel", OracleDbType.Varchar2, pwdHash, ParameterDirection.Input)];
+        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+    }
+
+    public async Task<List<Uzivatel?>?> GetUzivateleAsync()
+    {
+        string sql = @"DECLARE
+                     v_uzivatele_json CLOB;
+                     BEGIN
+                     v_uzivatele_json := GetUzivatele();
+                     :p_result := v_uzivatele_json;
+                     END;";
+        OracleParameter[] sqlParams = [];
+
+        return await GetObjectFromDB<List<Uzivatel?>>(sql, sqlParams);
+    }
+
+    public async Task<List<Vozidlo?>?> GetVozidlaAsync()
+    {
+        string sql = @"DECLARE
+                     v_vozidla_json CLOB;
+                     BEGIN
+                     v_vozidla_json := GetVozidla();
+                     :p_result := v_vozidla_json;
+                     END;";
+        OracleParameter[] sqlParams = [];
+        return await GetObjectFromDB<List<Vozidlo?>>(sql, sqlParams);
+    }
+
+    public async Task<Vozidlo?> GetVozidloByIdAsync(int id)
     {
         string sql = @"DECLARE
                      v_vozidlo_json CLOB;
@@ -80,7 +116,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetObjectFromDB<Vozidlo>(sql, sqlParams);
     }
 
-    public async Task<Zastavka?> GetZastavkaById(int id)
+    public async Task<Zastavka?> GetZastavkaByIdAsync(int id)
     {
         string sql = @"DECLARE
                      v_zastavka_json CLOB;
@@ -90,6 +126,18 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                      END;";
         OracleParameter[] sqlParams = [new OracleParameter("p_id_zastavka", OracleDbType.Int32, id, ParameterDirection.Input)];
         return await GetObjectFromDB<Zastavka>(sql, sqlParams);
+    }
+
+    public async Task<List<Zastavka?>?> GetZastavkyAsync()
+    {
+        string sql = @"DECLARE
+                     v_zastavky_json CLOB;
+                     BEGIN
+                     v_zastavky_json := GetZastavky();
+                     :p_result := v_zastavky_json;
+                     END;";
+        OracleParameter[] sqlParams = [];
+        return await GetObjectFromDB<List<Zastavka?>>(sql, sqlParams);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -109,6 +157,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
             .HasValue<Cisteni>('c')
             .HasValue<Oprava>('o')
             .HasValue<Udrzba>('x');
+    }
+
+    private async Task CreateInDb(string sql, OracleParameter[] sqlParams)
+    {
+        using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.AddRange(sqlParams);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
     }
 
     private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[] sqlParams) where T : class

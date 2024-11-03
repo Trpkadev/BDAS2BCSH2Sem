@@ -36,4 +36,7 @@ public class Vozidlo
     [JsonRequired]
     [Column("ID_MODEL")]
     public int IdModel { get; set; }
+
+    public string? GarazNazev { get; set; }
+    public string? ModelNazev { get; set; }
 }

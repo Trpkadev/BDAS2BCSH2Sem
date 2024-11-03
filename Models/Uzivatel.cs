@@ -25,6 +25,8 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
+    public string? RoleNazev { get; set; }
+
     public Role Role => (Role)IdRole;
 
     public bool HasAtleastRole(Role role) => Role >= role;

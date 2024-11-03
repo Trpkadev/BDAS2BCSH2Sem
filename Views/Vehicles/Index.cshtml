@@ -26,10 +26,10 @@
                 @Html.DisplayNameFor(model => model.MaKlimatizaci)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdGaraz)
+                @Html.DisplayNameFor(model => model.GarazNazev)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdModel)
+                @Html.DisplayNameFor(model => model.ModelNazev)
             </th>
             <th></th>
         </tr>
@@ -51,10 +51,10 @@
                     @Html.DisplayFor(modelItem => item.MaKlimatizaci)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdGaraz)
+                    @Html.DisplayFor(modelItem => item.GarazNazev)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdModel)
+                    @Html.DisplayFor(modelItem => item.ModelNazev)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Edit</a> |

@@ -28,4 +28,6 @@ public class Zastavka
     [JsonRequired]
     [Column("ID_PASMO")]
     public int IdPasmo { get; set; }
+
+    public string? PasmoNazev { get; set; }
 }

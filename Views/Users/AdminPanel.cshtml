@@ -1,4 +1,5 @@
 ﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model IEnumerable<BCSH2BDAS2.Models.Uzivatel>
 @{
     ViewData["Title"] = "AdminPanel";
@@ -11,7 +12,7 @@
                 @Html.DisplayNameFor(model => model.Jmeno)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdRole)
+                @Html.DisplayNameFor(model => model.RoleNazev)
             </th>
             <th></th>
             <th></th>
@@ -26,8 +27,12 @@
                 </td>
                 <td>
                     @Html.DropDownListFor(modelItem => item.IdRole,
-                             new SelectList(Enumerable.Range(1, 6).Select(modelItem => modelItem.ToString())),
-                             new { @class = "form-control", @disabled = "disabled" })
+                             new SelectList(Enum.GetValues(typeof(Role)).Cast<Role>().Where(role => role > 0).Select(role => new
+                             {
+                                 Value = (int)role,
+                                 Text = role.ToString()
+                             }), "Value", "Text", item.IdRole),
+                             new { @class = "form-control" })
                 </td>
                 <td>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)" class="btn btn-danger">Delete</a>

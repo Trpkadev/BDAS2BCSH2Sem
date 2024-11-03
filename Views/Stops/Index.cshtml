@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.SouradniceY)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdPasmo)
+                @Html.DisplayNameFor(model => model.PasmoNazev)
             </th>
             <th></th>
         </tr>
@@ -42,7 +42,7 @@
                     @Html.DisplayFor(modelItem => item.SouradniceY)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdPasmo)
+                    @Html.DisplayFor(modelItem => item.PasmoNazev)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)">Edit</a> |

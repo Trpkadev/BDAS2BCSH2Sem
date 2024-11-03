@@ -36,7 +36,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(vozidlo);
-            await _context.CreateVozidlo(vozidlo);
+            await _context.CreateVozidloAsync(vozidlo);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -56,7 +56,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloById(id);
+            var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
 
@@ -100,7 +100,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloById(id);
+            var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
 
@@ -123,7 +123,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloById(id);
+            var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
 
@@ -151,7 +151,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (await _context.GetVozidloById(vozidlo.IdVozidlo) == null)
+            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) == null)
                 return StatusCode(404);
             return StatusCode(500);
         }
@@ -165,7 +165,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         {
             if (ActingUser != null && !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA").ToListAsync());
+            return View(await _context.GetVozidlaAsync());
         }
         catch (Exception)
         {

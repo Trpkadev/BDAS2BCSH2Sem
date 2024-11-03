@@ -10,14 +10,34 @@ namespace BCSH2BDAS2.Controllers;
 public class UsersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("AdminPanel")]
-    public IActionResult AdminPanel()
+    [Route("ActBehalf")]
+    public IActionResult ActBehalf(string encryptedId)
     {
         try
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(_context.Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE"));
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            int id = GetDecryptedId(encryptedId);
+            ActBehalfInternal(id);
+            return RedirectToAction(nameof(AdminPanel));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("AdminPanel")]
+    public async Task<IActionResult> AdminPanel()
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            return View(await _context.GetUzivateleAsync());
         }
         catch (Exception)
         {
@@ -36,7 +56,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var uzivatel = await _context.GetUzivatelById(id);
+            var uzivatel = await _context.GetUzivatelByIdAsync(id);
             if (uzivatel == null)
                 return StatusCode(404);
 
@@ -59,7 +79,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetZastavkaById(uzivatel.IdUzivatel) != null)
+            if (await _context.GetZastavkaByIdAsync(uzivatel.IdUzivatel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", uzivatel.IdUzivatel);
 
             return RedirectToAction(nameof(AdminPanel));
@@ -87,13 +107,13 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("LoginSubmit")]
-    public IActionResult Login([FromForm] Uzivatel uzivatel)
+    public async Task<IActionResult> Login([FromForm] Uzivatel uzivatel)
     {
         try
         {
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
+            if (await LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
                 return RedirectToAction(nameof(Index), "Home");
             else
                 return RedirectToAction(nameof(Login));
@@ -144,29 +164,9 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return View(uzivatel);
-            var hash = OurCryptography.EncryptHash(uzivatel.Heslo);
-            await _context.Database.ExecuteSqlRawAsync("INSERT INTO UZIVATELE (JMENO, HESLO, ID_ROLE) VALUES ({0}, {1}, 1)", uzivatel.Jmeno, hash);
+            uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);
+            await _context.CreateUzivatelAsync(uzivatel);
             return RedirectToAction(nameof(Login));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("ActBehalf")]
-    public IActionResult ActBehalf(string encryptedId)
-    {
-        try
-        {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            ActBehalfInternal(id);
-            return RedirectToAction(nameof(AdminPanel));
         }
         catch (Exception)
         {
