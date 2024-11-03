@@ -2,14 +2,14 @@
 @model IEnumerable<BCSH2BDAS2.Models.Vozidlo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Seznam";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between mb-3">
+    <h2>Seznam všech vozidel</h2>
+    <a asp-action="Create" class="btn btn-primary">Vytvořit nové</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -57,9 +57,9 @@
                     @Html.DisplayFor(modelItem => item.ModelNazev)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Edit</a> |
-                    <a asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Details</a> |
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Delete</a>
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Detail</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Odstranit</a>
                 </td>
             </tr>
         }

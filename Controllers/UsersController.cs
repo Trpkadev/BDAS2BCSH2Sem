@@ -118,9 +118,9 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             else
                 return RedirectToAction(nameof(Login));
         }
-        catch (Exception)
+        catch (Exception) // při nesprávném jménu nebo heslu
         {
-            return StatusCode(500);
+            return RedirectToAction(nameof(Login));
         }
     }
 

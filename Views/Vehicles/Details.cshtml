@@ -2,13 +2,12 @@
 @model BCSH2BDAS2.Models.Vozidlo
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detail";
 }
 
-<h1>Details</h1>
+<h1>Detail vozidla</h1>
 
 <div>
-    <h4>Vozidlo</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -50,6 +49,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdVozidlo)">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdVozidlo)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
 </div>

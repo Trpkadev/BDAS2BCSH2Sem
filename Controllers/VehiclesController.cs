@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -17,6 +18,14 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         {
             if (ActingUser != null && !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
+
+            var garaze = _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToList();
+            var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
+            ViewBag.Garaze = garazeList;
+            var modely = _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToList();
+            var modelyList = new SelectList(modely, "IdModel", "Nazev");
+            ViewBag.Modely = modelyList;
+
             return View();
         }
         catch (Exception)
@@ -122,10 +131,18 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
+
+            var garaze = _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToList();
+            var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
+            ViewBag.Garaze = garazeList;
+            var modely = _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToList();
+            var modelyList = new SelectList(modely, "IdModel", "Nazev");
+            ViewBag.Modely = modelyList;
 
             return View(vozidlo);
         }
