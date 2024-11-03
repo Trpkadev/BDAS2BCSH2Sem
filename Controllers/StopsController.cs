@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -17,7 +18,12 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View();
+
+            var pasma = _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToList();
+            var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
+			ViewBag.Pasma = pasmaList;
+
+			return View();
         }
         catch (Exception)
         {
@@ -123,10 +129,15 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var zastavka = await _context.GetZastavkaByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
+
+            var pasma = _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToList();
+            var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
+            ViewBag.Pasma = pasmaList;
 
             return View(zastavka);
         }
@@ -138,7 +149,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("")]
+    [Route("EditSubmit")]
     public async Task<IActionResult> EditSubmit([FromForm] Zastavka zastavka)
     {
         try

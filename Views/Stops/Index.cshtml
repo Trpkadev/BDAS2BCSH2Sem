@@ -5,11 +5,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between">
+    <h2>Seznam všech zastávek</h2>
+    <a asp-action="Create" class="btn btn-primary">Vytvořit novou</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -45,9 +45,9 @@
                     @Html.DisplayFor(modelItem => item.PasmoNazev)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)">Edit</a> |
-                    <a asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)">Details</a> |
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)">Delete</a>
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Detail</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Odstranit</a>
                 </td>
             </tr>
         }

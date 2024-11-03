@@ -1,7 +1,7 @@
 ﻿@model BCSH2BDAS2.Models.Zastavka
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Upravit";
 }
 
 <h1>Edit</h1>
@@ -13,27 +13,27 @@
         <form asp-action="EditSubmit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdZastavka" />
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Nazev" class="control-label"></label>
                 <input asp-for="Nazev" class="form-control" />
                 <span asp-validation-for="Nazev" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="SouradniceX" class="control-label"></label>
                 <input asp-for="SouradniceX" class="form-control" />
                 <span asp-validation-for="SouradniceX" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="SouradniceY" class="control-label"></label>
                 <input asp-for="SouradniceY" class="form-control" />
                 <span asp-validation-for="SouradniceY" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="IdPasmo" class="control-label"></label>
-                <input asp-for="IdPasmo" class="form-control" />
+                @Html.DropDownList("IdPasmo", ViewBag.Pasma, "Vyberte pasmo", new { @class = "form-control" })
                 <span asp-validation-for="IdPasmo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -41,6 +41,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Zpět na seznam</a>
 </div>
 
