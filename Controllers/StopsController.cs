@@ -21,9 +21,9 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
             var pasma = _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToList();
             var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
-			ViewBag.Pasma = pasmaList;
+            ViewBag.Pasma = pasmaList;
 
-			return View();
+            return View();
         }
         catch (Exception)
         {
@@ -135,7 +135,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (zastavka == null)
                 return StatusCode(404);
 
-            var pasma = _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToList();
+            var pasma = await _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToListAsync();
             var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
             ViewBag.Pasma = pasmaList;
 

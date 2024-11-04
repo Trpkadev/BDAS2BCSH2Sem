@@ -16,7 +16,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
 
             var garaze = _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToList();
@@ -41,7 +41,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(vozidlo);
@@ -60,7 +60,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
@@ -84,7 +84,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
@@ -104,7 +104,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
@@ -127,7 +127,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
@@ -137,10 +137,10 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (vozidlo == null)
                 return StatusCode(404);
 
-            var garaze = _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToList();
+            var garaze = await _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToListAsync();
             var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
             ViewBag.Garaze = garazeList;
-            var modely = _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToList();
+            var modely = await _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToListAsync();
             var modelyList = new SelectList(modely, "IdModel", "Nazev");
             ViewBag.Modely = modelyList;
 
@@ -159,7 +159,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
@@ -180,7 +180,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     {
         try
         {
-            if (ActingUser != null && !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             return View(await _context.GetVozidlaAsync());
         }
