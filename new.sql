@@ -1,11 +1,10 @@
 CREATE OR REPLACE PROCEDURE CreateUser (
     p_Jmeno IN VARCHAR2,
-    p_Heslo IN VARCHAR2,
-    p_IdRole IN NUMBER
+    p_Heslo IN VARCHAR2
 ) AS
 BEGIN
     INSERT INTO Uzivatele (JMENO, HESLO, ID_ROLE)
-    VALUES (p_Jmeno, p_Heslo, p_IdRole);
+    VALUES (p_Jmeno, p_Heslo, 1);
     COMMIT;
 END CreateUser;
 /
