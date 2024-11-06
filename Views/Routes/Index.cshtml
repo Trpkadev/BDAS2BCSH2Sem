@@ -1,0 +1,48 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.Linka>
+
+@{
+    ViewData["Title"] = "Seznam";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h2>Seznam </h2>
+    <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdTypVozidla) @* TODO Join table *@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cislo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nazev)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(_ => item.IdTypVozidla) @* TODO Join table *@
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.Cislo)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.Nazev)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)" class="btn btn-secondary">Odstranit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

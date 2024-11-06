@@ -1,0 +1,60 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.Spoj>
+
+@{
+    ViewData["Title"] = "Seznam";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h2>Seznam </h2>
+    <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdLinka)@* TODO Join table *@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JedeVSobotu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JedeVNedeli)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GarantovanaNizkopodlazni)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(_ => item.IdLinka) @* TODO Join table *@
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.JedeVSobotu)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.JedeVNedeli)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.JedeVeVsedniDen)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.GarantovanaNizkopodlazni)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Odstranit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

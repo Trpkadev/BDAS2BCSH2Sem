@@ -39,7 +39,7 @@ public abstract class BaseController : Controller
 
     protected void ActBehalfInternal(int? id)
     {
-        if (LoggedUser == null || !LoggedUser.HasAtleastRole(Role.Admin))
+        if (LoggedUser == null || !LoggedUser.HasAdminRights())
             return;
         if (id == null)
         {

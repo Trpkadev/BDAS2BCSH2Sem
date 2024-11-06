@@ -1,0 +1,49 @@
+﻿<h2>NOT IMPLEMENTED </h2>
+
+@*
+@model BCSH2BDAS2.Models.JizniRad
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Odstranit</h1>
+
+<h3>Opravdu chcete tuto položku odstranit?</h3>
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdZastavka)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdSpoj)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CasPrijezdu)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CasOdjezdu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdZastavka)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdSpoj)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CasPrijezdu)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CasOdjezdu)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteSubmit">
+         <input type="hidden" asp-for="IdJizdniRad" /> TODO 
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Zpět na seznam</a>
+    </form>
+</div>
+*@

@@ -1,0 +1,38 @@
+﻿@model BCSH2BDAS2.Models.Udrzba
+
+@{
+    ViewData["Title"] = "Upravit";
+}
+
+<h1>Upravit</h1>
+
+<hr />
+<div class="row mb-3">
+    <div class="col-md-4">
+        <form asp-action="EditSubmit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdUdrzba" />
+
+            @* TODO Join table *@
+            <div class="form-group mb-3">
+                <label asp-for="IdVozidlo" class="control-label"></label>
+                <input asp-for="IdVozidlo" class="form-control" />
+                <span asp-validation-for="IdVozidlo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Datum" class="control-label"></label>
+                <input asp-for="Datum" class="form-control" />
+                <span asp-validation-for="Datum" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Uložit změny" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Zpět na seznam</a>
+</div>
+

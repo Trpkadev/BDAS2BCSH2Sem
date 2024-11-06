@@ -1,0 +1,30 @@
+﻿@model BCSH2BDAS2.Models.Znacka
+
+@{
+    ViewData["Title"] = "Upravit";
+}
+
+<h1>Upravit</h1>
+
+<hr />
+<div class="row mb-3">
+    <div class="col-md-4">
+        <form asp-action="EditSubmit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdZnacka" />
+            <div class="form-group mb-3">
+                <label asp-for="Nazev" class="control-label"></label>
+                <input asp-for="Nazev" class="form-control" />
+                <span asp-validation-for="Nazev" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Uložit změny" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Zpět na seznam</a>
+</div>
+

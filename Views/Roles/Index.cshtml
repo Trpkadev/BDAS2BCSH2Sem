@@ -1,0 +1,31 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.Role>
+
+@{
+    ViewData["Title"] = "Seznam";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h2>Seznam </h2>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(_ => item)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

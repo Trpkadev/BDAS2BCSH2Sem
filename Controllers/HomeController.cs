@@ -28,7 +28,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAtleastRole(Role.User))
+            if (ActingUser == null || !ActingUser.HasUserRights())
                 return RedirectToAction(nameof(Index));
             return View();
         }
@@ -44,7 +44,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAtleastRole(Role.User))
+            if (ActingUser == null || !ActingUser.HasUserRights())
                 return RedirectToAction(nameof(Index));
             return View();
         }

@@ -1,4 +1,5 @@
-﻿@using BCSH2BDAS2.Models
+﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
@@ -21,17 +22,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && ViewContext.RouteData.Values["action"]?.Equals("Index") == true ? "active" : "")" asp-controller="Home" asp-action="Index">Domů</a>
+                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Index") ? "active" : "")" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.User) == true)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasUserRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && (ViewContext.RouteData.Values["action"]?.Equals("Plan") == true || ViewContext.RouteData.Values["action"]?.Equals("Timetable") == true) ? "active" : "")" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Home","Plan"),new("Home","Timetable")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Spoj
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && ViewContext.RouteData.Values["action"]?.Equals("Plan") == true ? "active" : "")" asp-controller="Home" asp-action="Plan">Spojení</a></li>
-                                    <li><a class="dropdown-item @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && ViewContext.RouteData.Values["action"]?.Equals("Timetable") == true ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Spojení</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Timetable") ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a></li>
                                 </ul>
                             </li>
                         }
@@ -43,21 +44,21 @@
                                     Spoj
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && ViewContext.RouteData.Values["action"]?.Equals("Plan") == true ? "active" : "")" asp-controller="Home" asp-action="Plan">Spojení</a></li>
-                                    <li><a class="dropdown-item @(ViewContext.RouteData.Values["controller"]?.Equals("Home") == true && ViewContext.RouteData.Values["action"]?.Equals("Timetable") == true ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Timetable", "Index") ? "active" : "")" asp-controller="Timetable" asp-action="Index">Jízdní řády</a></li>
                                 </ul>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.Admin) == true || ((Uzivatel?)ViewData["ActingUser"])?.Role == Role.Maintainer)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasMaintainerRights() == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Vehicles") == true ? "active" : "")" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
+                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles") ? "active" : "")" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAtleastRole(Role.Dispatcher) == true)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Stops") == true ? "active" : "")" asp-controller="Stops" asp-action="Index">Zastávky</a>
+                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops") ? "active" : "")" asp-controller="Stops" asp-action="Index">Zastávky</a>
                             </li>
                         }
                     </ul>
@@ -66,10 +67,30 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (ViewData["LoggedUser"] != null)
                         {
-                            @if (((Uzivatel?)ViewData["LoggedUser"])?.HasAtleastRole(Role.Admin) == true)
+                            @if (((Uzivatel?)ViewData["LoggedUser"])?.HasAdminRights() == true)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Users") == true && ViewContext.RouteData.Values["action"]?.Equals("AdminPanel") == true ? "active" : "")" asp-controller="Users" asp-action="AdminPanel">Admin Panel</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext,[new("Users","Index"),new("Roles","Index"),new("Vehicles","Index"),new("Garages","Index"),new("Models","Index"),new("Brands","Index"),new("Types","Index"),new("Maintenance","Index"),new("Stops","Index"),new("Connections","Index"),new("Timetables","Index"),new("Tariff","Index"),new("Records","Index"),new("Schemes","Index")]) ? "active" : "")" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Admin Panel
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Index") ? "active" : "")" asp-controller="Users" asp-action="Index">Uzivatele</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Roles","Index") ? "active" : "")" asp-controller="Roles" asp-action="Index">Uzivatelské role</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles","Index") ? "active" : "")" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Garages","Index") ? "active" : "")" asp-controller="Garages" asp-action="Index">Garáže</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Models","Index") ? "active" : "")" asp-controller="Models" asp-action="Index">Modely</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Brands","Index") ? "active" : "")" asp-controller="Brands" asp-action="Index">Značky Vozidel</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Types","Index") ? "active" : "")" asp-controller="Types" asp-action="Index">Typy Vozidel</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Maintenance","Index") ? "active" : "")" asp-controller="Maintenance" asp-action="Index">Údržby</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops","Index") ? "active" : "")" asp-controller="Stops" asp-action="Index">Zastavky</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Connections","Index") ? "active" : "")" asp-controller="Connections" asp-action="Index">Spoje</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Routes","Index") ? "active" : "")" asp-controller="Routes" asp-action="Index">Linky</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","Index") ? "active" : "")" asp-controller="Timetables" asp-action="Index">Jízdní řády</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff","Index") ? "active" : "")" asp-controller="Tariff" asp-action="Index">Tarifní pásma</a>
+                                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records","Index") ? "active" : "")" asp-controller="Records" asp-action="Index">Záznamy tras</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             }
                             @if (ViewData["LoggedUser"]?.Equals(ViewData["ActingUser"]) == true)
@@ -94,10 +115,10 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Users") == true && ViewContext.RouteData.Values["action"]?.Equals("Login") == true ? "active" : "")" asp-controller="Users" asp-action="Login">Přihlásit se</a>
+                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Login") ? "active" : "")" asp-controller="Users" asp-action="Login">Přihlásit se</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.Equals("Users") == true && ViewContext.RouteData.Values["action"]?.Equals("Register") == true ? "active" : "")" asp-controller="Users" asp-action="Register">Zaregistrovat se</a>
+                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Register") ? "active" : "")" asp-controller="Users" asp-action="Register">Zaregistrovat se</a>
                             </li>
                         }
                     </ul>

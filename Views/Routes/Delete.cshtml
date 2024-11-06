@@ -1,0 +1,39 @@
+﻿@model BCSH2BDAS2.Models.Linka
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Odstranit</h1>
+
+<h3>Opravdu chcete tuto položku odstranit?</h3>
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdTypVozidla)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cislo)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazev)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdTypVozidla)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cislo)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nazev)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteSubmit">
+        <input type="hidden" asp-for="IdLinka" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Zpět na seznam</a>
+    </form>
+</div>

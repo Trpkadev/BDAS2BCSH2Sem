@@ -29,13 +29,13 @@ public class Uzivatel
 
     public Role Role => (Role)IdRole;
 
-    public bool HasAtleastRole(Role role) => Role >= role;
-
     public bool HasMaintainerRights() => Role == Role.Maintainer || Role >= Role.Admin;
 
-    public bool HasDispatchRights() => Role >= Role.Dispatcher;
+    public bool HasDispatchRights() => Role >= Role.Dispatcher || Role >= Role.Admin;
 
     public bool HasAdminRights() => Role >= Role.Admin;
+
+    public bool HasUserRights() => Role >= Role.User;
 
     public override bool Equals(object? obj)
     {

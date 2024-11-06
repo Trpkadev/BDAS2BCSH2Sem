@@ -20,4 +20,6 @@ public class Udrzba
     [JsonRequired]
     [Column("ID_VOZIDLO")]
     public int IdVozidlo { get; set; }
+
+    //TODO parity with db
 }

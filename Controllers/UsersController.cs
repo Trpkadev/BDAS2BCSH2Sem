@@ -21,7 +21,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
-            return RedirectToAction(nameof(AdminPanel));
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -30,8 +30,8 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     }
 
     [HttpGet]
-    [Route("AdminPanel")]
-    public async Task<IActionResult> AdminPanel()
+    [Route("")]
+    public async Task<IActionResult> Index()
     {
         try
         {
@@ -82,7 +82,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (await _context.GetZastavkaByIdAsync(uzivatel.IdUzivatel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", uzivatel.IdUzivatel);
 
-            return RedirectToAction(nameof(AdminPanel));
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -185,7 +185,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             ActBehalfInternal(null);
-            return RedirectToAction(nameof(AdminPanel));
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
