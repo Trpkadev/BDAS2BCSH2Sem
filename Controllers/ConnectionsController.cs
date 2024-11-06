@@ -124,6 +124,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         }
         return StatusCode(500);
     }
+
     [HttpGet]
     [Route("")]
     public IActionResult Index()

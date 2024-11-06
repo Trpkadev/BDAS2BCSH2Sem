@@ -124,6 +124,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         }
         return StatusCode(500);
     }
+
     public IActionResult Index()
     {
         try

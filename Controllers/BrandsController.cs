@@ -124,6 +124,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         }
         return StatusCode(500);
     }
+
     [HttpGet]
     [Route("")]
     public IActionResult Index()

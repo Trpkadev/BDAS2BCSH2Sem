@@ -124,6 +124,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         }
         return StatusCode(500);
     }
+
     [HttpGet]
     [Route("")]
     public IActionResult Index()

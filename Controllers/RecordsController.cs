@@ -124,6 +124,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         }
         return StatusCode(500);
     }
+
     [HttpGet]
     [Route("")]
     public IActionResult Index()
