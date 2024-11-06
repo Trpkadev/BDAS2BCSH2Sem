@@ -133,7 +133,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Udrzby.FromSqlRaw("SELECT * FROM UDRZBY"));
+            return View(_context.Udrzby.FromSqlRaw("SELECT * FROM UDRZBY"));
         }
         catch (Exception)
         {

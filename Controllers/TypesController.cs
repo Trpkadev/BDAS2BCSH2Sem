@@ -131,7 +131,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL"));
+            return View(_context.TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL"));
         }
         catch (Exception)
         {

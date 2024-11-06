@@ -22,6 +22,9 @@ public sealed class OurCryptography
 
     public static string EncryptHash(string text)
     {
+        if (string.IsNullOrEmpty(text))
+            throw new ArgumentException("Text cannot be null or empty", nameof(text));
+
         byte[] data = Encoding.UTF8.GetBytes(text);
         byte[] hash = SHA256.HashData(data);
         return BitConverter.ToString(hash).Replace("-", "");
@@ -29,6 +32,9 @@ public sealed class OurCryptography
 
     public int DecryptId(string encryptedId)
     {
+        if (string.IsNullOrEmpty(encryptedId))
+            throw new ArgumentException("Encrypted ID cannot be null or empty", nameof(encryptedId));
+
         using Aes aes = Aes.Create();
         aes.Key = Key;
         aes.IV = IV;
@@ -44,8 +50,9 @@ public sealed class OurCryptography
 
     public string EncryptId(string? plainText)
     {
-        if (plainText == null)
-            return string.Empty;
+        if (string.IsNullOrEmpty(plainText))
+            throw new ArgumentException("Plain text cannot be null or empty", nameof(plainText));
+
         return EncryptIdInner(Encoding.UTF8.GetBytes(plainText));
     }
 

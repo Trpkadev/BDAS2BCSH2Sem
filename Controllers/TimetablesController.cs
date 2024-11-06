@@ -133,7 +133,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY"));
+            return View(_context.JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY"));
         }
         catch (Exception)
         {

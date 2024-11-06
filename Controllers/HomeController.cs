@@ -21,36 +21,4 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
             return StatusCode(500);
         }
     }
-
-    [HttpGet]
-    [Route("Plan")]
-    public IActionResult Plan()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasUserRights())
-                return RedirectToAction(nameof(Index));
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("Timetable")]
-    public IActionResult Timetable()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasUserRights())
-                return RedirectToAction(nameof(Index));
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
 }

@@ -133,7 +133,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Znacky.FromSqlRaw("SELECT * FROM ZNACKY"));
+            return View(_context.Znacky.FromSqlRaw("SELECT * FROM ZNACKY"));
         }
         catch (Exception)
         {

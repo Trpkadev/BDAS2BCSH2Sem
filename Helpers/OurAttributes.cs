@@ -8,11 +8,11 @@ public class GetLoggedInUserAttribute : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        if (context.Controller is not BaseController)
-            return;
-        BaseController baseController = (BaseController)context.Controller;
-        baseController.ViewData["LoggedUser"] = baseController.LoggedUser;
-        baseController.ViewData["ActingUser"] = baseController.ActingUser;
+        if (context.Controller is BaseController baseController)
+        {
+            baseController.ViewData["LoggedUser"] = baseController.LoggedUser;
+            baseController.ViewData["ActingUser"] = baseController.ActingUser;
+        }
         base.OnActionExecuting(context);
     }
 }

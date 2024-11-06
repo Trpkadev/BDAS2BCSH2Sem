@@ -133,7 +133,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Garaze.FromSqlRaw("SELECT * FROM GARAZE"));
+            return View(_context.Garaze.FromSqlRaw("SELECT * FROM GARAZE"));
         }
         catch (Exception)
         {

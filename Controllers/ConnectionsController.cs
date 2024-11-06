@@ -133,7 +133,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Spoje.FromSqlRaw("SELECT * FROM SPOJE"));
+            return View(_context.Spoje.FromSqlRaw("SELECT * FROM SPOJE"));
         }
         catch (Exception)
         {

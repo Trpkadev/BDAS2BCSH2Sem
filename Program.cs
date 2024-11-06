@@ -11,31 +11,18 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews().AddCookieTempDataProvider();
-        builder.Services.AddSession(options =>
-        {
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
-
-        builder.Services.AddDbContext<TransportationContext>(options =>
-#if DEBUG
-            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")));
-#elif RELEASE
-            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
-#endif
-        builder.Services.AddResponseCompression(options =>
-        {
-            options.EnableForHttps = true;
-            options.Providers.Add<BrotliCompressionProvider>();
-            options.Providers.Add<GzipCompressionProvider>();
-        });
-
-        builder.Services.AddHttpContextAccessor();
+        ConfigureServices(builder.Services, builder.Configuration);
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
+        ConfigureMiddleware(app);
+
+        app.Run();
+    }
+
+    private static void ConfigureMiddleware(WebApplication app)
+    {
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
@@ -54,7 +41,30 @@ public static class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}");
+    }
 
-        app.Run();
+    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddControllersWithViews().AddCookieTempDataProvider();
+        services.AddSession(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+
+        services.AddDbContext<TransportationContext>(options =>
+#if DEBUG
+            options.UseOracle(configuration.GetConnectionString("DebugConnection")));
+#elif RELEASE
+            options.UseOracle(configuration.GetConnectionString("DefaultConnection")));
+#endif
+        services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+        });
+
+        services.AddHttpContextAccessor();
     }
 }

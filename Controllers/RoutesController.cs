@@ -133,7 +133,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Linky.FromSqlRaw("SELECT * FROM LINKY"));
+            return View(_context.Linky.FromSqlRaw("SELECT * FROM LINKY"));
         }
         catch (Exception)
         {

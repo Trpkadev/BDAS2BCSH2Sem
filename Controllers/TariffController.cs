@@ -133,7 +133,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA"));
+            return View(_context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA"));
         }
         catch (Exception)
         {

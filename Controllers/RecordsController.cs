@@ -133,7 +133,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY"));
+            return View(_context.ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY"));
         }
         catch (Exception)
         {

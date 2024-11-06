@@ -133,7 +133,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(context.Modely.FromSqlRaw("SELECT * FROM MODELY"));
+            return View(_context.Modely.FromSqlRaw("SELECT * FROM MODELY"));
         }
         catch (Exception)
         {
