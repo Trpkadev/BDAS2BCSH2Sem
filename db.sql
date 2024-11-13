@@ -150,7 +150,7 @@ create table SPOJE
     JEDE_VE_VSEDNI_DEN        NUMBER(1) not null,
     JEDE_V_SOBOTU             NUMBER(1) not null,
     JEDE_V_NEDELI             NUMBER(1) not null,
-    GARANTOVANA_NIZKOPODLAZNI NUMBER(1) not null,
+    GARANTOVANE_NIZKOPODLAZNI NUMBER(1) not null,
     ID_LINKA                  NUMBER    not null
         constraint SPOJ_LINKA_FK
             references LINKY

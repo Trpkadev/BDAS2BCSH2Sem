@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GarantovanaNizkopodlazni)
+                @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
             </th>
             <th></th>
         </tr>
@@ -48,7 +48,7 @@
                     @Html.DisplayFor(_ => item.JedeVeVsedniDen)
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.GarantovanaNizkopodlazni)
+                    @Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Upravit</a>

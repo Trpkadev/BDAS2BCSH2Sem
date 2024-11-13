@@ -26,8 +26,8 @@ public class Spoj
     public bool JedeVNedeli { get; set; }
 
     [JsonRequired]
-    [Column("GARANTOVANA_NIZKOPODLAZNI")]
-    public bool GarantovanaNizkopodlazni { get; set; } // TODO: Přejmenovat
+    [Column("GARANTOVANE_NIZKOPODLAZNI")]
+    public bool GarantovaneNizkopodlazni { get; set; }
 
     [JsonRequired]
     [Column("ID_LINKA")]
