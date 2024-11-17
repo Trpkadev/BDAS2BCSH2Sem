@@ -534,3 +534,262 @@ CREATE PACKAGE BODY DML_PROCEDURY AS
     END;
 
 END;
+
+
+CREATE OR REPLACE TRIGGER TRG_LOG_VOZIDLA
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON VOZIDLA
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'VOZIDLA',
+            :NEW.id_vozidlo || '; ' || :NEW.rok_vyroby || '; ' || :NEW.najete_kilometry || '; ' || :NEW.kapacita ||
+            '; ' || :NEW.ma_klimatizaci || '; ' || :NEW.id_garaz || '; ' || :NEW.id_model,
+            :OLD.id_vozidlo || '; ' || :OLD.rok_vyroby || '; ' || :OLD.najete_kilometry || '; ' || :OLD.kapacita ||
+            '; ' || :OLD.ma_klimatizaci || '; ' || :OLD.id_garaz || '; ' || :OLD.id_model);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_GARAZE
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON GARAZE
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'GARAZE', :NEW.id_garaz || '; ' || :NEW.nazev || '; ' || :NEW.kapacita,
+            :OLD.id_garaz || '; ' || :OLD.nazev || '; ' || :OLD.kapacita);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_MODELY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON MODELY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'MODELY',
+            :NEW.id_model || '; ' || :NEW.nazev || '; ' || :NEW.je_nizkopodlazni || '; ' || :NEW.id_znacka || '; ' ||
+            :NEW.id_typ_vozidla,
+            :OLD.id_model || '; ' || :OLD.nazev || '; ' || :OLD.je_nizkopodlazni || '; ' || :OLD.id_znacka || '; ' ||
+            :OLD.id_typ_vozidla);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_ZNACKY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON ZNACKY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'ZNACKY', :NEW.id_znacka || '; ' || :NEW.nazev, :OLD.id_znacka || '; ' || :OLD.nazev);
+END ;
+
+CREATE OR REPLACE TRIGGER TRG_LOG_TYPY_VOZIDEL
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON TYPY_VOZIDEL
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'TYPY_VOZIDEL', :NEW.id_typ_vozidla || '; ' || :NEW.nazev,
+            :OLD.id_typ_vozidla || '; ' || :OLD.nazev);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_LINKY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON LINKY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'LINKY',
+            :NEW.id_linka || '; ' || :NEW.cislo || '; ' || :NEW.nazev || '; ' || :NEW.id_typ_vozidla,
+            :OLD.id_linka || '; ' || :OLD.cislo || '; ' || :OLD.nazev || '; ' || :OLD.id_typ_vozidla);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_SPOJE
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON SPOJE
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'SPOJE',
+            :NEW.id_spoj || '; ' || :NEW.jede_ve_vsedni_den || '; ' || :NEW.jede_v_sobotu || '; ' ||
+            :NEW.jede_v_nedeli || '; ' || :NEW.garantovane_nizkopodlazni || '; ' || :NEW.id_linka,
+            :OLD.id_spoj || '; ' || :OLD.jede_ve_vsedni_den || '; ' || :OLD.jede_v_sobotu || '; ' ||
+            :OLD.jede_v_nedeli || '; ' || :OLD.garantovane_nizkopodlazni || '; ' || :OLD.id_linka);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_JIZDNI_RADY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON JIZDNI_RADY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'JIZDNI_RADY',
+            :NEW.cas_prijezdu || '; ' || :NEW.cas_odjezdu || '; ' || :NEW.id_zastavka || '; ' || :NEW.id_spoj,
+            :OLD.cas_prijezdu || '; ' || :OLD.cas_odjezdu || '; ' || :OLD.id_zastavka || '; ' || :OLD.id_spoj);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_ZAZNAMY_TRASY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON ZAZNAMY_TRASY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'ZAZNAMY_TRASY',
+            :NEW.id_zaznam || '; ' || :NEW.cas_prijezdu || '; ' || :NEW.cas_odjezdu || '; ' || :NEW.id_vozidlo ||
+            '; ' || :NEW.id_zastavka || '; ' || :NEW.id_spoj,
+            :OLD.id_zaznam || '; ' || :OLD.cas_prijezdu || '; ' || :OLD.cas_odjezdu || '; ' || :OLD.id_vozidlo ||
+            '; ' || :OLD.id_zastavka || '; ' || :OLD.id_spoj);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_ZASTAVKY
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON ZASTAVKY
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'ZASTAVKY',
+            :NEW.id_zastavka || '; ' || :NEW.nazev || '; ' || :NEW.souradnice_x || '; ' || :NEW.souradnice_y || '; ' ||
+            :NEW.id_pasmo,
+            :OLD.id_zastavka || '; ' || :OLD.nazev || '; ' || :OLD.souradnice_x || '; ' || :OLD.souradnice_y || '; ' ||
+            :OLD.id_pasmo);
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_LOG_TARIFNI_PASMA
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON TARIFNI_PASMA
+    FOR EACH ROW
+DECLARE
+    v_typ VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN
+        v_typ := 'INSERT';
+    ELSIF UPDATING THEN
+        v_typ := 'UPDATE';
+    ELSE
+        v_typ := 'DELETE';
+    END IF;
+    INSERT INTO LOGY
+    VALUES (NULL, SYSDATE, v_typ, 'TARIFNI_PASMA', :NEW.id_pasmo || '; ' || :NEW.nazev || '; ',
+            :OLD.id_pasmo || '; ' || :OLD.nazev);
+END ;
+/
+
+
+CREATE OR REPLACE VIEW PRUMERNE_ZPOZDENI AS
+SELECT MIN(L.CISLO) linka, ROUND(AVG(ZT.CAS_ODJEZDU - JR.CAS_ODJEZDU), 2) zpozdeni
+FROM JIZDNI_RADY JR
+         JOIN ZAZNAMY_TRASY ZT ON JR.ID_ZASTAVKA = ZT.ID_ZASTAVKA AND JR.ID_SPOJ = ZT.ID_SPOJ
+         JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ
+         JOIN LINKY L ON L.ID_LINKA = S.ID_LINKA
+GROUP BY L.ID_LINKA;
+
+CREATE OR REPLACE VIEW NAKLADY_VOZIDLA AS
+SELECT MIN(Z.NAZEV) znacka, MIN(M.NAZEV) model, ROUND(AVG(U.CENA / V.NAJETE_KILOMETRY), 2) naklady
+FROM UDRZBY U
+         JOIN VOZIDLA V ON V.ID_VOZIDLO = U.ID_VOZIDLO
+         JOIN MODELY M ON M.ID_MODEL = V.ID_MODEL
+         JOIN ZNACKY Z ON Z.ID_ZNACKA = M.ID_ZNACKA
+GROUP BY M.ID_MODEL;
+
+CREATE OR REPLACE VIEW DB_OBJEKTY AS
+SELECT OBJECT_NAME nazev, OBJECT_TYPE typ, CREATED vytvoreno, LAST_ANALYZED posledni_pristup
+FROM USER_OBJECTS
+         LEFT JOIN USER_TABLES ON OBJECT_NAME = TABLE_NAME
+ORDER BY OBJECT_NAME;
