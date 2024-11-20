@@ -37,7 +37,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View((await _context.GetUzivateleAsync(),await _context.GetRoleAsync()));
+            return View((await _context.GetUzivateleAsync(), await _context.GetRoleAsync()));
         }
         catch (Exception)
         {
