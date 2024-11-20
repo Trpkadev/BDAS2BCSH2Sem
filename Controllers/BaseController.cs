@@ -62,6 +62,10 @@ public abstract class BaseController : Controller
             return false;
         LoggedUser = user;
         ActingUser = user;
+        Role? role = await _context.GetRoleById(user.IdRole);
+        if (role == null)
+            return false;
+        user.Role = role;
         var serializedUser = JsonSerializer.Serialize(user);
         HttpContext.Session.SetString("LoggedUser", serializedUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);

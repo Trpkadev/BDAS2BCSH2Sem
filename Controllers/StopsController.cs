@@ -42,7 +42,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zastavka);
-            await _context.CreateZastavkaAsync(zastavka);
+            await _context.DMLZastavkyAsync(zastavka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)

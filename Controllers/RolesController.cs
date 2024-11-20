@@ -16,7 +16,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(Enum.GetValues(typeof(Role)));
+            throw new NotImplementedException();
         }
         catch (Exception)
         {

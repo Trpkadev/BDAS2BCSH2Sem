@@ -1,6 +1,6 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models
-@model IEnumerable<BCSH2BDAS2.Models.Uzivatel>
+@model (IEnumerable<BCSH2BDAS2.Models.Uzivatel> uzivatele,IEnumerable<BCSH2BDAS2.Models.Role> role)
 @{
     ViewData["Title"] = "Seznam";
 }
@@ -9,36 +9,37 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Jmeno)
+                @Html.DisplayNameFor(model => model.uzivatele.First().Jmeno)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleNazev)
+                @Html.DisplayNameFor(model => model.uzivatele.First().Role.Nazev)
             </th>
             <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var uzivatel in Model.uzivatele)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Jmeno)
+                    @Html.DisplayFor(modelItem => uzivatel.Jmeno)
                 </td>
                 <td>
-                    @Html.DropDownListFor(modelItem => item.IdRole,
-                             new SelectList(Enum.GetValues(typeof(Role)).Cast<Role>().Where(role => role > 0).Select(role => new
+                    @Html.DropDownListFor(modelItem => uzivatel.IdRole,
+                             new SelectList(Model.role.Where(role => role.Prava > 0).Select(role => new
                              {
-                                 Value = (int)role,
+                                 Value = role.IdRole,
                                  Text = role.ToString()
-                             }), "Value", "Text", item.IdRole),
+                             }), "Value", "Text", uzivatel.IdRole),
                              new { @class = "form-control" })
+
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
-                    <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
+                    <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
                 </td>
             </tr>
         }

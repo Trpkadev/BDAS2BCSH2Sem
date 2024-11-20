@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Data;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace BCSH2BDAS2.Models;
 
@@ -24,34 +26,43 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
 
-    public async Task CreateUzivatelAsync(Uzivatel uzivatel)
+    private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.Replace("Get", string.Empty).Replace("Async", string.Empty).ToUpper();
+    private static string ConvertMethodNameToDML([CallerMemberName] string methodName = "") => methodName.Replace("DML", "DML_").Replace("Async", string.Empty).ToUpper();
+    private static int? ConvertId(int id) => id == 0 ? null : id;
+
+
+    public async Task DMLUzivateleAsync(Uzivatel uzivatel)
     {
-        string sql = "BEGIN CreateUzivatel(:jmeno, :heslo); END;";
-        OracleParameter[] sqlParams = [ new OracleParameter("jmeno", uzivatel.Jmeno),
-                                        new OracleParameter("heslo", uzivatel.Heslo)];
-        await CreateInDb(sql, sqlParams);
+        string sql = $"{ConvertMethodNameToDML()}(:idUzivatel, :jmeno, :heslo, :idRole);";
+        OracleParameter[] sqlParams = [ new OracleParameter("idUzivatel", ConvertId(uzivatel.IdUzivatel)),
+                                        new OracleParameter("jmeno", uzivatel.Jmeno),
+                                        new OracleParameter("heslo", uzivatel.Heslo),
+                                        new OracleParameter("idRole", uzivatel.IdRole)];
+        await DMLPackageCall(sql, sqlParams);
     }
 
-    public async Task CreateVozidloAsync(Vozidlo vozidlo)
+    public async Task DMLVozidlaAsync(Vozidlo vozidlo)
     {
-        string sql = "BEGIN CreateVozidlo(:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel); END;";
-        OracleParameter[] sqlParams = [ new OracleParameter("rokVyroby", vozidlo.RokVyroby),
+        string sql = $"{ConvertMethodNameToDML()}(:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel);";
+        OracleParameter[] sqlParams = [ new OracleParameter("idVozidlo", ConvertId(vozidlo.IdVozidlo)),
+                                        new OracleParameter("rokVyroby", vozidlo.RokVyroby),
                                         new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry),
                                         new OracleParameter("kapacita", vozidlo.Kapacita),
                                         new OracleParameter("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
                                         new OracleParameter("idGaraz", vozidlo.IdGaraz),
                                         new OracleParameter("idModel", vozidlo.IdModel)];
-        await CreateInDb(sql, sqlParams);
+        await DMLPackageCall(sql, sqlParams);
     }
 
-    public async Task CreateZastavkaAsync(Zastavka zastavka)
+    public async Task DMLZastavkyAsync(Zastavka zastavka)
     {
-        string sql = "BEGIN CreateZastavka(:nazev, :souradniceX, :souradniceY, :idPasmo); END;";
-        OracleParameter[] sqlParams = [ new OracleParameter("nazev", zastavka.Nazev),
+        string sql = $"{ConvertMethodNameToDML()}(:idZastavka, :nazev, :souradniceX, :souradniceY, :idPasmo);";
+        OracleParameter[] sqlParams = [ new OracleParameter("idZastavka", ConvertId(zastavka.IdZastavka)),
+                                        new OracleParameter("nazev", zastavka.Nazev),
                                         new OracleParameter("souradniceX", zastavka.SouradniceX),
                                         new OracleParameter("souradniceY", zastavka.SouradniceY),
                                         new OracleParameter("idPasmo", zastavka.IdPasmo)];
-        await CreateInDb(sql, sqlParams);
+        await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task<Uzivatel?> GetUzivatelByIdAsync(int id)
@@ -78,6 +89,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new OracleParameter("p_hash_uzivatel", OracleDbType.Varchar2, pwdHash, ParameterDirection.Input)];
         return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
     }
+    public async Task<Role?> GetRoleById(int roleId)
+    {
+        string sql = @"DECLARE
+                     v_role_json CLOB;
+                     BEGIN
+                     v_role_json := GetRoleById(:p_role_id);
+                     :p_result := v_role_json;
+                     END;";
+        OracleParameter[] sqlParams = [new OracleParameter("p_role_id", OracleDbType.Int32, roleId, ParameterDirection.Input)];
+        return await GetObjectFromDB<Role>(sql, sqlParams);
+    }
 
     public async Task<List<Uzivatel?>?> GetUzivateleAsync()
     {
@@ -90,6 +112,19 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         OracleParameter[] sqlParams = [];
 
         return await GetObjectFromDB<List<Uzivatel?>>(sql, sqlParams);
+    }
+
+    public async Task<List<Role?>?> GetRoleAsync()
+    {
+        string sql = @"DECLARE
+                     v_role_json CLOB;
+                     BEGIN
+                     v_role_json := Role_View();
+                     :p_result := v_role_json;
+                     END;";
+        OracleParameter[] sqlParams = [];
+
+        return await GetObjectFromDB<List<Role?>>(sql, sqlParams);
     }
 
     public async Task<List<Vozidlo?>?> GetVozidlaAsync()
@@ -128,16 +163,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetObjectFromDB<Zastavka>(sql, sqlParams);
     }
 
-    public async Task<List<Zastavka?>?> GetZastavkyAsync()
+    public async Task<List<Zastavka>?> GetZastavkyAsync()
     {
-        string sql = @"DECLARE
-                     v_zastavky_json CLOB;
-                     BEGIN
-                     v_zastavky_json := GetZastavky();
-                     :p_result := v_zastavky_json;
-                     END;";
-        OracleParameter[] sqlParams = [];
-        return await GetObjectFromDB<List<Zastavka?>>(sql, sqlParams);
+        return await GetDBView<Zastavka>(ConvertMethodNameToView());
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -159,10 +187,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
             .HasValue<Udrzba>('x');
     }
 
-    private async Task CreateInDb(string sql, OracleParameter[] sqlParams)
+    private async Task DMLPackageCall(string sql, OracleParameter[] sqlParams)
     {
         using var command = Database.GetDbConnection().CreateCommand();
-        command.CommandText = sql;
+        command.CommandText = "BEGIN DML_PROCEDURY." + sql + "END;";
         command.CommandType = CommandType.Text;
         command.Parameters.AddRange(sqlParams);
         await Database.OpenConnectionAsync();
@@ -170,7 +198,18 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
-    private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[] sqlParams) where T : class
+    private async Task<List<T>?> GetDBView<T>(string modelName, OracleParameter[]? sqlParams = null) where T : class
+    {
+        string sql = @$"DECLARE
+                     v_{modelName}_json CLOB;
+                     BEGIN
+                     v_{modelName}_json := SELECT * FROM {modelName.ToUpper()}_VIEW;
+                     :p_result := v_{modelName}_json;
+                     END;";
+        return await GetObjectFromDB<List<T>>(sql, sqlParams);
+    }
+
+    private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[]? sqlParams = null) where T : class
     {
         var connection = Database.GetDbConnection();
         var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
@@ -179,12 +218,13 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         using (var command = connection.CreateCommand())
         {
             command.CommandText = sql;
-            command.Parameters.AddRange(sqlParams);
+            if (sqlParams != null)
+                command.Parameters.AddRange(sqlParams);
             command.Parameters.Add(resultParam);
 
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
-            if (resultParam.Value != DBNull.Value)
+            if (resultParam.Value != DBNull.Value && !((OracleClob)resultParam.Value).IsNull)
                 resultJson = ((OracleClob)resultParam.Value).Value;
             await connection.CloseAsync();
         }

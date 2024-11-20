@@ -25,17 +25,15 @@ public class Uzivatel
     [Column("ID_ROLE")]
     public int IdRole { get; set; }
 
-    public string? RoleNazev { get; set; }
+    public Role? Role { get; set; }
 
-    public Role Role => (Role)IdRole;
+    public bool HasMaintainerRights() => Role?.Prava == 2 || Role?.Prava >= 5;
 
-    public bool HasMaintainerRights() => Role == Role.Maintainer || Role >= Role.Admin;
+    public bool HasDispatchRights() => Role?.Prava == 3 || Role?.Prava >= 5;
 
-    public bool HasDispatchRights() => Role >= Role.Dispatcher || Role >= Role.Admin;
+    public bool HasAdminRights() => Role?.Prava == 5;
 
-    public bool HasAdminRights() => Role >= Role.Admin;
-
-    public bool HasUserRights() => Role >= Role.User;
+    public bool HasUserRights() => Role?.Prava >= 1;
 
     public override bool Equals(object? obj)
     {

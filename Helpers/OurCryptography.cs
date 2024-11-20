@@ -56,9 +56,12 @@ public sealed class OurCryptography
         return EncryptIdInner(Encoding.UTF8.GetBytes(plainText));
     }
 
-    public string EncryptId(int id)
+    public string EncryptId(int? id)
     {
-        return EncryptIdInner(BitConverter.GetBytes(id));
+        if (id == null)
+            throw new ArgumentException("id cannot be null", nameof(id));
+
+        return EncryptIdInner(BitConverter.GetBytes((int)id));
     }
 
     private string EncryptIdInner(byte[] bytes)

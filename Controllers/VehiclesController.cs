@@ -45,7 +45,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(vozidlo);
-            await _context.CreateVozidloAsync(vozidlo);
+            await _context.DMLVozidlaAsync(vozidlo);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
