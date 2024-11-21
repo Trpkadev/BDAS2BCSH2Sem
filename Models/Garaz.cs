@@ -20,4 +20,6 @@ public class Garaz
     [JsonRequired]
     [Column("KAPACITA")]
     public int Kapacita { get; set; }
+
+    public override string ToString() => Nazev;
 }

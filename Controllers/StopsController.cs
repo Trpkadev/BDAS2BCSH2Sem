@@ -178,7 +178,9 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetZastavkyAsync());
+            List<Zastavka>? zastavky = await _context.GetZastavkyAsync();
+            //TODO Join table Tarifni_Pasma
+            return View(zastavky);
         }
         catch (Exception)
         {

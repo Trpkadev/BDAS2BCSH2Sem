@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace BCSH2BDAS2.Models;
 
@@ -18,4 +18,6 @@ public class Role
     [JsonRequired]
     [Column("PRAVA")]
     public int Prava { get; set; }
+
+    public override string ToString() => Nazev;
 }

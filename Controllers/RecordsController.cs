@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -127,13 +126,13 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
 
     [HttpGet]
     [Route("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(_context.ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY"));
+            return View(await _context.GetZaznamy_TrasyAsync());
         }
         catch (Exception)
         {

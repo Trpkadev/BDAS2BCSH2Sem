@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.IdVozidlo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdZastavka)
+                @Html.DisplayNameFor(model => model.ZastavkaNazev)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CasPrijezdu)
@@ -42,13 +42,13 @@
                     @Html.DisplayFor(_ => item.IdVozidlo)
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.IdZastavka)
+                    @Html.DisplayFor(_ => item.ZastavkaNazev)
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.CasPrijezdu)
+                    @item.CasPrijezdu.ToShortTimeString()
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.CasOdjezdu)
+                    @item.CasOdjezdu.ToShortTimeString()
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Upravit</a>

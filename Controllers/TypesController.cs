@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -125,13 +124,13 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         return StatusCode(500);
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(_context.TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL"));
+            return View(await _context.GetTypy_VozidelAsync());
         }
         catch (Exception)
         {

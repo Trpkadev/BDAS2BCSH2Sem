@@ -10,13 +10,13 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
 {
     [HttpGet]
     [Route("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            throw new NotImplementedException();
+            return View(await _context.GetRoleAsync());
         }
         catch (Exception)
         {

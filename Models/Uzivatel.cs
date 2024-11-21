@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using System.Text.Json.Serialization;
 
 namespace BCSH2BDAS2.Models;
@@ -44,13 +43,7 @@ public class Uzivatel
                IdRole == uzivatel.IdRole;
     }
 
-    public override string ToString()
-    {
-        return Jmeno;
-    }
+    public override string ToString() => Jmeno;
 
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(IdUzivatel, Jmeno, Heslo, IdRole);
-    }
+    public override int GetHashCode() => HashCode.Combine(IdUzivatel, Jmeno, Heslo, IdRole);
 }

@@ -37,6 +37,6 @@ public class Vozidlo
     [Column("ID_MODEL")]
     public int IdModel { get; set; }
 
-    public string? GarazNazev { get; set; }
-    public string? ModelNazev { get; set; }
+    public string GarazNazev { get; set; }
+    public string ModelNazev { get; set; }
 }

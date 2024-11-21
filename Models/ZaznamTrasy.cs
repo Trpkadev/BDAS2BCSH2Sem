@@ -32,4 +32,6 @@ public class ZaznamTrasy
     [JsonRequired]
     [Column("ID_SPOJ")]
     public int IdSpoj { get; set; }
+
+    public string ZastavkaNazev { get; set; }
 }

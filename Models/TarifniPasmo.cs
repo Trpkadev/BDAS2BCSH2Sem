@@ -16,4 +16,6 @@ public class TarifniPasmo
     [JsonRequired]
     [Column("NAZEV")]
     public string Nazev { get; set; } = string.Empty;
+
+    public override string ToString() => Nazev;
 }

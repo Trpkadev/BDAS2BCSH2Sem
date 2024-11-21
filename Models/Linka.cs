@@ -24,4 +24,8 @@ public class Linka
     [JsonRequired]
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
+
+    public string TypVozidlaNazev { get; set; }
+
+    public override string ToString() => Nazev;
 }

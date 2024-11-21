@@ -37,7 +37,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View((await _context.GetUzivateleAsync(), await _context.GetRoleAsync()));
+            return View(((await _context.GetUzivateleAsync())?.AsEnumerable(), (await _context.GetRoleAsync())?.AsEnumerable()));
         }
         catch (Exception)
         {
@@ -118,7 +118,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             else
                 return RedirectToAction(nameof(Login));
         }
-        catch (Exception e) // při nesprávném jménu nebo heslu
+        catch (Exception) // při nesprávném jménu nebo heslu
         {
             return RedirectToAction(nameof(Login));
         }
@@ -169,7 +169,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             await _context.DMLUzivateleAsync(uzivatel);
             return RedirectToAction(nameof(Login));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(500);
         }

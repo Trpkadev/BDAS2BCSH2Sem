@@ -30,4 +30,6 @@ public class Zastavka
     public int IdPasmo { get; set; }
 
     public string? PasmoNazev { get; set; }
+
+    public override string ToString() => Nazev;
 }

@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -127,13 +126,13 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
 
     [HttpGet]
     [Route("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(_context.Znacky.FromSqlRaw("SELECT * FROM ZNACKY"));
+            return View(await _context.GetZnackyAsync());
         }
         catch (Exception)
         {

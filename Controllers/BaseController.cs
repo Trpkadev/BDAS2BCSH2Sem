@@ -1,7 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -16,10 +16,10 @@ public abstract class BaseController : Controller
         {
             var serializedUser = accessor.HttpContext?.Session.GetString("LoggedUser");
             if (serializedUser != null)
-                LoggedUser = JsonSerializer.Deserialize<Uzivatel>(serializedUser);
+                LoggedUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser);
             var serializedUser2 = accessor.HttpContext?.Session.GetString("ActingUser");
             if (serializedUser2 != null)
-                ActingUser = JsonSerializer.Deserialize<Uzivatel>(serializedUser2);
+                ActingUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser2);
         }
         catch
         {
@@ -49,7 +49,7 @@ public abstract class BaseController : Controller
         {
             ActingUser = _context.GetUzivatelByIdAsync((int)id).Result;
         }
-        var serializedUser = JsonSerializer.Serialize(ActingUser);
+        var serializedUser = JsonConvert.SerializeObject(ActingUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseController : Controller
         if (role == null)
             return false;
         user.Role = role;
-        var serializedUser = JsonSerializer.Serialize(user);
+        var serializedUser = JsonConvert.SerializeObject(user);
         HttpContext.Session.SetString("LoggedUser", serializedUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);
         return true;

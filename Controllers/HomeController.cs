@@ -10,7 +10,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
 {
     [HttpGet]
     [Route("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         try
         {
