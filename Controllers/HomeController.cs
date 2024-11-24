@@ -1,6 +1,7 @@
 using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -10,7 +11,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
 {
     [HttpGet]
     [Route("")]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         try
         {
@@ -20,5 +21,24 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         {
             return StatusCode(500);
         }
+    }
+
+    [HttpGet]
+    [Route("Plan")]
+    public async Task<ActionResult> Plan(string? od, string? _do, string? cas)
+    {
+		// TODO: Použít funkci v DB a zobrazit výsledek
+		var zastavky = await _context.GetZastavkyAsync();
+        ViewBag.Zastavky = new SelectList(zastavky);
+        return View();
+    }
+
+    [HttpGet]
+    [Route("Timetable")]
+    public async Task<ActionResult> Timetable(int? linka)
+    {
+        // TODO: Zobrazit JØ pro linku
+        var linky = await _context.GetLinkyAsync();
+        return View(linky);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+
 
 //using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,11 +21,13 @@ public class JizniRad
 
     [JsonRequired]
     [Column("CAS_PRIJEZDU")]
+    [DisplayName("Čas příjezdu")]
     public DateTime? CasPrijezdu { get; set; }
 
     [JsonRequired]
     [Column("CAS_ODJEZDU")]
-    public DateTime CasOdjezdu { get; set; }
+	[DisplayName("Čas odjezdu")]
+	public DateTime CasOdjezdu { get; set; }
 
     [JsonRequired]
     [Column("ID_ZASTAVKA")]
@@ -33,5 +37,6 @@ public class JizniRad
     [Column("ID_SPOJ")]
     public int IdSpoj { get; set; }
 
-    public string ZastavkaNazev { get; set; }
+	[DisplayName("Název zastávky")]
+	public string ZastavkaNazev { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,7 +14,8 @@ public class Role
 
     [JsonRequired]
     [Column("NAZEV")]
-    public string Nazev { get; set; }
+	[DisplayName("Název")]
+	public string Nazev { get; set; }
 
     [JsonRequired]
     [Column("PRAVA")]

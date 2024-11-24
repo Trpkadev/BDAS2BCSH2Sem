@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,11 +16,13 @@ public class Model
 
     [JsonRequired]
     [Column("NAZEV")]
-    public string Nazev { get; set; } = string.Empty;
+	[DisplayName("Název")]
+	public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("JE_NIZKOPODLAZNI")]
-    public bool JeNizkopodlazni { get; set; }
+	[DisplayName("Je nízkopodlažní")]
+	public bool JeNizkopodlazni { get; set; }
 
     [JsonRequired]
     [Column("ID_ZNACKA")]
@@ -29,8 +32,10 @@ public class Model
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 
-    public string ZnackaNazev { get; set; }
-    public string TypVozidlaNazev { get; set; }
+	[DisplayName("Značka")]
+	public string ZnackaNazev { get; set; }
+	[DisplayName("Typ vozidla")]
+	public string TypVozidlaNazev { get; set; }
 
     public override string ToString() => Nazev;
 }

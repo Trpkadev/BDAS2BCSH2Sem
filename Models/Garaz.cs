@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,6 +16,7 @@ public class Garaz
 
     [JsonRequired]
     [Column("NAZEV")]
+    [DisplayName("Název")]
     public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]

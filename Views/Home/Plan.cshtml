@@ -1,0 +1,28 @@
+﻿@{
+	ViewData["Title"] = "Plánování spojení";
+}
+
+<h1>Vyhledat spojení</h1>
+
+<hr />
+<div class="row mb-3">
+	<div class="col-md-4">
+		<form method="get" action="Plan">
+			<div class="form-group mb-3">
+				<label for="od" class="control-label">Od</label>
+				@Html.DropDownList("od", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
+			</div>
+			<div class="form-group mb-3">
+				<label for="do" class="control-label">Do</label>
+				@Html.DropDownList("_do", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
+			</div>
+			<div class="form-group mb-3">
+				<label for="cas" class="control-label">Čas odjezdu</label>
+				<input type="time" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("t")" />
+			</div>
+			<div class="form-group mb-3">
+				<input type="submit" value="Vyhledat" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>

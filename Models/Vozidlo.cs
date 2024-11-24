@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,11 +16,13 @@ public class Vozidlo
 
     [JsonRequired]
     [Column("ROK_VYROBY")]
-    public short RokVyroby { get; set; }
+	[DisplayName("Rok výroby")]
+	public short RokVyroby { get; set; }
 
     [JsonRequired]
     [Column("NAJETE_KILOMETRY")]
-    public int NajeteKilometry { get; set; }
+	[DisplayName("Najeté kilometry")]
+	public int NajeteKilometry { get; set; }
 
     [JsonRequired]
     [Column("KAPACITA")]
@@ -27,7 +30,8 @@ public class Vozidlo
 
     [JsonRequired]
     [Column("MA_KLIMATIZACI")]
-    public bool MaKlimatizaci { get; set; }
+	[DisplayName("Má klimatizaci")]
+	public bool MaKlimatizaci { get; set; }
 
     [JsonRequired]
     [Column("ID_GARAZ")]
@@ -37,6 +41,8 @@ public class Vozidlo
     [Column("ID_MODEL")]
     public int IdModel { get; set; }
 
-    public string GarazNazev { get; set; }
-    public string ModelNazev { get; set; }
+	[DisplayName("Garáž")]
+	public string GarazNazev { get; set; }
+	[DisplayName("Model")]
+	public string ModelNazev { get; set; }
 }

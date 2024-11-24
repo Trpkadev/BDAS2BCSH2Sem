@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,19 +16,23 @@ public class Spoj
 
     [JsonRequired]
     [Column("JEDE_VE_VSEDNI_DEN")]
-    public bool JedeVeVsedniDen { get; set; }
+	[DisplayName("Jede ve všední den")]
+	public bool JedeVeVsedniDen { get; set; }
 
     [JsonRequired]
     [Column("JEDE_V_SOBOTU")]
-    public bool JedeVSobotu { get; set; }
+	[DisplayName("Jede v sobotu")]
+	public bool JedeVSobotu { get; set; }
 
     [JsonRequired]
     [Column("JEDE_V_NEDELI")]
-    public bool JedeVNedeli { get; set; }
+	[DisplayName("Jede v neděli")]
+	public bool JedeVNedeli { get; set; }
 
     [JsonRequired]
     [Column("GARANTOVANE_NIZKOPODLAZNI")]
-    public bool GarantovaneNizkopodlazni { get; set; }
+	[DisplayName("Je garantována nízkopodlažnost")]
+	public bool GarantovaneNizkopodlazni { get; set; }
 
     [JsonRequired]
     [Column("ID_LINKA")]

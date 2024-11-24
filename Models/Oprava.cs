@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
 
@@ -8,7 +9,8 @@ public class Oprava : Udrzba
 {
     [JsonRequired]
     [Column("POPIS_UKONU")]
-    public string PopisUkonu { get; set; } = string.Empty;
+	[DisplayName("Popis úkonu")]
+	public string PopisUkonu { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("CENA")]

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BCSH2BDAS2.Models.Linka>
+@{
+	ViewData["Title"] = "Jízdní řády";
+}
+
+<h1>Jízdní řády</h1>
+
+<div class="mb-3">
+	<h2>Trolejbusové linky</h2>
+	@if (!Model.Where(l => l.IdTypVozidla == 1).Any())
+	{
+		<p>Žádné linky toho typu neexistují</p>
+	}
+	@foreach (var linka in Model.Where(l => l.IdTypVozidla == 1))
+	{
+		<a href="./Timetable?linka=@linka.Cislo" class="btn btn-secondary">Linka @linka.Cislo</a>
+	}
+</div>
+
+<div class="mb-3">
+
+	<h2>Autobusové linky</h2>
+	@if (!Model.Where(l => l.IdTypVozidla == 2).Any())
+	{
+		<p>Žádné linky toho typu neexistují</p>
+	}
+	@foreach (var linka in Model.Where(l => l.IdTypVozidla == 2))
+	{
+		<a href="./Timetable?linka=@linka.Cislo" class="btn btn-secondary">Linka @linka.Cislo</a>
+	}
+</div>
+
+<div class="mb-3">
+	<h2>Minibusové linky</h2>
+	@if (!Model.Where(l => l.IdTypVozidla == 3).Any())
+	{
+		<p>Žádné linky toho typu neexistují</p>
+	}
+	@foreach (var linka in Model.Where(l => l.IdTypVozidla == 3))
+	{
+		<a href="./Timetable?linka=@linka.Cislo" class="btn btn-secondary">Linka @linka.Cislo</a>
+	}
+</div>

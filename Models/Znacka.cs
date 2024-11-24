@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,7 +16,8 @@ public class Znacka
 
     [JsonRequired]
     [Column("NAZEV")]
-    public string Nazev { get; set; } = string.Empty;
+	[DisplayName("Název")]
+	public string Nazev { get; set; } = string.Empty;
 
     public override string ToString() => Nazev;
 }

@@ -26,7 +26,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
 
-    public async Task DMLGarazeAsync(Garaz garaz)
+	#region DML procedures
+
+	public async Task DMLGarazeAsync(Garaz garaz)
     {
         string sql = $"{ConvertMethodNameToDML()}(:idGaraz, :nazev, :kapacita);";
         OracleParameter[] sqlParams = [ new OracleParameter("idGaraz", ConvertId(garaz.IdGaraz)),
@@ -193,7 +195,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await DMLPackageCall(sql, sqlParams);
     }
 
-    public async Task<List<Garaz>?> GetGarazeAsync()
+	#endregion
+
+	#region views
+
+	public async Task<List<Garaz>?> GetGarazeAsync()
     {
         return await GetDBView<Garaz>(ConvertMethodNameToView());
     }
@@ -324,12 +330,16 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Znacka>(ConvertMethodNameToView());
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	#endregion
+
+	#region EF Core config
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine);
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 #if DEBUG
         modelBuilder.HasDefaultSchema("ST69642");
@@ -343,7 +353,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
             .HasValue<Udrzba>('x');
     }
 
-    private static int? ConvertId(int id) => id == 0 ? null : id;
+	#endregion
+
+	#region Helper methods
+
+	private static int? ConvertId(int id) => id == 0 ? null : id;
 
     private static string ConvertMethodNameToDML([CallerMemberName] string methodName = "") => methodName.Replace("DML", "DML_").Replace("Async", string.Empty).ToUpper();
 
@@ -403,4 +417,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
             return null;
         }
     }
+
+	#endregion
 }

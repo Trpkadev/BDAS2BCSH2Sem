@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -15,21 +16,25 @@ public class Zastavka
 
     [JsonRequired]
     [Column("NAZEV")]
-    public string Nazev { get; set; } = string.Empty;
+	[DisplayName("Název")]
+	public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("SOURADNICE_X")]
-    public double SouradniceX { get; set; }
+	[DisplayName("Souřadnice X")]
+	public double SouradniceX { get; set; }
 
     [JsonRequired]
     [Column("SOURADNICE_Y")]
-    public double SouradniceY { get; set; }
+	[DisplayName("Souřadnice Y")]
+	public double SouradniceY { get; set; }
 
     [JsonRequired]
     [Column("ID_PASMO")]
     public int IdPasmo { get; set; }
 
-    public string? PasmoNazev { get; set; }
+	[DisplayName("Pásmo")]
+	public string? PasmoNazev { get; set; }
 
     public override string ToString() => Nazev;
 }

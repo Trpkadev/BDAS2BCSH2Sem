@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -14,23 +15,28 @@ public class Schema
 
     [JsonRequired]
     [Column("NAZEV_SCHEMATU")]
-    public string NazevSchematu { get; set; }
+	[DisplayName("Název schématu")]
+	public string NazevSchematu { get; set; }
 
     [JsonRequired]
     [Column("NAZEV_SOUBORU")]
-    public string NazevSouboru { get; set; }
+	[DisplayName("Název souboru")]
+	public string NazevSouboru { get; set; }
 
     [JsonRequired]
     [Column("TYP_SOUBORU")]
-    public string TypSouboru { get; set; }
+	[DisplayName("Typ souboru")]
+	public string TypSouboru { get; set; }
 
     [JsonRequired]
     [Column("VELIKOST_SOUBORU")]
-    public int VelikostSouboru { get; set; }
+	[DisplayName("Velikost souboru")]
+	public int VelikostSouboru { get; set; }
 
     [JsonRequired]
     [Column("DATUM_ZMENY")]
-    public DateTime DatumZmeny { get; set; }
+	[DisplayName("Datum změny")]
+	public DateTime DatumZmeny { get; set; }
 
     [JsonRequired]
     [Column("SOUBOR")]
