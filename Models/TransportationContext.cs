@@ -185,6 +185,93 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     #endregion DML procedures
 
+    // Z nějakýho důvodu nefunguje, stejně jako 90% věcí v Oracle DB, padá na Execute
+    public async Task<List<Uzivatel>> UsersCursor()
+    {
+        List<Uzivatel> uzivatele = [];
+
+        try
+        {
+            var connection = Database.GetDbConnection();
+
+            using (var command = connection.CreateCommand())
+            {
+                await connection.OpenAsync();
+
+                int index = 1; // Start index
+
+                while (true)
+                {
+                    command.CommandText = @"
+                BEGIN
+                    GetUzivatelByIndex(
+                        p_index => :p_index,
+                        p_id_uzivatel => :p_id_uzivatel,
+                        p_jmeno => :p_jmeno,
+                        p_heslo => :p_heslo,
+                        p_id_role => :p_id_role,
+                        p_id_nadrizeny => :p_id_nadrizeny,
+                        p_hodinova_mzda => :p_hodinova_mzda);
+                END;";
+
+                    command.CommandType = CommandType.Text;
+
+                    // Clear parameters from previous iteration
+                    command.Parameters.Clear();
+
+                    // Input parameter
+                    command.Parameters.Add(new OracleParameter("p_index", OracleDbType.Int32, index, ParameterDirection.Input));
+
+                    // Output parameters
+                    var p_id_uzivatel = new OracleParameter("p_id_uzivatel", OracleDbType.Int32, ParameterDirection.Output);
+                    var p_jmeno = new OracleParameter("p_jmeno", OracleDbType.Varchar2, 64, ParameterDirection.Output);
+                    var p_heslo = new OracleParameter("p_heslo", OracleDbType.Varchar2, 128, ParameterDirection.Output);
+                    var p_id_role = new OracleParameter("p_id_role", OracleDbType.Int32, ParameterDirection.Output);
+                    var p_id_nadrizeny = new OracleParameter("p_id_nadrizeny", OracleDbType.Int32, ParameterDirection.Output);
+                    var p_hodinova_mzda = new OracleParameter("p_hodinova_mzda", OracleDbType.Int32, ParameterDirection.Output);
+
+                    command.Parameters.AddRange(new[]
+                    {
+                    p_id_uzivatel,
+                    p_jmeno,
+                    p_heslo,
+                    p_id_role,
+                    p_id_nadrizeny,
+                    p_hodinova_mzda
+                });
+
+                    // Execute the PL/SQL block (and crash)
+                    await command.ExecuteNonQueryAsync();
+
+                    // Check if there is data
+                    if (p_id_uzivatel.Value == DBNull.Value)
+                        break; // No more users
+
+                    // Add user to the list
+                    uzivatele.Add(new Uzivatel
+                    {
+                        IdUzivatel = Convert.ToInt32(p_id_uzivatel.Value),
+                        Jmeno = p_jmeno.Value.ToString(),
+                        Heslo = p_heslo.Value.ToString(),
+                        IdRole = Convert.ToInt32(p_id_role.Value),
+                        IdNadrizeny = p_id_nadrizeny.Value == DBNull.Value ? null : Convert.ToInt32(p_id_nadrizeny.Value),
+                        HodinovaMzda = p_hodinova_mzda.Value == DBNull.Value ? null : Convert.ToInt32(p_hodinova_mzda.Value)
+                    });
+
+                    index++; // Move to the next row
+                }
+
+                await connection.CloseAsync();
+            }
+
+            return uzivatele;
+        }
+        catch (Exception)
+        {
+            return [];
+        }
+    }
+
     #region views
 
     public async Task<List<Garaz>?> GetGarazeAsync()
