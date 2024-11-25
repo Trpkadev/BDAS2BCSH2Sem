@@ -18,7 +18,7 @@
 			</div>
 			<div class="form-group mb-3">
 				<label for="cas" class="control-label">Čas odjezdu</label>
-				<input type="time" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("t")" />
+				<input type="datetime-local" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("s")" />
 			</div>
 			<div class="form-group mb-3">
 				<input type="submit" value="Vyhledat" class="btn btn-primary" />

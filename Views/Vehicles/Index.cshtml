@@ -51,10 +51,10 @@
                     @Html.DisplayFor(modelItem => item.MaKlimatizaci)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.GarazNazev)
+                    <a asp-controller="Garages" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdGaraz)">@Html.DisplayFor(modelItem => item.GarazNazev)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ModelNazev)
+                    <a asp-controller="Models" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.ModelNazev)</a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Upravit</a>

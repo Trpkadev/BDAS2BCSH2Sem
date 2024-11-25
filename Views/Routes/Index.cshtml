@@ -30,7 +30,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(_ => item.TypVozidlaNazev) 
+                     <a asp-controller="Types" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdTypVozidla)">@Html.DisplayFor(_ => item.TypVozidlaNazev)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.Cislo)

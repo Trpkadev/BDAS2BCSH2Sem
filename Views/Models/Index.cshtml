@@ -36,10 +36,10 @@
                     @Html.DisplayFor(_ => item.Nazev)
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.ZnackaNazev)
+                     <a asp-controller="Brands" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZnacka)">@Html.DisplayFor(_ => item.ZnackaNazev)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.TypVozidlaNazev)
+                     <a asp-controller="Types" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdTypVozidla)">@Html.DisplayFor(_ => item.TypVozidlaNazev)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.JeNizkopodlazni)

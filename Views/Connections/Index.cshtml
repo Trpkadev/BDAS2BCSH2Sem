@@ -14,7 +14,8 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdLinka)
+                Linka
+                @* @Html.DisplayNameFor(model => model.IdLinka) *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.JedeVSobotu)
@@ -36,7 +37,8 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(_ => item.IdLinka)
+                    <a asp-controller="Routes" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka</a>
+                    @* @Html.DisplayFor(_ => item.IdLinka) *@
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.JedeVSobotu)
