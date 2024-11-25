@@ -1,28 +1,35 @@
-﻿@{
-	ViewData["Title"] = "Plánování spojení";
+﻿@using BCSH2BDAS2.Models;
+@{
+    ViewData["Title"] = "Vyhledat spojení";
 }
 
-<h1>Vyhledat spojení</h1>
+<h1>@ViewData["Title"]</h1>
 
 <hr />
 <div class="row mb-3">
-	<div class="col-md-4">
-		<form method="get" action="Plan">
-			<div class="form-group mb-3">
-				<label for="od" class="control-label">Od</label>
-				@Html.DropDownList("od", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
-			</div>
-			<div class="form-group mb-3">
-				<label for="do" class="control-label">Do</label>
-				@Html.DropDownList("_do", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
-			</div>
-			<div class="form-group mb-3">
-				<label for="cas" class="control-label">Čas odjezdu</label>
-				<input type="datetime-local" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("s")" />
-			</div>
-			<div class="form-group mb-3">
-				<input type="submit" value="Vyhledat" class="btn btn-primary" />
-			</div>
-		</form>
-	</div>
+    <div class="col-md-4">
+        <form method="get" action="Plan">
+            <div class="form-group mb-3">
+                <label for="od" class="control-label">Ze zastávky</label>
+                <input list="zastavkyList" id="od" name="od" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label for="do" class="control-label">Do zastávky</label>
+                <input list="zastavkyList" id="do" name="do" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label for="cas" class="control-label">Datum a čas odjezdu</label>
+                <input type="datetime-local" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Vyhledat" class="btn btn-primary" />
+            </div>
+            <datalist id="zastavkyList">
+                @foreach (var item in Model)
+                {
+                    <option value="@item.Nazev">@item.Nazev</option>
+                }
+            </datalist>
+        </form>
+    </div>
 </div>

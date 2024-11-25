@@ -23,7 +23,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
 
-	#region DML procedures
+    #region DML procedures
 
     public async Task DMLGarazeAsync(Garaz garaz)
     {
@@ -183,9 +183,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await DMLPackageCall(sql, sqlParams);
     }
 
-	#endregion
+    #endregion DML procedures
 
-	#region views
+    #region views
 
     public async Task<List<Garaz>?> GetGarazeAsync()
     {
@@ -366,9 +366,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Znacka>(ConvertMethodNameToView());
     }
 
-	#endregion
+    #endregion views
 
-	#region EF Core config
+    #region EF Core config
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -384,9 +384,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 #endif
     }
 
-	#endregion
+    #endregion EF Core config
 
-	#region Helper methods
+    #region Helper methods
+
     private static string ConvertDMLMethodName([CallerMemberName] string methodName = "") => methodName.ToUpper().Replace("DML", "DML_").Replace("ASYNC", string.Empty);
 
     private static int? ConvertId(int id) => id == 0 ? null : id;
@@ -458,5 +459,5 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         }
     }
 
-	#endregion
+    #endregion Helper methods
 }

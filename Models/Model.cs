@@ -16,13 +16,13 @@ public class Model
 
     [JsonRequired]
     [Column("NAZEV")]
-	[DisplayName("Název")]
-	public string Nazev { get; set; } = string.Empty;
+    [DisplayName("Název")]
+    public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("JE_NIZKOPODLAZNI")]
-	[DisplayName("Je nízkopodlažní")]
-	public bool JeNizkopodlazni { get; set; }
+    [DisplayName("Je nízkopodlažní")]
+    public bool JeNizkopodlazni { get; set; }
 
     [JsonRequired]
     [Column("ID_ZNACKA")]
@@ -32,10 +32,11 @@ public class Model
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 
-	[DisplayName("Značka")]
-	public string ZnackaNazev { get; set; }
-	[DisplayName("Typ vozidla")]
-	public string TypVozidlaNazev { get; set; }
+    [DisplayName("Značka")]
+    public string ZnackaNazev { get; set; }
+
+    [DisplayName("Typ vozidla")]
+    public string TypVozidlaNazev { get; set; }
 
     public override string ToString() => Nazev;
 }

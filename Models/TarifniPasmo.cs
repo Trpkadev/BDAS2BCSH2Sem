@@ -16,8 +16,8 @@ public class TarifniPasmo
 
     [JsonRequired]
     [Column("NAZEV")]
-	[DisplayName("Název")]
-	public string Nazev { get; set; } = string.Empty;
+    [DisplayName("Název")]
+    public string Nazev { get; set; } = string.Empty;
 
     public override string ToString() => Nazev;
 }

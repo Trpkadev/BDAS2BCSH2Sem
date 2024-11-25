@@ -15,28 +15,28 @@ public class Schema
 
     [JsonRequired]
     [Column("NAZEV_SCHEMATU")]
-	[DisplayName("Název schématu")]
-	public string NazevSchematu { get; set; }
+    [DisplayName("Název schématu")]
+    public string NazevSchematu { get; set; }
 
     [JsonRequired]
     [Column("NAZEV_SOUBORU")]
-	[DisplayName("Název souboru")]
-	public string NazevSouboru { get; set; }
+    [DisplayName("Název souboru")]
+    public string NazevSouboru { get; set; }
 
     [JsonRequired]
     [Column("TYP_SOUBORU")]
-	[DisplayName("Typ souboru")]
-	public string TypSouboru { get; set; }
+    [DisplayName("Typ souboru")]
+    public string TypSouboru { get; set; }
 
     [JsonRequired]
     [Column("VELIKOST_SOUBORU")]
-	[DisplayName("Velikost souboru")]
-	public int VelikostSouboru { get; set; }
+    [DisplayName("Velikost souboru")]
+    public int VelikostSouboru { get; set; }
 
     [JsonRequired]
     [Column("DATUM_ZMENY")]
-	[DisplayName("Datum změny")]
-	public DateTime DatumZmeny { get; set; }
+    [DisplayName("Datum změny")]
+    public DateTime DatumZmeny { get; set; }
 
     [JsonRequired]
     [Column("SOUBOR")]

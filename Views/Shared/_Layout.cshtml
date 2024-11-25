@@ -35,6 +35,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Timetable") ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a></li>
                                 </ul>
                             </li>
                         }
@@ -66,9 +67,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        @if (ViewData["LoggedUser"] != null)
+                        @if (ViewData["ActingUser"] != null)
                         {
-                            @if (((Uzivatel?)ViewData["LoggedUser"])?.HasAdminRights() == true)
+                            @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext,[new("Users","Index"),new("Roles","Index"),new("Vehicles","Index"),new("Garages","Index"),new("Models","Index"),new("Brands","Index"),new("Types","Index"),new("Maintenance","Index"),new("Stops","Index"),new("Connections","Index"),new("Timetables","Index"),new("Tariff","Index"),new("Records","Index"),new("Schemes","Index")]) ? "active" : "")" role="button" data-bs-toggle="dropdown" aria-expanded="false">

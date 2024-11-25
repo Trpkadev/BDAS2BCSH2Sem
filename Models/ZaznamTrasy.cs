@@ -16,13 +16,13 @@ public class ZaznamTrasy
 
     [JsonRequired]
     [Column("CAS_PRIJEZDU")]
-	[DisplayName("Čas příjezdu")]
-	public DateTime CasPrijezdu { get; set; }
+    [DisplayName("Čas příjezdu")]
+    public DateTime CasPrijezdu { get; set; }
 
     [JsonRequired]
     [Column("CAS_ODJEZDU")]
-	[DisplayName("Čas odjezdu")]
-	public DateTime CasOdjezdu { get; set; }
+    [DisplayName("Čas odjezdu")]
+    public DateTime CasOdjezdu { get; set; }
 
     [JsonRequired]
     [Column("ID_VOZIDLO")]
@@ -36,6 +36,6 @@ public class ZaznamTrasy
     [Column("ID_SPOJ")]
     public int IdSpoj { get; set; }
 
-	[DisplayName("Zastávka")]
-	public string ZastavkaNazev { get; set; }
+    [DisplayName("Zastávka")]
+    public string ZastavkaNazev { get; set; }
 }

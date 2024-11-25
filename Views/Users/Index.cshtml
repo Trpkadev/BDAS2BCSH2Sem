@@ -16,6 +16,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.uzivatele.First().Role.Nazev)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uzivatele.First().HodinovaMzda)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uzivatele.First().IdNadrizeny)
+            </th>
             <th></th>
             <th></th>
         </tr>
@@ -36,6 +42,12 @@
                              }), "Value", "Text", uzivatel.IdRole),
                              new { @class = "form-control", @onchange = $"submitRoleChange(this, {uzivatel.IdUzivatel},'{uzivatel.Jmeno}','{uzivatel.Heslo}')" })
 
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => uzivatel.HodinovaMzda)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => uzivatel.IdNadrizeny)
                 </td>
                 <td>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Delete</a>

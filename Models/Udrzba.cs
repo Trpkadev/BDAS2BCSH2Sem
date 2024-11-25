@@ -33,6 +33,7 @@ public class Udrzba
     [Column("CISTENO_OZONEM")]
     public bool? CistenoOzonem { get; set; }
 
+    [JsonRequired]
     [Column("TYP_UDRZBY")]
     public char TypUdrzby { get; set; }
 }

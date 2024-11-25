@@ -21,16 +21,15 @@ public class Linka
 
     [JsonRequired]
     [Column("NAZEV")]
-	[DisplayName("Název")]
-
-	public string Nazev { get; set; } = string.Empty;
+    [DisplayName("Název")]
+    public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 
-	[DisplayName("Typ vozidla")]
-	public string TypVozidlaNazev { get; set; }
+    [DisplayName("Typ vozidla")]
+    public string TypVozidlaNazev { get; set; }
 
     public override string ToString() => Nazev;
 }

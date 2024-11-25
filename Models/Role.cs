@@ -14,8 +14,8 @@ public class Role
 
     [JsonRequired]
     [Column("NAZEV")]
-	[DisplayName("Název")]
-	public string Nazev { get; set; }
+    [DisplayName("Název")]
+    public string Nazev { get; set; }
 
     [JsonRequired]
     [Column("PRAVA")]
