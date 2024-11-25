@@ -16,8 +16,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-
-            throw new NotImplementedException();
+            return View();
         }
         catch (Exception)
         {
@@ -36,7 +35,8 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(tarifniPasmo);
-            throw new NotImplementedException();
+            await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -55,8 +55,10 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-
-            throw new NotImplementedException();
+            var tarifniPasmo = await _context.GetTarifni_PasmaByIdAsync(id);
+            if (tarifniPasmo == null)
+                return StatusCode(404);
+            return View(tarifniPasmo);
         }
         catch (Exception)
         {
@@ -75,8 +77,8 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-
-            throw new NotImplementedException();
+            await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -96,7 +98,10 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            throw new NotImplementedException();
+            var tarifniPasmo = await _context.GetTarifni_PasmaByIdAsync(id);
+            if (tarifniPasmo == null)
+                return StatusCode(404);
+            return View(tarifniPasmo);
         }
         catch (Exception)
         {
@@ -115,13 +120,13 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(tarifniPasmo);
-            throw new NotImplementedException();
+            await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(404);
+            return StatusCode(500);
         }
-        return StatusCode(500);
     }
 
     [HttpGet]

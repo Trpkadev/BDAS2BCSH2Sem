@@ -24,8 +24,10 @@ public class Uzivatel
 
     [JsonRequired]
     [Column("ID_ROLE")]
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5.")]
     public int IdRole { get; set; }
 
+    [JsonIgnore]
     public Role? Role { get; set; }
 
     public bool HasMaintainerRights() => Role?.Prava == 2 || Role?.Prava >= 5;

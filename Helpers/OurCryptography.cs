@@ -36,11 +36,7 @@ public sealed class OurCryptography
             throw new ArgumentException("Encrypted ID cannot be null or empty", nameof(encryptedId));
 
         using Aes aes = Aes.Create();
-        aes.Key = Key;
-        aes.IV = IV;
-
-        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-
+        ICryptoTransform decryptor = aes.CreateDecryptor(Key, IV);
         using MemoryStream ms = new(Convert.FromBase64String(encryptedId));
         using CryptoStream cs = new(ms, decryptor, CryptoStreamMode.Read);
         byte[] decryptedBytes = new byte[sizeof(int)];

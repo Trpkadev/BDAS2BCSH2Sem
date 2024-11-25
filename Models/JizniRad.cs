@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 
 //using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -14,10 +15,10 @@ namespace BCSH2BDAS2.Models;
 public class JizniRad
 {
     //TODO PK IdJizdniRad
-    //[Key]
-    //[JsonRequired]
-    //[Column("ID_JIZDNI_RAD")]
-    //public int IdJizdniRad{ get; set; }
+    [Key]
+    [JsonRequired]
+    [Column("ID_JIZDNI_RAD")]
+    public int IdJizdniRad { get; set; }
 
     [JsonRequired]
     [Column("CAS_PRIJEZDU")]

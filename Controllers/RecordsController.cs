@@ -16,8 +16,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-
-            throw new NotImplementedException();
+            return View();
         }
         catch (Exception)
         {
@@ -36,7 +35,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zaznamTrasy);
-            throw new NotImplementedException();
+            await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -55,8 +55,10 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-
-            throw new NotImplementedException();
+            var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+            if (zaznamTrasy == null)
+                return StatusCode(404);
+            return View(zaznamTrasy);
         }
         catch (Exception)
         {
@@ -75,8 +77,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-
-            throw new NotImplementedException();
+            await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -96,7 +98,10 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            throw new NotImplementedException();
+            var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+            if (zaznamTrasy == null)
+                return StatusCode(404);
+            return View(zaznamTrasy);
         }
         catch (Exception)
         {
@@ -115,13 +120,13 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zaznamTrasy);
-            throw new NotImplementedException();
+            await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(404);
+            return StatusCode(500);
         }
-        return StatusCode(500);
     }
 
     [HttpGet]

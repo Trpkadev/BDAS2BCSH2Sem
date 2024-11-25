@@ -2,8 +2,10 @@
 @using BCSH2BDAS2.Models
 @model (IEnumerable<BCSH2BDAS2.Models.Uzivatel> uzivatele,IEnumerable<BCSH2BDAS2.Models.Role> role)
 @{
-    ViewData["Title"] = "Seznam";
+    ViewData["Title"] = "Seznam uživatelů";
 }
+
+<h2>@ViewData["Title"]</h2>
 
 <table class="table">
     <thead>
@@ -32,7 +34,7 @@
                                  Value = role.IdRole,
                                  Text = role.ToString()
                              }), "Value", "Text", uzivatel.IdRole),
-                             new { @class = "form-control" })
+                             new { @class = "form-control", @onchange = $"submitRoleChange(this, {uzivatel.IdUzivatel},'{uzivatel.Jmeno}','{uzivatel.Heslo}')" })
 
                 </td>
                 <td>
@@ -42,6 +44,34 @@
                     <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
                 </td>
             </tr>
+            @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
+            @Html.HiddenFor(modelItem => uzivatel.Heslo)
         }
     </tbody>
 </table>
+
+<script type="text/javascript">
+        function submitRoleChange(dropdown, id, jmeno, heslo) {
+        var selectedRoleId = dropdown.value;
+        var uzivatel = {
+            idUzivatel: id,
+            idRole: selectedRoleId,
+            jmeno: jmeno,
+            heslo: heslo
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Users/EditSubmit",
+            contentType: "application/json",
+            data: JSON.stringify(uzivatel),
+            success: function(response) {
+                alert("Role updated successfully!");
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    }
+</script>

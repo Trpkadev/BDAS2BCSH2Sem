@@ -16,8 +16,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-
-            throw new NotImplementedException();
+            return View();
         }
         catch (Exception)
         {
@@ -36,7 +35,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(spoj);
-            throw new NotImplementedException();
+            await _context.DMLSpojeAsync(spoj);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -55,8 +55,10 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-
-            throw new NotImplementedException();
+            var spoj = await _context.GetSpojeByIdAsync(id);
+            if (spoj == null)
+                return StatusCode(404);
+            return View(spoj);
         }
         catch (Exception)
         {
@@ -75,8 +77,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-
-            throw new NotImplementedException();
+            await _context.DMLSpojeAsync(spoj);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -96,7 +98,10 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            throw new NotImplementedException();
+            var spoj = await _context.GetSpojeByIdAsync(id);
+            if (spoj == null)
+                return StatusCode(404);
+            return View(spoj);
         }
         catch (Exception)
         {
@@ -115,13 +120,13 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(spoj);
-            throw new NotImplementedException();
+            await _context.DMLSpojeAsync(spoj);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(404);
+            return StatusCode(500);
         }
-        return StatusCode(500);
     }
 
     [HttpGet]
@@ -132,7 +137,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetSpojeAsync());
+            return View((await _context.GetSpojeAsync())?.OrderBy(item => item.IdLinka));
         }
         catch (Exception)
         {

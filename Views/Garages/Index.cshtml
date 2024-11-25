@@ -2,11 +2,11 @@
 @model IEnumerable<BCSH2BDAS2.Models.Garaz>
 
 @{
-    ViewData["Title"] = "Seznam";
+    ViewData["Title"] = "Seznam garáží";
 }
 
 <div class="d-flex justify-content-between mb-3">
-    <h2>Seznam </h2>
+    <h2>@ViewData["Title"]</h2>
     <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
 </div>
 

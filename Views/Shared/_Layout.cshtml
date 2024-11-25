@@ -31,8 +31,7 @@
                                     Spoj
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Spojení</a></li>
-                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Timetable") ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a></li>
+                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a></li>
                                 </ul>
                             </li>
                         }
@@ -45,17 +44,16 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a></li>
-                                    <li><a class="dropdown-item @(RazorHelper.IsControllerAndAction(ViewContext, "Timetable", "Index") ? "active" : "")" asp-controller="Timetable" asp-action="Index">Jízdní řády</a></li>
                                 </ul>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasMaintainerRights() == true)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasMaintainerRights() == true && ((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == false)
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles") ? "active" : "")" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true && ((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == false)
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops") ? "active" : "")" asp-controller="Stops" asp-action="Index">Zastávky</a>
@@ -127,6 +125,14 @@
         </nav>
     </header>
     <main class="container pt-3" role="main" style="max-width:90vw">
+        @{
+            if (TempData["error"] != null)
+            {
+                <div class="error-div">
+                    @TempData["error"]
+                </div>
+            }
+        }
         @RenderBody()
     </main>
     <footer class="border-top footer text-muted">

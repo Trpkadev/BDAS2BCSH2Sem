@@ -4,18 +4,15 @@ using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Data;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace BCSH2BDAS2.Models;
 
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
-    public DbSet<Cisteni> Cisteni { get; set; }
     public DbSet<Garaz> Garaze { get; set; }
     public DbSet<JizniRad> JizdniRady { get; set; }
     public DbSet<Linka> Linky { get; set; }
     public DbSet<Model> Modely { get; set; }
-    public DbSet<Oprava> Opravy { get; set; }
     public DbSet<Spoj> Spoje { get; set; }
     public DbSet<TarifniPasmo> TarifniPasma { get; set; }
     public DbSet<TypVozidla> TypyVozidel { get; set; }
@@ -28,9 +25,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
 	#region DML procedures
 
-	public async Task DMLGarazeAsync(Garaz garaz)
+    public async Task DMLGarazeAsync(Garaz garaz)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idGaraz, :nazev, :kapacita);";
+        string sql = $"{ConvertDMLMethodName()}(:idGaraz, :nazev, :kapacita);";
         OracleParameter[] sqlParams = [ new OracleParameter("idGaraz", ConvertId(garaz.IdGaraz)),
                                         new OracleParameter("nazev", garaz.Nazev),
                                         new OracleParameter("kapacita", garaz.Kapacita)];
@@ -39,7 +36,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLJizdni_RadyAsync(JizniRad jizdniRad)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
+        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new OracleParameter("idSpoj", jizdniRad.IdSpoj),
                                         new OracleParameter("idZastavka", jizdniRad.IdZastavka),
                                         new OracleParameter("casPrijezdu", jizdniRad.CasPrijezdu),
@@ -49,7 +46,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLLinkyAsync(Linka linka)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idLinka, :nazev, :typVozidla, :cislo);";
+        string sql = $"{ConvertDMLMethodName()}(:idLinka, :nazev, :typVozidla, :cislo);";
         OracleParameter[] sqlParams = [ new OracleParameter("idLinka", ConvertId(linka.IdLinka)),
                                         new OracleParameter("nazev", linka.Nazev),
                                         new OracleParameter("typVozidla", linka.IdTypVozidla),
@@ -59,7 +56,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLModelyAsync(Model model)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idModel, :idTypVozidla, :idZnacka, :nazev, :jeNizkopodlazni);";
+        string sql = $"{ConvertDMLMethodName()}(:idModel, :idTypVozidla, :idZnacka, :nazev, :jeNizkopodlazni);";
         OracleParameter[] sqlParams = [ new OracleParameter("idModel", ConvertId(model.IdModel)),
                                         new OracleParameter("idTypVozidla", model.IdTypVozidla),
                                         new OracleParameter("idZnacka", model.IdZnacka),
@@ -70,7 +67,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLRoleAsync(Role role)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idRole, :nazev, :prava);";
+        string sql = $"{ConvertDMLMethodName()}(:idRole, :nazev, :prava);";
         OracleParameter[] sqlParams = [ new OracleParameter("idRole", ConvertId(role.IdRole)),
                                         new OracleParameter("nazev", role.Nazev),
                                         new OracleParameter("prava", role.Prava)];
@@ -79,7 +76,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSchemataAsync(Schema schema)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idSchema, :nazevSchematu, :nazevSouboru, :typSouboru, :velikostSouboru, :datumZmeny, :soubor);";
+        string sql = $"{ConvertDMLMethodName()}(:idSchema, :nazevSchematu, :nazevSouboru, :typSouboru, :velikostSouboru, :datumZmeny, :soubor);";
         OracleParameter[] sqlParams = [ new OracleParameter("idSchema", ConvertId(schema.IdSchema)),
                                         new OracleParameter("nazevSchematu", schema.NazevSchematu),
                                         new OracleParameter("nazevSouboru", schema.NazevSouboru),
@@ -92,7 +89,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSpojeAsync(Spoj spoj)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idSpoj, :idLinka, :garantovaneNizkopodlazni, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli);";
+        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :garantovaneNizkopodlazni, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli);";
         OracleParameter[] sqlParams = [ new OracleParameter("idSpoj", ConvertId(spoj.IdSpoj)),
                                         new OracleParameter("idLinka", spoj.IdLinka),
                                         new OracleParameter("garantovaneNizkopodlazni", spoj.GarantovaneNizkopodlazni),
@@ -104,7 +101,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLTarifni_PasmaAsync(TarifniPasmo tarifniPasmo)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idPasmo, :nazev);";
+        string sql = $"{ConvertDMLMethodName()}(:idPasmo, :nazev);";
         OracleParameter[] sqlParams = [ new OracleParameter("idPasmo", ConvertId(tarifniPasmo.IdPasmo)),
                                         new OracleParameter("nazev", tarifniPasmo.Nazev)];
         await DMLPackageCall(sql, sqlParams);
@@ -112,7 +109,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLTypy_VozidelAsync(TypVozidla typVozidla)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idTypVozidla, :nazev);";
+        string sql = $"{ConvertDMLMethodName()}(:idTypVozidla, :nazev);";
         OracleParameter[] sqlParams = [ new OracleParameter("idTypVozidla", ConvertId(typVozidla.IdTypVozidla)),
                                         new OracleParameter("nazev", typVozidla.Nazev)];
         await DMLPackageCall(sql, sqlParams);
@@ -120,30 +117,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLUdrzbyAsync(Udrzba udrzba)
     {
-        List<OracleParameter> sqlParams = [ new OracleParameter("idUdrzba", ConvertId(udrzba.IdUdrzba)),
-                                            new OracleParameter("idVozidlo", udrzba.IdVozidlo),
-                                            new OracleParameter("datum", udrzba.Datum)];
-        StringBuilder sql = new($"{ConvertMethodNameToDML()}(:idUdrzba, :idVozidlo, :datum, ");
-        if (udrzba is Cisteni cisteni)
-        {
-            sql.Append(":typUdrzby, :umytoVMycce, :cistenoOzonem);");
-            sqlParams.Add(new OracleParameter("typUdrzby", 'c'));
-            sqlParams.Add(new OracleParameter("umytoVMycce", cisteni.UmytoVMycce ? 1 : 0));
-            sqlParams.Add(new OracleParameter("cistenoOzonem", cisteni.CistenoOzonem ? 1 : 0));
-        }
-        else if (udrzba is Oprava oprava)
-        {
-            sql.Append(":typUdrzby, :popisUkonu, :cena);");
-            sqlParams.Add(new OracleParameter("typUdrzby", 'o'));
-            sqlParams.Add(new OracleParameter("popisUkonu", oprava.PopisUkonu));
-            sqlParams.Add(new OracleParameter("cena", oprava.Cena));
-        }
-        await DMLPackageCall(sql.ToString(), [.. sqlParams]);
+        string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum,:typUdrzby, :umytoVMycce, :cistenoOzonem, :typUdrzby, :popisUkonu, :cena);";
+        OracleParameter[] sqlParams = [ new OracleParameter("idUdrzba", ConvertId(udrzba.IdUdrzba)),
+                                        new OracleParameter("idVozidlo", udrzba.IdVozidlo),
+                                        new OracleParameter("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
+                                        new OracleParameter("popisUkonu", udrzba.PopisUkonu),
+                                        new OracleParameter("cena", udrzba.Cena),
+                                        new OracleParameter("umytoVMycce", udrzba.UmytoVMycce),
+                                        new OracleParameter("cistenoOzonem", udrzba.CistenoOzonem),
+                                        new OracleParameter("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
+        await DMLPackageCall(sql.ToString(), sqlParams);
     }
 
     public async Task DMLUzivateleAsync(Uzivatel uzivatel)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idUzivatel, :jmeno, :heslo, :idRole);";
+        string sql = $"{ConvertDMLMethodName()}(:idUzivatel, :jmeno, :heslo, :idRole);";
         OracleParameter[] sqlParams = [ new OracleParameter("idUzivatel", ConvertId(uzivatel.IdUzivatel)),
                                         new OracleParameter("jmeno", uzivatel.Jmeno),
                                         new OracleParameter("heslo", uzivatel.Heslo),
@@ -153,7 +141,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLVozidlaAsync(Vozidlo vozidlo)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idVozidlo,:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel);";
+        string sql = $"{ConvertDMLMethodName()}(:idVozidlo,:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel);";
         OracleParameter[] sqlParams = [ new OracleParameter("idVozidlo", ConvertId(vozidlo.IdVozidlo)),
                                         new OracleParameter("rokVyroby", vozidlo.RokVyroby),
                                         new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry),
@@ -166,7 +154,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLZastavkyAsync(Zastavka zastavka)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idZastavka, :nazev, :souradniceX, :souradniceY, :idPasmo);";
+        string sql = $"{ConvertDMLMethodName()}(:idZastavka, :nazev, :souradniceX, :souradniceY, :idPasmo);";
         OracleParameter[] sqlParams = [ new OracleParameter("idZastavka", ConvertId(zastavka.IdZastavka)),
                                         new OracleParameter("nazev", zastavka.Nazev),
                                         new OracleParameter("souradniceX", zastavka.SouradniceX),
@@ -177,7 +165,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLZaznamy_TrasyAsync(ZaznamTrasy zaznamTrasy)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:idZaznam, :idSpoj, :idZastavka, :idVozidlo, :casPrijezdu, :casOdjezdu);";
+        string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idSpoj, :idZastavka, :idVozidlo, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new OracleParameter("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
                                         new OracleParameter("idSpoj", zaznamTrasy.IdSpoj),
                                         new OracleParameter("idZastavka", zaznamTrasy.IdZastavka),
@@ -189,7 +177,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLZnackyAsync(Znacka znacka)
     {
-        string sql = $"{ConvertMethodNameToDML()}(:ídZnacka, :nazev);";
+        string sql = $"{ConvertDMLMethodName()}(:ídZnacka, :nazev);";
         OracleParameter[] sqlParams = [ new OracleParameter("ídZnacka", ConvertId(znacka.IdZnacka)),
                                         new OracleParameter("nazev", znacka.Nazev)];
         await DMLPackageCall(sql, sqlParams);
@@ -199,9 +187,15 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
 	#region views
 
-	public async Task<List<Garaz>?> GetGarazeAsync()
+    public async Task<List<Garaz>?> GetGarazeAsync()
     {
         return await GetDBView<Garaz>(ConvertMethodNameToView());
+    }
+
+    public async Task<Garaz?> GetGarazeByIdAsync(int id)
+    {
+        string whereClause = $"IDGARAZ = {id}";
+        return await GetDBView<Garaz>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<JizniRad>?> GetJizdni_RadyAsync()
@@ -209,9 +203,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<JizniRad>(ConvertMethodNameToView());
     }
 
+    public async Task<JizniRad?> GetJizdni_RadyByIdAsync(int id)
+    {
+        string whereClause = $"IDJIZDNI_RAD = {id}";
+        return await GetDBView<JizniRad>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<Linka>?> GetLinkyAsync()
     {
         return await GetDBView<Linka>(ConvertMethodNameToView());
+    }
+
+    public async Task<Linka?> GetLinkyByIdAsync(int id)
+    {
+        string whereClause = $"IDLINKA = {id}";
+        return await GetDBView<Linka>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Model>?> GetModelyAsync()
@@ -219,21 +225,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Model>(ConvertMethodNameToView());
     }
 
+    public async Task<Model?> GetModelyByIdAsync(int id)
+    {
+        string whereClause = $"IDMODEL = {id}";
+        return await GetDBView<Model>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<Role>?> GetRoleAsync()
     {
         return await GetDBView<Role>(ConvertMethodNameToView());
     }
 
-    public async Task<Role?> GetRoleById(int roleId)
+    public async Task<Role?> GetRoleByIdAsync(int id)
     {
-        string sql = @"DECLARE
-                     v_role_json CLOB;
-                     BEGIN
-                     v_role_json := GetRoleById(:p_role_id);
-                     :p_result := v_role_json;
-                     END;";
-        OracleParameter[] sqlParams = [new OracleParameter("p_role_id", OracleDbType.Int32, roleId, ParameterDirection.Input)];
-        return await GetObjectFromDB<Role>(sql, sqlParams);
+        string whereClause = $"IDROLE = {id}";
+        return await GetDBView<Role>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Spoj>?> GetSpojeAsync()
@@ -241,9 +247,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Spoj>(ConvertMethodNameToView());
     }
 
+    public async Task<Spoj?> GetSpojeByIdAsync(int id)
+    {
+        string whereClause = $"IDSPOJ = {id}";
+        return await GetDBView<Spoj>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<TarifniPasmo>?> GetTarifni_PasmaAsync()
     {
         return await GetDBView<TarifniPasmo>(ConvertMethodNameToView());
+    }
+
+    public async Task<TarifniPasmo?> GetTarifni_PasmaByIdAsync(int id)
+    {
+        string whereClause = $"IDTARIFNI_PASMO = {id}";
+        return await GetDBView<TarifniPasmo>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<TypVozidla>?> GetTypy_VozidelAsync()
@@ -251,16 +269,21 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<TypVozidla>(ConvertMethodNameToView());
     }
 
-    public async Task<Uzivatel?> GetUzivatelByIdAsync(int id)
+    public async Task<TypVozidla?> GetTypy_VozidelByIdAsync(int id)
     {
-        string sql = @"DECLARE
-                     v_uzivatel_json CLOB;
-                     BEGIN
-                     v_uzivatel_json := GetUzivatelById(:p_id_uzivatel);
-                     :p_result := v_uzivatel_json;
-                     END;";
-        OracleParameter[] sqlParams = [new OracleParameter("p_id_uzivatel", OracleDbType.Int32, id, ParameterDirection.Input)];
-        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+        string whereClause = $"IDTYP_VOZIDLA = {id}";
+        return await GetDBView<TypVozidla>(ConvertMethodNameToView(), whereClause);
+    }
+
+    public async Task<List<Udrzba>?> GetUdrzbyAsync()
+    {
+        return await GetDBView<Udrzba>(ConvertMethodNameToView());
+    }
+
+    public async Task<Udrzba?> GetUdrzbyByIdAsync(int id)
+    {
+        string whereClause = $"IDUDRZBA = {id}";
+        return await GetDBView<Udrzba>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<Uzivatel?> GetUzivatelByNamePwdAsync(string name, string pwdHash)
@@ -276,9 +299,27 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
     }
 
+    public async Task<Uzivatel?> GetUzivatelByNameAsync(string name)
+    {
+        string sql = @"DECLARE
+                     v_uzivatel_json CLOB;
+                     BEGIN
+                     v_uzivatel_json := GetUzivatelByJmeno(:p_jmeno_uzivatel);
+                     :p_result := v_uzivatel_json;
+                     END;";
+        OracleParameter[] sqlParams = [new OracleParameter("p_jmeno_uzivatel", OracleDbType.Varchar2, name, ParameterDirection.Input)];
+        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+    }
+
     public async Task<List<Uzivatel>?> GetUzivateleAsync()
     {
         return await GetDBView<Uzivatel>(ConvertMethodNameToView());
+    }
+
+    public async Task<Uzivatel?> GetUzivateleByIdAsync(int id)
+    {
+        string whereClause = $"IDUZIVATEL = {id}";
+        return await GetDBView<Uzivatel>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Vozidlo>?> GetVozidlaAsync()
@@ -286,33 +327,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Vozidlo>(ConvertMethodNameToView());
     }
 
-    public async Task<Vozidlo?> GetVozidloByIdAsync(int id)
+    public async Task<Vozidlo?> GetVozidlaByIdAsync(int id)
     {
-        string sql = @"DECLARE
-                     v_vozidlo_json CLOB;
-                     BEGIN
-                     v_vozidlo_json := GetVozidloById(:p_id_vozidlo);
-                     :p_result := v_vozidlo_json;
-                     END;";
-        OracleParameter[] sqlParams = [new OracleParameter("p_id_vozidlo", OracleDbType.Int32, id, ParameterDirection.Input)];
-        return await GetObjectFromDB<Vozidlo>(sql, sqlParams);
-    }
-
-    public async Task<Zastavka?> GetZastavkaByIdAsync(int id)
-    {
-        string sql = @"DECLARE
-                     v_zastavka_json CLOB;
-                     BEGIN
-                     v_zastavka_json := GetZastavkaById(:p_id_zastavka);
-                     :p_result := v_zastavka_json;
-                     END;";
-        OracleParameter[] sqlParams = [new OracleParameter("p_id_zastavka", OracleDbType.Int32, id, ParameterDirection.Input)];
-        return await GetObjectFromDB<Zastavka>(sql, sqlParams);
-    }
-
-    public async Task<List<Udrzba>?> GetUdrzbyAsync()
-    {
-        return await GetDBView<Udrzba>(ConvertMethodNameToView());
+        string whereClause = $"IDVOZIDLO = {id}";
+        return await GetDBView<Vozidlo>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Zastavka>?> GetZastavkyAsync()
@@ -320,9 +338,27 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Zastavka>(ConvertMethodNameToView());
     }
 
+    public async Task<Zastavka?> GetZastavkyByIdAsync(int id)
+    {
+        string whereClause = $"IDZASTAVKA = {id}";
+        return await GetDBView<Zastavka>(ConvertMethodNameToView(), whereClause);
+    }
+
+    public async Task<ZaznamTrasy?> GetZaznamy_TrasyByIdAsync(int id)
+    {
+        string whereClause = $"IDZAZNAM_TRASY = {id}";
+        return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<ZaznamTrasy>?> GetZaznamy_TrasyAsync()
     {
         return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView());
+    }
+
+    public async Task<Znacka?> GetZnackyByIdAsync(int id)
+    {
+        string whereClause = $"IDZNACKA = {id}";
+        return await GetDBView<Znacka>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Znacka>?> GetZnackyAsync()
@@ -334,34 +370,28 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
 	#region EF Core config
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine);
     }
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 #if DEBUG
         modelBuilder.HasDefaultSchema("ST69642");
 #elif RELEASE
         modelBuilder.HasDefaultSchema("ST69612");
 #endif
-        modelBuilder.Entity<Udrzba>()
-            .HasDiscriminator<char>("TYP_UDRZBY")
-            .HasValue<Cisteni>('c')
-            .HasValue<Oprava>('o')
-            .HasValue<Udrzba>('x');
     }
 
 	#endregion
 
 	#region Helper methods
+    private static string ConvertDMLMethodName([CallerMemberName] string methodName = "") => methodName.ToUpper().Replace("DML", "DML_").Replace("ASYNC", string.Empty);
 
-	private static int? ConvertId(int id) => id == 0 ? null : id;
+    private static int? ConvertId(int id) => id == 0 ? null : id;
 
-    private static string ConvertMethodNameToDML([CallerMemberName] string methodName = "") => methodName.Replace("DML", "DML_").Replace("Async", string.Empty).ToUpper();
-
-    private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.Replace("Get", string.Empty).Replace("Async", string.Empty).ToLower();
+    private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.ToLower().Replace("get", string.Empty).Replace("async", string.Empty).Replace("byid", string.Empty);
 
     private async Task DMLPackageCall(string sql, OracleParameter[] sqlParams)
     {
@@ -374,17 +404,28 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
-    private async Task<List<T>?> GetDBView<T>(string modelName, int? id = null) where T : class
+    private async Task<T?> GetDBView<T>(string viewName, string whereClase) where T : class
     {
-        StringBuilder sql = new(@$"DECLARE
-                     v_{modelName}_json CLOB;
-                     BEGIN
-                     SELECT JSON_ARRAYAGG(JSON_OBJECT(*) RETURNING CLOB) INTO v_{modelName}_json FROM {modelName.ToUpper()}_VIEW");
-        if (id != null)
-            sql.Append($" WHERE ID_{modelName.ToUpper()} = {id}");
-        sql.Append(@$";
-                     :p_result := v_{modelName}_json;
-                     END;");
+        string sql = @$"DECLARE
+                        v_{viewName}_json CLOB;
+                        BEGIN
+                        SELECT JSON_OBJECT(*) INTO v_{viewName}_json
+                        FROM {viewName.ToUpper()}_VIEW
+                        WHERE {whereClase};
+                        :p_result := v_{viewName}_json;
+                        END;";
+        return await GetObjectFromDB<T>(sql.ToString());
+    }
+
+    private async Task<List<T>?> GetDBView<T>(string viewName) where T : class
+    {
+        string sql = @$"DECLARE
+                        v_{viewName}_json CLOB;
+                        BEGIN
+                        SELECT JSON_ARRAYAGG(JSON_OBJECT(*) RETURNING CLOB) INTO v_{viewName}_json
+                        FROM {viewName.ToUpper()}_VIEW;
+                        :p_result := v_{viewName}_json;
+                        END;";
         return await GetObjectFromDB<List<T>>(sql.ToString());
     }
 
@@ -409,10 +450,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                     resultJson = ((OracleClob)resultParam.Value).Value;
                 await connection.CloseAsync();
             }
-            //TODO Deserializace typu údržby
             return JsonConvert.DeserializeObject<T>(resultJson);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return null;
         }

@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -16,8 +17,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-
-            throw new NotImplementedException();
+            return View();
         }
         catch (Exception)
         {
@@ -36,7 +36,9 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(typVozidla);
-            throw new NotImplementedException();
+            await _context.DMLTypy_VozidelAsync(typVozidla);
+
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -56,7 +58,10 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
 
-            throw new NotImplementedException();
+            var type = await _context.GetTypy_VozidelByIdAsync(id);
+            if (type == null)
+                return StatusCode(404);
+            return View(type);
         }
         catch (Exception)
         {
@@ -76,7 +81,12 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            throw new NotImplementedException();
+            var type = await _context.GetTypy_VozidelByIdAsync(typVozidla.IdTypVozidla);
+            if (type == null)
+                return StatusCode(404);
+            await _context.Database.ExecuteSqlRawAsync("DELETE FROM TYPY_VOZIDEL WHERE ID_TYP_VOZIDLA = {0}", typVozidla.IdTypVozidla);
+
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -96,7 +106,9 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            throw new NotImplementedException();
+
+            var type = await _context.GetTypy_VozidelByIdAsync(id);
+            return View(type);
         }
         catch (Exception)
         {
@@ -115,13 +127,13 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(typVozidla);
-            throw new NotImplementedException();
+            await _context.DMLTypy_VozidelAsync(typVozidla);
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(404);
+            return StatusCode(500);
         }
-        return StatusCode(500);
     }
 
     public async Task<IActionResult> Index()

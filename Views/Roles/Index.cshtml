@@ -2,12 +2,11 @@
 @model IEnumerable<BCSH2BDAS2.Models.Role>
 
 @{
-    ViewData["Title"] = "Seznam";
+    ViewData["Title"] = "Seznam rolí";
 }
 
-
 <div class="d-flex justify-content-between mb-3">
-    <h2>Seznam všech rolí</h2>
+    <h2>@ViewData["Title"]</h2>
     <a asp-action="Create" class="btn btn-primary">Vytvořit novou</a>
 </div>
 

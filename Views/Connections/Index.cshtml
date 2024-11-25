@@ -2,11 +2,11 @@
 @model IEnumerable<BCSH2BDAS2.Models.Spoj>
 
 @{
-    ViewData["Title"] = "Seznam";
+    ViewData["Title"] = "Seznam spojů";
 }
 
 <div class="d-flex justify-content-between mb-3">
-    <h2>Seznam </h2>
+    <h2>@ViewData["Title"]</h2>
     <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
 </div>
 
@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdLinka)@* TODO Join table *@
+                @Html.DisplayNameFor(model => model.IdLinka)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.JedeVSobotu)
@@ -36,7 +36,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(_ => item.IdLinka) @* TODO Join table *@
+                    @Html.DisplayFor(_ => item.IdLinka)
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.JedeVSobotu)

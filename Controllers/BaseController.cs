@@ -47,7 +47,7 @@ public abstract class BaseController : Controller
         }
         else
         {
-            ActingUser = _context.GetUzivatelByIdAsync((int)id).Result;
+            ActingUser = _context.GetUzivateleByIdAsync((int)id).Result;
         }
         var serializedUser = JsonConvert.SerializeObject(ActingUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);
@@ -62,7 +62,7 @@ public abstract class BaseController : Controller
             return false;
         LoggedUser = user;
         ActingUser = user;
-        Role? role = await _context.GetRoleById(user.IdRole);
+        Role? role = await _context.GetRoleByIdAsync(user.IdRole);
         if (role == null)
             return false;
         user.Role = role;

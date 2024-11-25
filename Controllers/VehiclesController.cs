@@ -65,11 +65,11 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloByIdAsync(id);
-            if (vozidlo == null)
+            var vehicle = await _context.GetVozidlaByIdAsync(id);
+            if (vehicle == null)
                 return StatusCode(404);
 
-            return View(vozidlo);
+            return View(vehicle);
         }
         catch (Exception)
         {
@@ -109,7 +109,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloByIdAsync(id);
+            var vozidlo = await _context.GetVozidlaByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
 
@@ -133,7 +133,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidloByIdAsync(id);
+            var vozidlo = await _context.GetVozidlaByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
 
@@ -163,12 +163,12 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.Database.ExecuteSqlRawAsync("UPDATE VOZIDLA SET ROK_VYROBY = {0}, NAJETE_KILOMETRY = {1}, KAPACITA = {2}, MA_KLIMATIZACI = {3}, ID_GARAZ = {4}, ID_MODEL = {5} WHERE ID_VOZIDLO = {6}", vozidlo.RokVyroby, vozidlo.NajeteKilometry, vozidlo.Kapacita, vozidlo.MaKlimatizaci ? 1 : 0, vozidlo.IdGaraz, vozidlo.IdModel, vozidlo.IdVozidlo);
+            await _context.DMLVozidlaAsync(vozidlo);
             return RedirectToAction(nameof(Index));
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) == null)
+            if (await _context.GetVozidlaByIdAsync(vozidlo.IdVozidlo) == null)
                 return StatusCode(404);
             return StatusCode(500);
         }

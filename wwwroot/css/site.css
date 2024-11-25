@@ -32,3 +32,9 @@ p {
 th, td, select {
     text-align: center;
 }
+
+.error-div {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}

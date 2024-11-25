@@ -56,7 +56,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var uzivatel = await _context.GetUzivatelByIdAsync(id);
+            var uzivatel = await _context.GetUzivateleByIdAsync(id);
             if (uzivatel == null)
                 return StatusCode(404);
 
@@ -79,10 +79,30 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetZastavkaByIdAsync(uzivatel.IdUzivatel) != null)
+            if (await _context.GetUzivateleByIdAsync(uzivatel.IdUzivatel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", uzivatel.IdUzivatel);
 
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPost]
+    [Route("EditSubmit")]
+    public async Task<IActionResult> EditSubmit([FromBody] Uzivatel uzivatel)
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+            if (await _context.GetUzivateleByIdAsync(uzivatel.IdUzivatel) != null)
+                await _context.DMLUzivateleAsync(uzivatel);
+            return StatusCode(200);
         }
         catch (Exception)
         {
@@ -115,12 +135,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
             if (await LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
                 return RedirectToAction(nameof(Index), "Home");
-            else
-                return RedirectToAction(nameof(Login));
-        }
-        catch (Exception) // při nesprávném jménu nebo heslu
-        {
+            TempData["error"] = "Nesprávné jméno nebo heslo";
             return RedirectToAction(nameof(Login));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
         }
     }
 
@@ -164,6 +184,11 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return View(uzivatel);
+            if (await _context.GetUzivatelByNameAsync(uzivatel.Jmeno) != null)
+            {
+                TempData["error"] = "Jméno již existuje";
+                return View(uzivatel);
+            }
             uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);
             uzivatel.IdRole = 1;
             await _context.DMLUzivateleAsync(uzivatel);

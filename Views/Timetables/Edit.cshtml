@@ -1,7 +1,4 @@
-﻿<h2>NOT IMPLEMENTED </h2>
-
-@*
-@model BCSH2BDAS2.Models.JizniRad
+﻿@model BCSH2BDAS2.Models.JizniRad
 
 @{
     ViewData["Title"] = "Upravit";
@@ -16,14 +13,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdJizdniRad" />
 
-            TODO Join table 
             <div class="form-group mb-3">
                 <label asp-for="IdZastavka" class="control-label"></label>
                 <input asp-for="IdZastavka" class="form-control" />
                 <span asp-validation-for="IdZastavka" class="text-danger"></span>
             </div>
 
-            TODO Join table 
             <div class="form-group mb-3">
                 <label asp-for="IdSpoj" class="control-label"></label>
                 <input asp-for="IdSpoj" class="form-control" />
@@ -50,4 +45,3 @@
 <div>
     <a asp-action="Index">Zpět na seznam</a>
 </div>
- *@

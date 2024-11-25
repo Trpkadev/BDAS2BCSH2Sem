@@ -19,6 +19,7 @@ public class Role
 
     [JsonRequired]
     [Column("PRAVA")]
+    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5.")]
     public int Prava { get; set; }
 
     public override string ToString() => Nazev;

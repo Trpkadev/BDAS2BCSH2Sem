@@ -20,4 +20,19 @@ public class Udrzba
     [JsonRequired]
     [Column("ID_VOZIDLO")]
     public int IdVozidlo { get; set; }
+
+    [Column("POPIS_UKONU")]
+    public string? PopisUkonu { get; set; }
+
+    [Column("CENA")]
+    public double? Cena { get; set; }
+
+    [Column("UMYTO_V_MYCCE")]
+    public bool? UmytoVMycce { get; set; }
+
+    [Column("CISTENO_OZONEM")]
+    public bool? CistenoOzonem { get; set; }
+
+    [Column("TYP_UDRZBY")]
+    public char TypUdrzby { get; set; }
 }

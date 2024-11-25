@@ -62,7 +62,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaByIdAsync(id);
+            var zastavka = await _context.GetZastavkyByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -85,7 +85,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetZastavkaByIdAsync(zastavka.IdZastavka) != null)
+            if (await _context.GetZastavkyByIdAsync(zastavka.IdZastavka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", zastavka.IdZastavka);
 
             return RedirectToAction(nameof(Index));
@@ -107,7 +107,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaByIdAsync(id);
+            var zastavka = await _context.GetZastavkyByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -131,7 +131,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var zastavka = await _context.GetZastavkaByIdAsync(id);
+            var zastavka = await _context.GetZastavkyByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
@@ -163,7 +163,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            if (await _context.GetZastavkaByIdAsync(zastavka.IdZastavka) == null)
+            if (await _context.GetZastavkyByIdAsync(zastavka.IdZastavka) == null)
                 return StatusCode(404);
         }
 
@@ -179,7 +179,6 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
             List<Zastavka>? zastavky = await _context.GetZastavkyAsync();
-            //TODO Join table Tarifni_Pasma
             return View(zastavky);
         }
         catch (Exception)
