@@ -1,43 +1,87 @@
 ﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model IEnumerable<BCSH2BDAS2.Models.Schema>
 @{
     ViewData["Title"] = "Seznam schémat";
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto">
-    <table class="table text-nowrap">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.NazevSchematu)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VelikostSouboru)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Soubor)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(_ => item.NazevSchematu)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.VelikostSouboru)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.Soubor)
-                    </td>
 
-                    @await Html.PartialAsync("IndexActionButtons", item.IdSchema)
-                </tr>
+<div class="container mt-4">
+    <ul class="nav nav-tabs">
+        @{
+            for (int i = 0; i < Model.Count(); i++)
+            {
+                var activeClass = i == 0 ? "nav-link active" : "nav-link";
+                <li class="nav-item">
+                    <a class="@activeClass" data-bs-toggle="tab" href="#tab1">@Model.ElementAt(i).NazevSchematu</a>
+                </li>
             }
-        </tbody>
-    </table>
+            @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+            {
+                var activeClass = Model.Count() == 0 ? "nav-link active" : "nav-link";
+                <li class="nav-item">
+                    <a class="@activeClass" data-bs-toggle="tab" href="#tabTable">Table</a>
+                </li>
+            }
+        }
+    </ul>
+
+    <div class="tab-content">
+        @{
+            for (int i = 0; i < Model.Count(); i++)
+            {
+                var activeClass = i == 0 ? "tab-pane fade show active" : "tab-pane fade";
+                <div id="tab@i" class="@activeClass">
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ElementAt(i).Soubor)" />
+                    <p>@Model.ElementAt(i).NazevSouboru</p>
+                    <p>@Model.ElementAt(i).VelikostSouboru</p>
+                    <p>@Model.ElementAt(i).DatumZmeny</p>
+                </div>
+            }
+
+            @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+            {
+                var activeClass = Model.Count() == 0 ? "tab-pane fade show active" : "tab-pane fade";
+                <div id="tabTable" class="@activeClass">
+                    <div class="table-responsive overflow-auto">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.NazevSchematu)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VelikostSouboru)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Soubor)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.NazevSchematu)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.VelikostSouboru)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.Soubor)
+                                        </td>
+
+                                        @await Html.PartialAsync("IndexActionButtons", item.IdSchema)
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>

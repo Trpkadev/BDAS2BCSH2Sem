@@ -36,6 +36,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         }
     }
 
+    [RequestSizeLimit(50 * 1024 * 1024)]
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("CreateEditSubmit")]
@@ -48,7 +49,16 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return View(schema);
 
-            await _context.DMLSchemataAsync(schema);
+            if (schema.UploadedFile != null)
+            {
+                using var memoryStream = new MemoryStream();
+                await schema.UploadedFile.CopyToAsync(memoryStream);
+                schema.Soubor = memoryStream.ToArray();
+                schema.NazevSouboru = schema.UploadedFile.FileName;
+                schema.TypSouboru = schema.UploadedFile.ContentType;
+                schema.VelikostSouboru = (int)memoryStream.Length;
+                await _context.DMLSchemataAsync(schema);
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
