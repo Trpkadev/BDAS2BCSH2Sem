@@ -12,17 +12,17 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
 {
     [HttpGet]
     [Route("Create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
 
-            var garaze = _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToList();
+            var garaze = await _context.GetGarazeAsync();
             var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
             ViewBag.Garaze = garazeList;
-            var modely = _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToList();
+            var modely = await _context.GetModelyAsync();
             var modelyList = new SelectList(modely, "IdModel", "Nazev");
             ViewBag.Modely = modelyList;
 
@@ -88,7 +88,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
+            if (await _context.GetVozidlaByIdAsync(vozidlo.IdVozidlo) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
 
             return RedirectToAction(nameof(Index));
         }
@@ -137,10 +138,10 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (vozidlo == null)
                 return StatusCode(404);
 
-            var garaze = await _context.Garaze.FromSqlRaw("SELECT * FROM GARAZE").ToListAsync();
+            var garaze = await _context.GetGarazeAsync();
             var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
             ViewBag.Garaze = garazeList;
-            var modely = await _context.Modely.FromSqlRaw("SELECT * FROM MODELY").ToListAsync();
+            var modely = await _context.GetModelyAsync();
             var modelyList = new SelectList(modely, "IdModel", "Nazev");
             ViewBag.Modely = modelyList;
 
@@ -166,10 +167,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             await _context.DMLVozidlaAsync(vozidlo);
             return RedirectToAction(nameof(Index));
         }
-        catch (DbUpdateConcurrencyException)
+        catch (Exception)
         {
-            if (await _context.GetVozidlaByIdAsync(vozidlo.IdVozidlo) == null)
-                return StatusCode(404);
             return StatusCode(500);
         }
     }
@@ -182,7 +181,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetVozidlaAsync());
+            var vozidla = await _context.GetVozidlaAsync();
+            return View(vozidla);
         }
         catch (Exception)
         {

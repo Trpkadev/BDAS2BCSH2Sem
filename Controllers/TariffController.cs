@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+            if (await _context.GetTarifni_PasmaByIdAsync(tarifniPasmo.IdPasmo) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM TARIFNI_PASMA WHERE ID_PASMO = {0}", tarifniPasmo.IdPasmo);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -137,7 +139,8 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetTarifni_PasmaAsync());
+            var tarifniPasma = await _context.GetTarifni_PasmaAsync();
+            return View(tarifniPasma);
         }
         catch (Exception)
         {

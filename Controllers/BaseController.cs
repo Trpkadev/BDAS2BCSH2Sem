@@ -28,8 +28,8 @@ public abstract class BaseController : Controller
         }
     }
 
-    internal Uzivatel? ActingUser { get; private set; }
-    internal Uzivatel? LoggedUser { get; private set; }
+    internal IUser? ActingUser { get; private set; }
+    internal IUser? LoggedUser { get; private set; }
     protected bool IsLoggedIn => LoggedUser != null;
 
     protected static int GetDecryptedId(string encryptedId)
@@ -41,14 +41,7 @@ public abstract class BaseController : Controller
     {
         if (LoggedUser == null || !LoggedUser.HasAdminRights())
             return;
-        if (id == null)
-        {
-            ActingUser = LoggedUser;
-        }
-        else
-        {
-            ActingUser = _context.GetUzivateleByIdAsync((int)id).Result;
-        }
+        ActingUser = id == null ? LoggedUser : _context.GetUzivateleByIdAsync((int)id).Result;
         var serializedUser = JsonConvert.SerializeObject(ActingUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);
     }
@@ -57,12 +50,12 @@ public abstract class BaseController : Controller
     {
         username = username.ToLower();
         password = OurCryptography.EncryptHash(password);
-        Uzivatel? user = await _context.GetUzivatelByNamePwdAsync(username, password);
+        IUser? user = await _context.GetUzivatelOrPracovnikByNamePwdAsync(username, password);
         if (user == null)
             return false;
         LoggedUser = user;
         ActingUser = user;
-        Role? role = await _context.GetRoleByIdAsync(user.IdRole);
+        Role? role = user is Pracovnik pracovnik ? await _context.GetRoleByIdAsync(pracovnik.IdRole) : null;
         if (role == null)
             return false;
         user.Role = role;

@@ -1,6 +1,6 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models
-@model (IEnumerable<BCSH2BDAS2.Models.Uzivatel> uzivatele,IEnumerable<BCSH2BDAS2.Models.Role> role)
+@model IEnumerable<BCSH2BDAS2.Models.Uzivatel>
 @{
     ViewData["Title"] = "Seznam uživatelů";
 }
@@ -11,50 +11,31 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.uzivatele.First().Jmeno)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.uzivatele.First().Role.Nazev)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.uzivatele.First().HodinovaMzda)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.uzivatele.First().IdNadrizeny)
+                @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
             </th>
             <th></th>
-            <th></th>
+            @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+            {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (var uzivatel in Model.uzivatele)
+        @foreach (var uzivatel in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => uzivatel.Jmeno)
-                </td>
-                <td>
-                    @Html.DropDownListFor(modelItem => uzivatel.IdRole,
-                             new SelectList(Model.role.Where(role => role.Prava > 0).Select(role => new
-                             {
-                                 Value = role.IdRole,
-                                 Text = role.ToString()
-                             }), "Value", "Text", uzivatel.IdRole),
-                             new { @class = "form-control", @onchange = $"submitRoleChange(this, {uzivatel.IdUzivatel},'{uzivatel.Jmeno}','{uzivatel.Heslo}')" })
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => uzivatel.HodinovaMzda)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => uzivatel.IdNadrizeny)
+                    @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
                 </td>
                 <td>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Delete</a>
                 </td>
-                <td>
-                    <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
-                </td>
+                @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                {
+                    <td>
+                        <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
+                    </td>
+                }
             </tr>
             @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
             @Html.HiddenFor(modelItem => uzivatel.Heslo)

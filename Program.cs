@@ -1,4 +1,4 @@
-using BCSH2BDAS2.Models;
+using BCSH2BDAS2.Helpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 

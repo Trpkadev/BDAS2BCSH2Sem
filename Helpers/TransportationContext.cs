@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BCSH2BDAS2.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Data;
 using System.Runtime.CompilerServices;
 
-namespace BCSH2BDAS2.Models;
+namespace BCSH2BDAS2.Helpers;
 
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
@@ -131,11 +132,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLUzivateleAsync(Uzivatel uzivatel)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idUzivatel, :jmeno, :heslo, :idRole);";
+        string sql = $"{ConvertDMLMethodName()}(:idUzivatel, :jmeno, :heslo);";
         OracleParameter[] sqlParams = [ new OracleParameter("idUzivatel", ConvertId(uzivatel.IdUzivatel)),
-                                        new OracleParameter("jmeno", uzivatel.Jmeno),
-                                        new OracleParameter("heslo", uzivatel.Heslo),
-                                        new OracleParameter("idRole", uzivatel.IdRole)];
+                                        new OracleParameter("jmeno", uzivatel.UzivatelskeJmeno),
+                                        new OracleParameter("heslo", uzivatel.Heslo)];
         await DMLPackageCall(sql, sqlParams);
     }
 
@@ -184,93 +184,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     }
 
     #endregion DML procedures
-
-    // Z nějakýho důvodu nefunguje, stejně jako 90% věcí v Oracle DB, padá na Execute
-    public async Task<List<Uzivatel>> UsersCursor()
-    {
-        List<Uzivatel> uzivatele = [];
-
-        try
-        {
-            var connection = Database.GetDbConnection();
-
-            using (var command = connection.CreateCommand())
-            {
-                await connection.OpenAsync();
-
-                int index = 1; // Start index
-
-                while (true)
-                {
-                    command.CommandText = @"
-                BEGIN
-                    GetUzivatelByIndex(
-                        p_index => :p_index,
-                        p_id_uzivatel => :p_id_uzivatel,
-                        p_jmeno => :p_jmeno,
-                        p_heslo => :p_heslo,
-                        p_id_role => :p_id_role,
-                        p_id_nadrizeny => :p_id_nadrizeny,
-                        p_hodinova_mzda => :p_hodinova_mzda);
-                END;";
-
-                    command.CommandType = CommandType.Text;
-
-                    // Clear parameters from previous iteration
-                    command.Parameters.Clear();
-
-                    // Input parameter
-                    command.Parameters.Add(new OracleParameter("p_index", OracleDbType.Int32, index, ParameterDirection.Input));
-
-                    // Output parameters
-                    var p_id_uzivatel = new OracleParameter("p_id_uzivatel", OracleDbType.Int32, ParameterDirection.Output);
-                    var p_jmeno = new OracleParameter("p_jmeno", OracleDbType.Varchar2, 64, ParameterDirection.Output);
-                    var p_heslo = new OracleParameter("p_heslo", OracleDbType.Varchar2, 128, ParameterDirection.Output);
-                    var p_id_role = new OracleParameter("p_id_role", OracleDbType.Int32, ParameterDirection.Output);
-                    var p_id_nadrizeny = new OracleParameter("p_id_nadrizeny", OracleDbType.Int32, ParameterDirection.Output);
-                    var p_hodinova_mzda = new OracleParameter("p_hodinova_mzda", OracleDbType.Int32, ParameterDirection.Output);
-
-                    command.Parameters.AddRange(new[]
-                    {
-                    p_id_uzivatel,
-                    p_jmeno,
-                    p_heslo,
-                    p_id_role,
-                    p_id_nadrizeny,
-                    p_hodinova_mzda
-                });
-
-                    // Execute the PL/SQL block (and crash)
-                    await command.ExecuteNonQueryAsync();
-
-                    // Check if there is data
-                    if (p_id_uzivatel.Value == DBNull.Value)
-                        break; // No more users
-
-                    // Add user to the list
-                    uzivatele.Add(new Uzivatel
-                    {
-                        IdUzivatel = Convert.ToInt32(p_id_uzivatel.Value),
-                        Jmeno = p_jmeno.Value.ToString(),
-                        Heslo = p_heslo.Value.ToString(),
-                        IdRole = Convert.ToInt32(p_id_role.Value),
-                        IdNadrizeny = p_id_nadrizeny.Value == DBNull.Value ? null : Convert.ToInt32(p_id_nadrizeny.Value),
-                        HodinovaMzda = p_hodinova_mzda.Value == DBNull.Value ? null : Convert.ToInt32(p_hodinova_mzda.Value)
-                    });
-
-                    index++; // Move to the next row
-                }
-
-                await connection.CloseAsync();
-            }
-
-            return uzivatele;
-        }
-        catch (Exception)
-        {
-            return [];
-        }
-    }
 
     #region views
 
@@ -329,6 +242,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Role>(ConvertMethodNameToView(), whereClause);
     }
 
+    public async Task<List<Schema>?> GetSchemataAsync()
+    {
+        return await GetDBView<Schema>(ConvertMethodNameToView());
+    }
+
+    public async Task<Schema?> GetSchemataByIdAsync(int id)
+    {
+        string whereClause = $"IDSCHEMA = {id}";
+        return await GetDBView<Schema>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<Spoj>?> GetSpojeAsync()
     {
         return await GetDBView<Spoj>(ConvertMethodNameToView());
@@ -373,29 +297,39 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Udrzba>(ConvertMethodNameToView(), whereClause);
     }
 
-    public async Task<Uzivatel?> GetUzivatelByNamePwdAsync(string name, string pwdHash)
+    public async Task<IUser?> GetUzivatelOrPracovnikByNamePwdAsync(string name, string pwdHash)
     {
-        string sql = @"DECLARE
-                     v_uzivatel_json CLOB;
-                     BEGIN
-                     v_uzivatel_json := GetUzivatelByJmenoHash(:p_jmeno_uzivatel,:p_hash_uzivatel);
-                     :p_result := v_uzivatel_json;
-                     END;";
-        OracleParameter[] sqlParams = [ new OracleParameter("p_jmeno_uzivatel", OracleDbType.Varchar2, name, ParameterDirection.Input),
-                                        new OracleParameter("p_hash_uzivatel", OracleDbType.Varchar2, pwdHash, ParameterDirection.Input)];
-        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+        string sql = @" DECLARE
+                        v_uzivatel_json CLOB;
+                        BEGIN
+                        v_uzivatel_json := GetUzivatelOrPracovnikByJmenoHash(:p_uzivatelske_jmeno,:p_hash);
+                        :p_result := v_uzivatel_json;
+                        END;";
+        OracleParameter[] sqlParams = [ new OracleParameter("p_uzivatelske_jmeno", OracleDbType.Varchar2, name, ParameterDirection.Input),
+                                        new OracleParameter("p_hash", OracleDbType.Varchar2, pwdHash, ParameterDirection.Input)];
+        var a = await GetObjectFromDB<Dictionary<string, string>>(sql, sqlParams);
+        IUser? user = null;
+        if (a != null)
+        {
+            string json = JsonConvert.SerializeObject(a);
+            user = a.ContainsKey("IdRole") ? JsonConvert.DeserializeObject<Pracovnik>(json) : JsonConvert.DeserializeObject<Uzivatel>(json);
+        }
+        return user;
     }
 
-    public async Task<Uzivatel?> GetUzivatelByNameAsync(string name)
+    public async Task<bool> GetUzivatelOrPracovnikUsernameExistsAsync(string name)
     {
         string sql = @"DECLARE
-                     v_uzivatel_json CLOB;
+                     v_result CLOB;
                      BEGIN
-                     v_uzivatel_json := GetUzivatelByJmeno(:p_jmeno_uzivatel);
-                     :p_result := v_uzivatel_json;
+                     v_result := GetUzivatelOrPracovnikUsernameExists(:p_uzivatelske_jmeno);
+                     :p_result := v_result;
                      END;";
-        OracleParameter[] sqlParams = [new OracleParameter("p_jmeno_uzivatel", OracleDbType.Varchar2, name, ParameterDirection.Input)];
-        return await GetObjectFromDB<Uzivatel>(sql, sqlParams);
+        OracleParameter[] sqlParams = [new OracleParameter("p_uzivatelske_jmeno", OracleDbType.Varchar2, name, ParameterDirection.Input)];
+        var result = await GetObjectFromDB<Dictionary<string, bool>>(sql, sqlParams);
+        bool exists = false;
+        result?.TryGetValue("exists", out exists);
+        return exists;
     }
 
     public async Task<List<Uzivatel>?> GetUzivateleAsync()
@@ -407,6 +341,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     {
         string whereClause = $"IDUZIVATEL = {id}";
         return await GetDBView<Uzivatel>(ConvertMethodNameToView(), whereClause);
+    }
+
+    public async Task<List<Pracovnik>?> GetPracovniciAsync()
+    {
+        return await GetDBView<Pracovnik>(ConvertMethodNameToView());
+    }
+
+    public async Task<Pracovnik?> GetPracovniciByIdAsync(int id)
+    {
+        string whereClause = $"IDPRACOVNIK = {id}";
+        return await GetDBView<Pracovnik>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Vozidlo>?> GetVozidlaAsync()
@@ -431,26 +376,26 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Zastavka>(ConvertMethodNameToView(), whereClause);
     }
 
+    public async Task<List<ZaznamTrasy>?> GetZaznamy_TrasyAsync()
+    {
+        return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView());
+    }
+
     public async Task<ZaznamTrasy?> GetZaznamy_TrasyByIdAsync(int id)
     {
         string whereClause = $"IDZAZNAM_TRASY = {id}";
         return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView(), whereClause);
     }
 
-    public async Task<List<ZaznamTrasy>?> GetZaznamy_TrasyAsync()
+    public async Task<List<Znacka>?> GetZnackyAsync()
     {
-        return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView());
+        return await GetDBView<Znacka>(ConvertMethodNameToView());
     }
 
     public async Task<Znacka?> GetZnackyByIdAsync(int id)
     {
         string whereClause = $"IDZNACKA = {id}";
         return await GetDBView<Znacka>(ConvertMethodNameToView(), whereClause);
-    }
-
-    public async Task<List<Znacka>?> GetZnackyAsync()
-    {
-        return await GetDBView<Znacka>(ConvertMethodNameToView());
     }
 
     #endregion views
@@ -484,7 +429,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     private async Task DMLPackageCall(string sql, OracleParameter[] sqlParams)
     {
         using var command = Database.GetDbConnection().CreateCommand();
-        command.CommandText = "BEGIN DML_PROCEDURY." + sql + "END;";
+        command.CommandText = $@"   BEGIN
+                                    DML_PROCEDURY.{sql}
+                                    END;";
         command.CommandType = CommandType.Text;
         command.Parameters.AddRange(sqlParams);
         await Database.OpenConnectionAsync();
@@ -492,14 +439,14 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
-    private async Task<T?> GetDBView<T>(string viewName, string whereClase) where T : class
+    private async Task<T?> GetDBView<T>(string viewName, string whereClause) where T : class
     {
         string sql = @$"DECLARE
                         v_{viewName}_json CLOB;
                         BEGIN
                         SELECT JSON_OBJECT(*) INTO v_{viewName}_json
                         FROM {viewName.ToUpper()}_VIEW
-                        WHERE {whereClase};
+                        WHERE {whereClause};
                         :p_result := v_{viewName}_json;
                         END;";
         return await GetObjectFromDB<T>(sql.ToString());

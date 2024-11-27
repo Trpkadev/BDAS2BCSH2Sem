@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLZnackyAsync(znacka);
+            if (await _context.GetZnackyByIdAsync(znacka.IdZnacka) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZNACKY WHERE ID_ZNACKA = {0}", znacka.IdZnacka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)

@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLLinkyAsync(linka);
+            if (await _context.GetLinkyByIdAsync(linka.IdLinka) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM LINKY WHERE ID_LINKA = {0}", linka.IdLinka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)

@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLGarazeAsync(garaz);
+            if (await _context.GetGarazeByIdAsync(garaz.IdGaraz) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM GARAZE WHERE ID_GARAZ = {0}", garaz.IdGaraz);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)

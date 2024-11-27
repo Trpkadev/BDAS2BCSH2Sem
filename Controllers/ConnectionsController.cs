@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLSpojeAsync(spoj);
+            if (await _context.GetSpojeByIdAsync(spoj.IdSpoj) == null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SPOJE WHERE ID_SPOJ = {0}", spoj.IdSpoj);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -137,7 +139,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View((await _context.GetSpojeAsync())?.OrderBy(item => item.IdLinka));
+            return View((await _context.GetSpojeAsync())?.OrderBy(item => item.IdLinka)); //TODO
         }
         catch (Exception)
         {

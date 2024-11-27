@@ -12,14 +12,14 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 {
     [HttpGet]
     [Route("Create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
 
-            var pasma = _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToList();
+            var pasma = await _context.GetTarifni_PasmaAsync();
             var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
             ViewBag.Pasma = pasmaList;
 
@@ -107,6 +107,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
+
             var zastavka = await _context.GetZastavkyByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
@@ -131,11 +132,12 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
+
             var zastavka = await _context.GetZastavkyByIdAsync(id);
             if (zastavka == null)
                 return StatusCode(404);
 
-            var pasma = await _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToListAsync();
+            var pasma = await _context.GetTarifni_PasmaAsync();
             var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
             ViewBag.Pasma = pasmaList;
 
@@ -158,7 +160,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(zastavka);
-            await _context.Database.ExecuteSqlRawAsync("UPDATE ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", zastavka.Nazev, zastavka.SouradniceX, zastavka.SouradniceY, zastavka.IdPasmo, zastavka.IdZastavka);
+            await _context.DMLZastavkyAsync(zastavka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)

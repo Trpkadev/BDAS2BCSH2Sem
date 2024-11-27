@@ -37,8 +37,9 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var a = await _context.UsersCursor();
-            return View((a.AsEnumerable(), (await _context.GetRoleAsync())?.AsEnumerable()));
+            var uzivatele = await _context.GetUzivateleAsync();
+            var role = await _context.GetRoleAsync();
+            return View((uzivatele?.AsEnumerable(), role?.AsEnumerable()));
         }
         catch (Exception)
         {
@@ -134,7 +135,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await LoginInternal(uzivatel.Jmeno, uzivatel.Heslo))
+            if (await LoginInternal(uzivatel.UzivatelskeJmeno, uzivatel.Heslo))
                 return RedirectToAction(nameof(Index), "Home");
             TempData["error"] = "Nesprávné jméno nebo heslo";
             return RedirectToAction(nameof(Login));
@@ -185,13 +186,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return View(uzivatel);
-            if (await _context.GetUzivatelByNameAsync(uzivatel.Jmeno) != null)
+            if ((await _context.GetUzivatelOrPracovnikUsernameExistsAsync(uzivatel.UzivatelskeJmeno)))
             {
                 TempData["error"] = "Jméno již existuje";
                 return View(uzivatel);
             }
             uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);
-            uzivatel.IdRole = 1;
             await _context.DMLUzivateleAsync(uzivatel);
             return RedirectToAction(nameof(Login));
         }

@@ -58,10 +58,10 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
             int id = GetDecryptedId(encryptedId);
 
-            var type = await _context.GetTypy_VozidelByIdAsync(id);
-            if (type == null)
+            var typVozidla = await _context.GetTypy_VozidelByIdAsync(id);
+            if (typVozidla == null)
                 return StatusCode(404);
-            return View(type);
+            return View(typVozidla);
         }
         catch (Exception)
         {
@@ -81,10 +81,8 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            var type = await _context.GetTypy_VozidelByIdAsync(typVozidla.IdTypVozidla);
-            if (type == null)
-                return StatusCode(404);
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM TYPY_VOZIDEL WHERE ID_TYP_VOZIDLA = {0}", typVozidla.IdTypVozidla);
+            if (await _context.GetTypy_VozidelByIdAsync(typVozidla.IdTypVozidla) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM TYPY_VOZIDEL WHERE ID_TYP_VOZIDLA = {0}", typVozidla.IdTypVozidla);
 
             return RedirectToAction(nameof(Index));
         }
@@ -104,11 +102,11 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-
             int id = GetDecryptedId(encryptedId);
-
-            var type = await _context.GetTypy_VozidelByIdAsync(id);
-            return View(type);
+            var typVozidla = await _context.GetTypy_VozidelByIdAsync(id);
+            if (typVozidla != null)
+                return StatusCode(404);
+            return View(typVozidla);
         }
         catch (Exception)
         {
@@ -142,7 +140,8 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetTypy_VozidelAsync());
+            var typyVozidel = await _context.GetTypy_VozidelAsync();
+            return View(typyVozidel);
         }
         catch (Exception)
         {

@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -77,7 +78,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            await _context.DMLJizdni_RadyAsync(jizdniRad);
+            if (await _context.GetJizdni_RadyByIdAsync(jizdniRad.IdJizdniRad) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM JIZDNI_RADY WHERE ID_JIZDNI_RAD = {0}", jizdniRad.IdJizdniRad);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -137,7 +139,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetJizdni_RadyAsync());
+            var jizdniRady = await _context.GetJizdni_RadyAsync();
+            return View(jizdniRady);
         }
         catch (Exception)
         {
