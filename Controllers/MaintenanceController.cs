@@ -10,6 +10,54 @@ namespace BCSH2BDAS2.Controllers;
 public class MaintenanceController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var udrzba = await _context.GetUdrzbyByIdAsync(id);
+                if (udrzba == null)
+                    return StatusCode(404);
+                return View(udrzba);
+            }
+            return View(new Udrzba());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Udrzba udrzba)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View("CreateEdit", udrzba);
+
+            await _context.DMLUdrzbyAsync(udrzba);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +67,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var udrzba = await _context.GetUdrzbyByIdAsync(id);
             if (udrzba == null)
@@ -42,51 +91,9 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetUdrzbyByIdAsync(udrzba.IdUdrzba) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UDRZBY WHERE ID_UDRZBA = {0}", udrzba.IdUdrzba);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var udrzba = await _context.GetUdrzbyByIdAsync(id);
-            if (udrzba == null)
-                return StatusCode(404);
-            return View(udrzba);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Udrzba udrzba)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(udrzba);
-            await _context.DMLUdrzbyAsync(udrzba);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -103,6 +110,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var udrzba = await _context.GetUdrzbyAsync();
             return View(udrzba);
         }

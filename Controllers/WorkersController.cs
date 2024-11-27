@@ -10,24 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class WorkersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> Index()
-    {
-        try
-        {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            var pracovnici = await _context.GetPracovniciAsync() ?? [];
-            var role = await _context.GetRoleAsync() ?? [];
-            return View((pracovnici.AsEnumerable(), role.AsEnumerable()));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -37,12 +19,40 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var pracovnik = await _context.GetPracovniciByIdAsync(id);
             if (pracovnik == null)
                 return StatusCode(404);
-
             return View(pracovnik);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            ViewData["Role"] = await _context.GetRoleAsync() ?? [];
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var pracovnik = await _context.GetPracovniciByIdAsync(id);
+                if (pracovnik == null)
+                    return StatusCode(404);
+                return View(pracovnik);
+            }
+            return View(new Pracovnik());
         }
         catch (Exception)
         {
@@ -61,9 +71,9 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetPracovniciByIdAsync(pracovnik.IdPracovnik) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM PRACOVNICI WHERE ID_UZIVATEL = {0}", pracovnik.IdPracovnik);
-
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -82,9 +92,29 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetPracovniciByIdAsync(pracovnik.IdPracovnik) != null)
                 await _context.DMLPracovniciAsync(pracovnik);
             return StatusCode(200);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("")]
+    public async Task<IActionResult> Index()
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+
+            var pracovnici = await _context.GetPracovniciAsync() ?? [];
+            ViewData["Role"] = await _context.GetRoleAsync() ?? [];
+            return View(pracovnici);
         }
         catch (Exception)
         {

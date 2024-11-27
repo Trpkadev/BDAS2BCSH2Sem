@@ -10,14 +10,26 @@ namespace BCSH2BDAS2.Controllers;
 public class ModelsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View("CreateEdit");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            ViewData["Znacky"] = await _context.GetZnackyAsync() ?? [];
+            ViewData["TypyVozidel"] = await _context.GetTypy_VozidelAsync() ?? [];
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var model = await _context.GetModelyByIdAsync(id);
+                if (model == null)
+                    return StatusCode(404);
+            }
+            return View(new Model());
         }
         catch (Exception)
         {
@@ -27,7 +39,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("CreateSubmit")]
+    [Route("CreateEditSubmit")]
     public async Task<IActionResult> CreateSubmit([FromForm] Model model)
     {
         try
@@ -36,7 +48,9 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View("CreateEdit", model);
-            await _context.DMLModelyAsync(model);
+
+            if (await _context.GetModelyByIdAsync(model.IdModel) != null)
+                await _context.DMLModelyAsync(model);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -55,6 +69,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var model = await _context.GetModelyByIdAsync(id);
             if (model == null)
@@ -78,51 +93,9 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetModelyByIdAsync(model.IdModel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM MODELY WHERE ID_MODEL = {0}", model.IdModel);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var model = await _context.GetModelyByIdAsync(id);
-            if (model == null)
-                return StatusCode(404);
-            return View("CreateEdit", model);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Model model)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View("CreateEdit", model);
-            await _context.DMLModelyAsync(model);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -139,6 +112,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var modely = await _context.GetModelyAsync() ?? [];
             return View(modely);
         }

@@ -19,26 +19,10 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
             return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> Index()
-    {
-        try
-        {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            var uzivatele = await _context.GetUzivateleAsync();
-            return View(uzivatele);
         }
         catch (Exception)
         {
@@ -56,11 +40,11 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var uzivatel = await _context.GetUzivateleByIdAsync(id);
             if (uzivatel == null)
                 return StatusCode(404);
-
             return View(uzivatel);
         }
         catch (Exception)
@@ -80,10 +64,28 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetUzivateleByIdAsync(pracovnik.IdUzivatel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", pracovnik.IdUzivatel);
-
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("")]
+    public async Task<IActionResult> Index()
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+
+            var uzivatele = await _context.GetUzivateleAsync();
+            return View(uzivatele);
         }
         catch (Exception)
         {
@@ -114,10 +116,13 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await LoginInternal(uzivatel.UzivatelskeJmeno, uzivatel.Heslo))
-                return RedirectToAction(nameof(Index), "Home");
-            TempData["error"] = "Nesprávné jméno nebo heslo";
-            return RedirectToAction(nameof(Login));
+
+            if (!await LoginInternal(uzivatel.UzivatelskeJmeno, uzivatel.Heslo))
+            {
+                TempData["error"] = "Nesprávné jméno nebo heslo";
+                return RedirectToAction(nameof(Login));
+            }
+            return RedirectToAction(nameof(Index), "Home");
         }
         catch (Exception)
         {
@@ -133,6 +138,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser == null)
                 return RedirectToAction(nameof(Index), "Home");
+
             LogoutInternal();
             return RedirectToAction(nameof(Index), "Home");
         }
@@ -165,6 +171,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
                 return View(uzivatel);
+
             if ((await _context.GetUzivatelOrPracovnikUsernameExistsAsync(uzivatel.UzivatelskeJmeno)))
             {
                 TempData["error"] = "Jméno již existuje";
@@ -190,6 +197,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             ActBehalfInternal(null);
             return RedirectToAction(nameof(Index));
         }

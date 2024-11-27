@@ -6,64 +6,39 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-            </th>
-            <th></th>
-            @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
-            {
-                <th></th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var uzivatel in Model)
-        {
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
-                </td>
-                <td class="d-flex">
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Delete</a>
+                <th>
+                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
+                </th>
+                <th></th>
                 @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
                 {
-                    <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
+                    <th></th>
                 }
-                </td>
             </tr>
-            @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
-            @Html.HiddenFor(modelItem => uzivatel.Heslo)
-        }
-    </tbody>
-</table>
-
-<script type="text/javascript">
-        function submitRoleChange(dropdown, id, jmeno, heslo) {
-        var selectedRoleId = dropdown.value;
-        var uzivatel = {
-            idUzivatel: id,
-            idRole: selectedRoleId,
-            jmeno: jmeno,
-            heslo: heslo
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "/Users/EditSubmit",
-            contentType: "application/json",
-            data: JSON.stringify(uzivatel),
-            success: function(response) {
-                alert("Role updated successfully!");
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-                alert("Error: " + xhr.responseText);
+        </thead>
+        <tbody>
+            @foreach (var uzivatel in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
+                    </td>
+                    <td class="d-flex">
+                        <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
+                        <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Odstranit</a>
+                        @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                        {
+                            <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
+                        }
+                    </td>
+                </tr>
+                @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
+                @Html.HiddenFor(modelItem => uzivatel.Heslo)
             }
-        });
-    }
-</script>
+        </tbody>
+    </table>
+</div>

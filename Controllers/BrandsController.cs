@@ -10,6 +10,54 @@ namespace BCSH2BDAS2.Controllers;
 public class BrandsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var znacka = await _context.GetZnackyByIdAsync(id);
+                if (znacka == null)
+                    return StatusCode(404);
+                return View(znacka);
+            }
+            return View(new Znacka());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Znacka znacka)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View("CreateEdit", znacka);
+
+            await _context.DMLZnackyAsync(znacka);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +67,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var znacka = await _context.GetZnackyByIdAsync(id);
             if (znacka == null)
@@ -42,51 +91,9 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetZnackyByIdAsync(znacka.IdZnacka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZNACKY WHERE ID_ZNACKA = {0}", znacka.IdZnacka);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var znacka = await _context.GetZnackyByIdAsync(id);
-            if (znacka == null)
-                return StatusCode(404);
-            return View(znacka);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Znacka znacka)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(znacka);
-            await _context.DMLZnackyAsync(znacka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -103,6 +110,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var znacky = await _context.GetZnackyAsync() ?? [];
             return View(znacky);
         }

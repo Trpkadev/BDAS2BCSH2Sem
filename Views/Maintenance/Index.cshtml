@@ -1,117 +1,16 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.Udrzba>
-
 @{
     ViewData["Title"] = "Seznam údržeb";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
-</div>
-
+@await Html.PartialAsync("IndexCreateTitle")
 <div class="container">
     <div class="row">
         <div class="col-sm">
             <h2 class="text-center">Opravy</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.IdVozidlo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Datum)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PopisUkonu)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Cena)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Where(item => item.TypUdrzby == 'o'))
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(_ => item.IdVozidlo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.Datum)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.PopisUkonu)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.Cena)
-                            </td>
-                            <td class="d-flex">
-                                <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Upravit</a>
-                                <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Detail</a>
-                                <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Odstranit</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm-auto" style="padding: 0px;border-left: 6px solid gray; height: auto;"></div>
-        <div class="col-sm">
-            <h2 class="text-center">Čístění</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.IdVozidlo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Datum)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CistenoOzonem)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UmytoVMycce)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Where(item => item.TypUdrzby == 'c'))
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(_ => item.IdVozidlo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.Datum)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.CistenoOzonem.Value)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(_ => item.UmytoVMycce.Value)
-                            </td>
-                            <td class="d-flex">
-                                <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Upravit</a>
-                                <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Detail</a>
-                                <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Odstranit</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    @if (Model.Where(item => item.TypUdrzby == 'x').Any())
-    {
-        <div class="row">
-            <div class="col-sm">
-                <h2 class="text-center">Nespecifikované</h2>
-                <table class="table">
+            <div class="table-responsive overflow-auto">
+                <table class="table text-nowrap">
                     <thead>
                         <tr>
                             <th>
@@ -120,22 +19,112 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Datum)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PopisUkonu)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Cena)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Where(item => item.TypUdrzby == 'x'))
+                        @foreach (var item in Model.Where(item => item.TypUdrzby == 'o'))
                         {
                             <tr>
-                                <td class="d-flex">
-                                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Upravit</a>
-                                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Detail</a>
-                                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUdrzba)" class="btn btn-secondary">Odstranit</a>
+                                <td>
+                                    @Html.DisplayFor(_ => item.IdVozidlo)
                                 </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.Datum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.PopisUkonu)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.Cena)
+                                </td>
+                                @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
                             </tr>
                         }
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="col-sm-auto" style="padding: 0px;border-left: 6px solid gray; height: auto;"></div>
+        <div class="col-sm">
+            <h2 class="text-center">Čístění</h2>
+            <div class="table-responsive overflow-auto">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IdVozidlo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Datum)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CistenoOzonem)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UmytoVMycce)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(item => item.TypUdrzby == 'c'))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(_ => item.IdVozidlo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.Datum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.CistenoOzonem.Value)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.UmytoVMycce.Value)
+                                </td>
+                                @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @if (Model.Where(item => item.TypUdrzby == 'x').Any())
+    {
+        <div class="row">
+            <div class="col-sm">
+                <h2 class="text-center">Nespecifikované</h2>
+                <div class="table-responsive overflow-auto">
+                    <table class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IdVozidlo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Datum)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(item => item.TypUdrzby == 'x'))
+                            {
+                                <tr>
+                                    @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     }

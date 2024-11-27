@@ -17,6 +17,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
+    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)" class="btn btn-danger mb-3">Odstranit</a>
+    <a asp-action="Index">Zpět na seznam</a>
 </div>

@@ -11,7 +11,7 @@ namespace BCSH2BDAS2.Helpers;
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
     public DbSet<Garaz> Garaze { get; set; }
-    public DbSet<JizniRad> JizdniRady { get; set; }
+    public DbSet<JizdniRad> JizdniRady { get; set; }
     public DbSet<Linka> Linky { get; set; }
     public DbSet<Model> Modely { get; set; }
     public DbSet<Spoj> Spoje { get; set; }
@@ -36,7 +36,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await DMLPackageCall(sql, sqlParams);
     }
 
-    public async Task DMLJizdni_RadyAsync(JizniRad jizdniRad)
+    public async Task DMLJizdni_RadyAsync(JizdniRad jizdniRad)
     {
         string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new OracleParameter("idSpoj", jizdniRad.IdSpoj),
@@ -215,15 +215,15 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Garaz>(ConvertMethodNameToView(), whereClause);
     }
 
-    public async Task<List<JizniRad>?> GetJizdni_RadyAsync()
+    public async Task<List<JizdniRad>?> GetJizdni_RadyAsync()
     {
-        return await GetDBView<JizniRad>(ConvertMethodNameToView());
+        return await GetDBView<JizdniRad>(ConvertMethodNameToView());
     }
 
-    public async Task<JizniRad?> GetJizdni_RadyByIdAsync(int id)
+    public async Task<JizdniRad?> GetJizdni_RadyByIdAsync(int id)
     {
         string whereClause = $"IDJIZDNI_RAD = {id}";
-        return await GetDBView<JizniRad>(ConvertMethodNameToView(), whereClause);
+        return await GetDBView<JizdniRad>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Linka>?> GetLinkyAsync()

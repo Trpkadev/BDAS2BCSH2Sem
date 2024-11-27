@@ -32,6 +32,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null)
                 return RedirectToAction(nameof(Index));
+
             return View(await _context.GetZastavkyAsync());
         }
         catch (Exception)
@@ -59,16 +60,12 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
             Routes = await _context.GetLinkyAsync() ?? [],
         };
         if (encryptedId == null)
-        {
             return View(vm);
-        }
 
         int linkaId = OurCryptography.Instance.DecryptId(encryptedId);
         var linka = await _context.GetLinkyByIdAsync(linkaId);
         if (linka == null)
-        {
             return StatusCode(404);
-        }
 
         var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS ZastavkaNazev FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ST69642.ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
         var zastavky = jr.Select(jr => jr.ZastavkaNazev).Distinct().ToList();
@@ -77,9 +74,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         vm.CisloLinky = linka.Cislo;
 
         foreach (var zastavka in zastavky)
-        {
             vm.Timetable[zastavka] = jr.Where(jr => jr.ZastavkaNazev == zastavka).ToList();
-        }
 
         return View(vm);
     }

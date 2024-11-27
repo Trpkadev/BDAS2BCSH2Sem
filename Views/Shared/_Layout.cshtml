@@ -164,7 +164,7 @@
             </div>
         </nav>
     </header>
-    <main class="container pt-3" role="main" style="max-width:90vw">
+    <main class="container mw-90 w-auto pt-3" role="main">
         @{
             if (TempData["error"] != null)
             {
@@ -181,6 +181,8 @@
     </footer>
     <script>
         $('.table').DataTable({
+            responsive: true,
+            autoWidth: true,
             language: {
                 "decimal": ",",
                 "emptyTable": "Nejsou dostupná žádná data",

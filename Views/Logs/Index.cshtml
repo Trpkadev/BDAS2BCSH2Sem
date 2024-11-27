@@ -1,55 +1,55 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.Log>
-
 @{
     ViewData["Title"] = "Logy";
 }
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between">
     <h2>@ViewData["Title"]</h2>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cas)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypZmeny)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tabulka)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoveHodnoty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StareHodnoty)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(_ => item.Cas)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.TypZmeny)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Tabulka)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.NoveHodnoty)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.StareHodnoty)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cas)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TypZmeny)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tabulka)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NoveHodnoty)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StareHodnoty)
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(_ => item.Cas)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.TypZmeny)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.Tabulka)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.NoveHodnoty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.StareHodnoty)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

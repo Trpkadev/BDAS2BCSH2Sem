@@ -1,6 +1,5 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model BCSH2BDAS2.Models.Model
-
 @{
     ViewData["Title"] = "Detail modelu";
 }
@@ -35,7 +34,4 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdModel)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
-</div>
+@await Html.PartialAsync("DetailActionButtons", Model.IdModel)

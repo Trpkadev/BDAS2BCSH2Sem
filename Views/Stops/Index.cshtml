@@ -1,55 +1,49 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.Zastavka>
-
 @{
     ViewData["Title"] = "Seznam zastávek";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit novou</a>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nazev)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SouradniceX)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SouradniceY)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasmoNazev)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@await Html.PartialAsync("IndexCreateTitle")
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nazev)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SouradniceX)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SouradniceY)
-                </td>
-                <td>
-                     <a asp-controller="Tariff" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)">@Html.DisplayFor(modelItem => item.PasmoNazev)</a>
-                </td>
-                <td class="d-flex">
-                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Upravit</a>
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZastavka)" class="btn btn-secondary">Odstranit</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nazev)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SouradniceX)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SouradniceY)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PasmoNazev)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nazev)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SouradniceX)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SouradniceY)
+                    </td>
+                    <td>
+                        <a asp-controller="Tariff" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)">@Html.DisplayFor(modelItem => item.PasmoNazev)</a>
+                    </td>
+
+                    @await Html.PartialAsync("IndexActionButtons", item.IdZastavka)
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

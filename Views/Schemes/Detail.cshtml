@@ -1,7 +1,5 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model BCSH2BDAS2.Models.Schema
-
-
 @{
     ViewData["Title"] = "Detail schématu";
 }
@@ -49,7 +47,4 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSchema)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
-</div>
+@await Html.PartialAsync("DetailActionButtons", Model.IdSchema)

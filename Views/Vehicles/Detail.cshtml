@@ -46,7 +46,4 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdVozidlo)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
-</div>
+@await Html.PartialAsync("DetailActionButtons", Model.IdVozidlo)

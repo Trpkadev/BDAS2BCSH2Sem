@@ -1,6 +1,5 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model BCSH2BDAS2.Models.Udrzba
-
 @{
     ViewData["Title"] = "Detail údržby";
 }
@@ -25,24 +24,12 @@
             @Html.DisplayNameFor(model => model.TypUdrzby)
         </dt>
         <dd class="col-sm-10">
-            @if (Model.TypUdrzby == 'c')
+            @(Model.TypUdrzby switch
             {
-                <label>
-                    Čištění
-                </label>
-            }
-            else if (Model.TypUdrzby == 'o')
-            {
-                <label>
-                    Oprava
-                </label>
-            }
-            else
-            {
-                <label>
-                    Nespecifikováno
-                </label>
-            }
+                'c' => "Čištění",
+                'o' => "Oprava",
+                _ => "Nespecifikováno"
+            })
         </dd>
         @if (Model.TypUdrzby == 'c')
         {
@@ -76,7 +63,4 @@
         }
     </dl>
 </div>
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUdrzba)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
-</div>
+@await Html.PartialAsync("DetailActionButtons", Model.IdUdrzba)

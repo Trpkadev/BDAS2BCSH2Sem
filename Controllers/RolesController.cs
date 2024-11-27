@@ -10,6 +10,53 @@ namespace BCSH2BDAS2.Controllers;
 public class RolesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var role = await _context.GetRoleByIdAsync(id);
+                if (role == null)
+                    return StatusCode(404);
+            }
+            return View(new Role());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Role role)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View("CreateEdit", role);
+
+            await _context.DMLRoleAsync(role);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +66,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var role = await _context.GetRoleByIdAsync(id);
             if (role == null)
@@ -42,51 +90,9 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetRoleByIdAsync(role.IdRole) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ROLE WHERE ID_ROLE = {0}", role.IdRole);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var role = await _context.GetRoleByIdAsync(id);
-            if (role == null)
-                return StatusCode(404);
-            return View(role);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Role role)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(role);
-            await _context.DMLRoleAsync(role);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -103,6 +109,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var role = await _context.GetRoleAsync() ?? [];
             return View(role);
         }

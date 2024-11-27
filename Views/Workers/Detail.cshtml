@@ -1,6 +1,6 @@
 ﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model BCSH2BDAS2.Models.Pracovnik
-
 @{
     ViewData["Title"] = "Detail pracovníka";
 }
@@ -13,6 +13,14 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UzivatelskeJmeno)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DropDownList("IdRole",
+                     new SelectList(((List<Role>?)ViewData["Role"])?.AsEnumerable(), "IdRole", "Nazev", Model.IdRole),
+                     new { @class = "form-control" })
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Jmeno)
@@ -40,8 +48,4 @@
         </dd>
     </dl>
 </div>
-
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdPracovnik)" class="btn btn-primary mb-3">Upravit</a>
-    <p><a asp-action="Index">Zpět na seznam</a></p>
-</div>
+@await Html.PartialAsync("DetailActionButtons", Model.IdPracovnik)

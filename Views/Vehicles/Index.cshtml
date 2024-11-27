@@ -1,66 +1,61 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.Vozidlo>
-
 @{
     ViewData["Title"] = "Seznam vozidel";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit nové</a>
-</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RokVyroby)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NajeteKilometry)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kapacita)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaKlimatizaci)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GarazNazev)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModelNazev)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@await Html.PartialAsync("IndexCreateTitle")
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RokVyroby)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NajeteKilometry)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Kapacita)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaKlimatizaci)
-                </td>
-                <td>
-                    <a asp-controller="Garages" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdGaraz)">@Html.DisplayFor(modelItem => item.GarazNazev)</a>
-                </td>
-                <td>
-                    <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.ModelNazev)</a>
-                </td>
-                <td class="d-flex">
-                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Upravit</a>
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)" class="btn btn-secondary">Odstranit</a>
-                </td>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.RokVyroby)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.NajeteKilometry)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.Kapacita)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.MaKlimatizaci)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.GarazNazev)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.ModelNazev)
+                </th>
+                <th class="p-2"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="p-2">
+                        @Html.DisplayFor(modelItem => item.RokVyroby)
+                    </td>
+                    <td class="p-2">
+                        @Html.DisplayFor(modelItem => item.NajeteKilometry)
+                    </td>
+                    <td class="p-2">
+                        @Html.DisplayFor(modelItem => item.Kapacita)
+                    </td>
+                    <td class="p-2">
+                        @Html.DisplayFor(modelItem => item.MaKlimatizaci)
+                    </td>
+                    <td class="p-2">
+                        <a asp-controller="Garages" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdGaraz)">@Html.DisplayFor(modelItem => item.GarazNazev)</a>
+                    </td>
+                    <td class="p-2">
+                        <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.ModelNazev)</a>
+                    </td>
+
+                    @await Html.PartialAsync("IndexActionButtons", item.IdVozidlo)
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

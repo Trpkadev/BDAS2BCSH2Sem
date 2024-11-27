@@ -10,6 +10,54 @@ namespace BCSH2BDAS2.Controllers;
 public class RoutesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var linka = await _context.GetLinkyByIdAsync(id);
+                if (linka == null)
+                    return StatusCode(404);
+                return View(linka);
+            }
+            return View(new Linka());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Linka linka)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View(linka);
+
+            await _context.DMLLinkyAsync(linka);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +67,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var linka = await _context.GetLinkyByIdAsync(id);
             if (linka == null)
@@ -42,51 +91,9 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetLinkyByIdAsync(linka.IdLinka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM LINKY WHERE ID_LINKA = {0}", linka.IdLinka);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var linka = await _context.GetLinkyByIdAsync(id);
-            if (linka == null)
-                return StatusCode(404);
-            return View(linka);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Linka linka)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(linka);
-            await _context.DMLLinkyAsync(linka);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -103,6 +110,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var linky = await _context.GetLinkyAsync() ?? [];
             return View(linky);
         }

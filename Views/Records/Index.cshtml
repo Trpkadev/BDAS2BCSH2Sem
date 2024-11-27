@@ -1,61 +1,55 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.ZaznamTrasy>
-
 @{
     ViewData["Title"] = "Seznam záznamů tras";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Spoj
-            </th>
-            <th>
-                Vozidlo
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ZastavkaNazev)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CasPrijezdu)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CasOdjezdu)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@await Html.PartialAsync("IndexCreateTitle")
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                     <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
-                </td>
-                <td>
-                     <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.ZastavkaNazev)
-                </td>
-                <td>
-                    @item.CasPrijezdu.ToShortTimeString()
-                </td>
-                <td>
-                    @item.CasOdjezdu.ToShortTimeString()
-                </td>
-                <td class="d-flex">
-                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Upravit</a>
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Odstranit</a>
-                </td>
+                <th>
+                    Spoj
+                </th>
+                <th>
+                    Vozidlo
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ZastavkaNazev)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CasPrijezdu)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CasOdjezdu)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.ZastavkaNazev)
+                    </td>
+                    <td>
+                        @item.CasPrijezdu.ToShortTimeString()
+                    </td>
+                    <td>
+                        @item.CasOdjezdu.ToShortTimeString()
+                    </td>
+
+                    @await Html.PartialAsync("IndexActionButtons", item.IdZaznam)
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

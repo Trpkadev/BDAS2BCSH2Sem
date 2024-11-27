@@ -1,61 +1,54 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.Spoj>
-
 @{
     ViewData["Title"] = "Seznam spojů";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Linka
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JedeVSobotu)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JedeVNedeli)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@await Html.PartialAsync("IndexCreateTitle")
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    <a asp-controller="Routes" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.JedeVSobotu)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.JedeVNedeli)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.JedeVeVsedniDen)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)
-                </td>
-                <td class="d-flex">
-                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Upravit</a>
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Odstranit</a>
-                </td>
+                <th>
+                    Linka
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JedeVSobotu)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JedeVNedeli)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Routes" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.JedeVSobotu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.JedeVNedeli)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.JedeVeVsedniDen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)
+                    </td>
+                    @await Html.PartialAsync("IndexActionButtons", item.IdSpoj)
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

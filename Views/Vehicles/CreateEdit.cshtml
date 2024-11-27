@@ -1,5 +1,5 @@
-﻿@model (BCSH2BDAS2.Models.Vozidlo vozidlo,IEnumerable<BCSH2BDAS2.Models.Garaz> garaze,IEnumerable<BCSH2BDAS2.Models.Model> modely)
-
+﻿@using BCSH2BDAS2.Models
+@model BCSH2BDAS2.Models.Vozidlo
 @{
     ViewData["Title"] = "Vytvořit/Upravit vozidlo";
 }
@@ -11,40 +11,40 @@
     <div class="col-md-4">
         <form asp-action="CreateEditSubmit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="vozidlo.IdVozidlo" />
+            <input type="hidden" asp-for="IdVozidlo" />
             <div class="form-group mb-3">
-                <label asp-for="vozidlo.RokVyroby" class="control-label">Rok výroby</label>
-                <input asp-for="vozidlo.RokVyroby" class="form-control" />
-                <span asp-validation-for="vozidlo.RokVyroby" class="text-danger"></span>
+                <label asp-for="RokVyroby" class="control-label">Rok výroby</label>
+                <input asp-for="RokVyroby" class="form-control" />
+                <span asp-validation-for="RokVyroby" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="vozidlo.NajeteKilometry" class="control-label">Najeté kilometry</label>
-                <input asp-for="vozidlo.NajeteKilometry" class="form-control" />
-                <span asp-validation-for="vozidlo.NajeteKilometry" class="text-danger"></span>
+                <label asp-for="NajeteKilometry" class="control-label">Najeté kilometry</label>
+                <input asp-for="NajeteKilometry" class="form-control" />
+                <span asp-validation-for="NajeteKilometry" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="vozidlo.Kapacita" class="control-label"></label>
-                <input asp-for="vozidlo.Kapacita" class="form-control" />
-                <span asp-validation-for="vozidlo.Kapacita" class="text-danger"></span>
+                <label asp-for="Kapacita" class="control-label"></label>
+                <input asp-for="Kapacita" class="form-control" />
+                <span asp-validation-for="Kapacita" class="text-danger"></span>
             </div>
             <div class="form-group form-check mb-3">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="vozidlo.MaKlimatizaci" /> @Html.DisplayNameFor(model => model.vozidlo.MaKlimatizaci)
+                    <input class="form-check-input" asp-for="MaKlimatizaci" /> @Html.DisplayNameFor(model => model.MaKlimatizaci)
                 </label>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="vozidlo.IdGaraz" class="control-label">Garáž</label>
+                <label asp-for="IdGaraz" class="control-label">Garáž</label>
                 @Html.DropDownList("IdGaraz",
-                         new SelectList(Model.garaze, "IdGaraz", "Nazev", Model.vozidlo.IdGaraz),
+                         new SelectList(((List<Garaz>?)ViewData["Garaze"])?.AsEnumerable(), "IdGaraz", "Nazev", Model.IdGaraz),
                          new { @class = "form-control" })
-                <span asp-validation-for="vozidlo.IdGaraz" class="text-danger"></span>
+                <span asp-validation-for="IdGaraz" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="vozidlo.IdModel" class="control-label">Model vozidla</label>
+                <label asp-for="IdModel" class="control-label">Model vozidla</label>
                 @Html.DropDownList("IdModel",
-                         new SelectList(Model.modely, "IdModel", "Nazev", Model.vozidlo.IdModel),
+                         new SelectList(((List<Model>?)ViewData["Modely"])?.AsEnumerable(), "IdModel", "Nazev", Model.IdModel),
                          new { @class = "form-control" })
-                <span asp-validation-for="vozidlo.IdModel" class="text-danger"></span>
+                <span asp-validation-for="IdModel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Uložit změny" class="btn btn-primary" />
@@ -52,7 +52,6 @@
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Zpět na seznam</a>
 </div>

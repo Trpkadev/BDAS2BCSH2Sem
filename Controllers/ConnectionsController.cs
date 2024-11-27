@@ -10,6 +10,54 @@ namespace BCSH2BDAS2.Controllers;
 public class ConnectionsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var spoj = await _context.GetSpojeByIdAsync(id);
+                if (spoj == null)
+                    return StatusCode(404);
+                return View(spoj);
+            }
+            return View(new Spoj());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Spoj spoj)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View("CreateEdit", spoj);
+
+            await _context.DMLSpojeAsync(spoj);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +67,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var spoj = await _context.GetSpojeByIdAsync(id);
             if (spoj == null)
@@ -42,51 +91,9 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             if (await _context.GetSpojeByIdAsync(spoj.IdSpoj) == null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM SPOJE WHERE ID_SPOJ = {0}", spoj.IdSpoj);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            int id = GetDecryptedId(encryptedId);
-            var spoj = await _context.GetSpojeByIdAsync(id);
-            if (spoj == null)
-                return StatusCode(404);
-            return View(spoj);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Spoj spoj)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(spoj);
-            await _context.DMLSpojeAsync(spoj);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -103,6 +110,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
+
             var spoje = await _context.GetSpojeAsync() ?? [];
             return View(spoje);
         }

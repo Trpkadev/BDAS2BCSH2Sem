@@ -10,6 +10,54 @@ namespace BCSH2BDAS2.Controllers;
 public class SchemesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string? encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            if (encryptedId != null)
+            {
+                int id = GetDecryptedId(encryptedId);
+                var schema = await _context.GetSchemataByIdAsync(id);
+                if (schema == null)
+                    return StatusCode(404);
+                return View(schema);
+            }
+            return View(new Schema());
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Schema schema)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return View(schema);
+
+            await _context.DMLSchemataAsync(schema);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -19,6 +67,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
+
             int id = GetDecryptedId(encryptedId);
             var schema = await _context.GetSchemataByIdAsync(id);
             if (schema == null)
@@ -64,56 +113,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            int id = GetDecryptedId(encryptedId);
-            var schema = await _context.GetSchemataByIdAsync(id);
-            if (schema == null)
-                return StatusCode(404);
-
-            return View(schema);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
-    [Route("CreateEdit")]
-    public async Task<IActionResult> CreateEdit(string encryptedId)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
             var schema = await _context.GetSchemataByIdAsync(id);
             if (schema == null)
                 return StatusCode(404);
-
             return View(schema);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromForm] Schema schema)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(schema);
-            await _context.DMLSchemataAsync(schema);
-            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {

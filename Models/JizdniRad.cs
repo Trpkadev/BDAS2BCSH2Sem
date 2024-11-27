@@ -10,7 +10,7 @@ namespace BCSH2BDAS2.Models;
 
 [PrimaryKey(nameof(IdZastavka), nameof(IdSpoj))]
 [Table("JIZDNI_RADY")]
-public class JizniRad
+public class JizdniRad
 {
     //TODO PK IdJizdniRad
     [Key]

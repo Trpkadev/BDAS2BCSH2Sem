@@ -1,37 +1,31 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model IEnumerable<BCSH2BDAS2.Models.TarifniPasmo>
-
 @{
     ViewData["Title"] = "Seznam tarifních pásem";
 }
 
-<div class="d-flex justify-content-between mb-3">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nazev)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@await Html.PartialAsync("IndexCreateTitle")
+<div class="table-responsive overflow-auto">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(_ => item.Nazev)
-                </td>
-                <td class="d-flex">
-                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Upravit</a>
-                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Detail</a>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Odstranit</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nazev)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(_ => item.Nazev)
+                    </td>
+
+                    @await Html.PartialAsync("IndexActionButtons", item.IdPasmo)
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
