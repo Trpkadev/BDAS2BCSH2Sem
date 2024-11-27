@@ -23,6 +23,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<Zastavka> Zastavky { get; set; }
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
+    public DbSet<Log> Logy { get; set; }
 
     #region DML procedures
 
@@ -396,6 +397,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     {
         string whereClause = $"IDZNACKA = {id}";
         return await GetDBView<Znacka>(ConvertMethodNameToView(), whereClause);
+    }
+
+    public async Task<List<Log>?> GetLogyAsync()
+    {
+        return await GetDBView<Log>(ConvertMethodNameToView());
     }
 
     #endregion views

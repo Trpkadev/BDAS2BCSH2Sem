@@ -47,12 +47,12 @@
                 <td>
                     @item.CasOdjezdu.ToShortTimeString()
                 </td>
+                <td>
                 @* TODO
-                    <td>
                     <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdJizdniRad)" class="btn btn-secondary">Upravit</a>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdJizdniRad)" class="btn btn-secondary">Odstranit</a>
-                </td> 
                 *@
+                </td>
             </tr>
         }
     </tbody>

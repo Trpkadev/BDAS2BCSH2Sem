@@ -1,53 +1,82 @@
 ﻿@using BCSH2BDAS2.Helpers
-@model IEnumerable<BCSH2BDAS2.Models.Linka>
+@model BCSH2BDAS2.Models.TimetableViewModel
 @{
     ViewData["Title"] = "Jízdní řády";
 }
 
 <h1>@ViewData["Title"]</h1>
-@if (Model.Count() > 1)
+<div class="mb-3">
+    <h3>Trolejbusové linky</h3>
+    @if (!Model.Routes.Where(item => item.IdTypVozidla == 1).Any())
+    {
+        <p>Žádné linky tohoto typu neexistují</p>
+    }
+    else
+        @foreach (var linka in Model.Routes.Where(l => l.IdTypVozidla == 1))
+        {
+            <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
+        }
+</div>
+
+<div class="mb-3">
+
+    <h3>Autobusové linky</h3>
+    @if (!Model.Routes.Where(item => item.IdTypVozidla == 2).Any())
+    {
+        <p>Žádné linky tohoto typu neexistují</p>
+    }
+    else
+        @foreach (var linka in Model.Routes.Where(l => l.IdTypVozidla == 2))
+        {
+            <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
+        }
+</div>
+
+<div class="mb-3">
+    <h3>Minibusové linky</h3>
+    @if (!Model.Routes.Where(item => item.IdTypVozidla == 3).Any())
+    {
+        <p>Žádné linky tohoto typu neexistují</p>
+    }
+    else
+        @foreach (var linka in Model.Routes.Where(l => l.IdTypVozidla == 3))
+        {
+            <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
+        }
+</div>
+
+
+@if (Model.Timetable != null)
 {
-    <div class="mb-3">
-        <h2>Trolejbusové linky</h2>
-        @if (!Model.Where(item => item.IdTypVozidla == 1).Any())
-        {
-            <p>Žádné linky tohoto typu neexistují</p>
-        }
-        else
-            @foreach (var linka in Model.Where(l => l.IdTypVozidla == 1))
-            {
-                <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
-            }
-    </div>
-
-    <div class="mb-3">
-
-        <h2>Autobusové linky</h2>
-        @if (!Model.Where(item => item.IdTypVozidla == 2).Any())
-        {
-            <p>Žádné linky tohoto typu neexistují</p>
-        }
-        else
-            @foreach (var linka in Model.Where(l => l.IdTypVozidla == 2))
-            {
-                <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
-            }
-    </div>
-
-    <div class="mb-3">
-        <h2>Minibusové linky</h2>
-        @if (!Model.Where(item => item.IdTypVozidla == 3).Any())
-        {
-            <p>Žádné linky tohoto typu neexistují</p>
-        }
-        else
-            @foreach (var linka in Model.Where(l => l.IdTypVozidla == 3))
-            {
-                <a asp-action="Timetable" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(linka.IdLinka)" class="btn btn-secondary">Linka @linka.Cislo</a>
-            }
-    </div>
-}
-else
-{
-    // TODO
+    <h2>Jízdní řád linky @Model.CisloLinky</h2>
+    @if (Model.Timetable.Count == 0)
+    {
+        <p>Tato linka v tuto chvíli nemá žádné spoje</p>
+    }
+    else
+    {
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Zastávka</th>
+                    @for (int i = 1; i <= Model.ConnectionCount; i++)
+                    {
+                        <th>Spoj @i</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var zastZaznam in Model.Timetable)
+                {
+                    <tr>
+                        <td>@zastZaznam.Key</td>
+                        @foreach (var zaznam in zastZaznam.Value)
+                        {
+                            <td>@zaznam.CasOdjezdu.ToString("t")</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }

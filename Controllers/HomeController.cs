@@ -1,6 +1,8 @@
 using BCSH2BDAS2.Helpers;
+using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -52,14 +54,33 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     [Route("Timetable")]
     public async Task<ActionResult> Timetable(string? encryptedId)
     {
+        var vm = new TimetableViewModel()
+        {
+            Routes = await _context.GetLinkyAsync() ?? [],
+        };
         if (encryptedId == null)
         {
-            var linky = await _context.GetLinkyAsync();
-            return View(linky);
+            return View(vm);
         }
-        // TODO načíst víc než jen linku
+
         int linkaId = OurCryptography.Instance.DecryptId(encryptedId);
         var linka = await _context.GetLinkyByIdAsync(linkaId);
-        return View(linka);
+        if (linka == null)
+        {
+            return StatusCode(404);
+        }
+
+        var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS ZastavkaNazev FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ST69642.ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
+        var zastavky = jr.Select(jr => jr.ZastavkaNazev).Distinct().ToList();
+
+        vm.Timetable = [];
+        vm.CisloLinky = linka.Cislo;
+
+        foreach (var zastavka in zastavky)
+        {
+            vm.Timetable[zastavka] = jr.Where(jr => jr.ZastavkaNazev == zastavka).ToList();
+        }
+
+        return View(vm);
     }
 }

@@ -88,13 +88,26 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Workers","Index"),new("Users","Index"),new("Roles","Index")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manager
+                                    Manažer
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Workers","Index") ? "active" : "")" asp-controller="Workers" asp-action="Index">Pracovníci</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Index") ? "active" : "")" asp-controller="Users" asp-action="Index">Uživatelé</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Roles","Index") ? "active" : "")" asp-controller="Roles" asp-action="Index">Uživatelské role</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs","Index")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Administrátor
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs","Index") ? "active" : "")" asp-controller="Logs" asp-action="Index">Logy</a>
                                     </li>
                                 </ul>
                             </li>
@@ -142,7 +155,7 @@
         @{
             if (TempData["error"] != null)
             {
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>@TempData["error"]</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
