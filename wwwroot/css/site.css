@@ -20,7 +20,8 @@ header {
 }
 
 main {
-    max-height: 100%;
+    max-height: 90vh;
+    max-width: 90vw;
     overflow-y: auto;
 }
 
@@ -32,9 +33,3 @@ p {
 th, td, select {
     text-align: center;
 }
-
-/*.error-div {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-}*/

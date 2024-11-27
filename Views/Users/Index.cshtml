@@ -27,15 +27,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
                 </td>
-                <td>
+                <td class="d-flex">
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Delete</a>
-                </td>
                 @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
                 {
-                    <td>
-                        <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
-                    </td>
+                    <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
                 }
+                </td>
             </tr>
             @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
             @Html.HiddenFor(modelItem => uzivatel.Heslo)

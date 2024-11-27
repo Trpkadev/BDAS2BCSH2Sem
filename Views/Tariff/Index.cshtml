@@ -7,7 +7,7 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h2>@ViewData["Title"]</h2>
-    <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
+    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
 </div>
 
 <table class="table">
@@ -26,8 +26,9 @@
                 <td>
                     @Html.DisplayFor(_ => item.Nazev)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Upravit</a>
+                <td class="d-flex">
+                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Detail</a>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)" class="btn btn-secondary">Odstranit</a>
                 </td>
             </tr>

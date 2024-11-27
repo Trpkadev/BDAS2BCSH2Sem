@@ -1,0 +1,22 @@
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.Uzivatel
+@{
+    ViewData["Title"] = "Detail uživatele";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UzivatelskeJmeno)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
+</div>

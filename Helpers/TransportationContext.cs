@@ -67,6 +67,22 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await DMLPackageCall(sql, sqlParams);
     }
 
+    public async Task DMLPracovniciAsync(Pracovnik pracovnik)
+    {
+        string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :uzivatelskeJmeno, :heslo, :idNadrizeny, :idRole, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email);";
+        OracleParameter[] sqlParams = [ new OracleParameter("idPracovnik", ConvertId(pracovnik.IdPracovnik)),
+                                        new OracleParameter("uzivatelskeJmeno", pracovnik.UzivatelskeJmeno),
+                                        new OracleParameter("heslo", pracovnik.Heslo),
+                                        new OracleParameter("idNadrizeny", pracovnik.IdNadrizeny),
+                                        new OracleParameter("idRole", pracovnik.IdNadrizeny),
+                                        new OracleParameter("hodinovaMzda", pracovnik.HodinovaMzda),
+                                        new OracleParameter("jmeno", pracovnik.Jmeno),
+                                        new OracleParameter("prijmeni", pracovnik.Prijmeni),
+                                        new OracleParameter("telefonniCislo", pracovnik.TelefonniCislo),
+                                        new OracleParameter("email", pracovnik.Email)];
+        await DMLPackageCall(sql, sqlParams);
+    }
+
     public async Task DMLRoleAsync(Role role)
     {
         string sql = $"{ConvertDMLMethodName()}(:idRole, :nazev, :prava);";
@@ -232,6 +248,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Model>(ConvertMethodNameToView(), whereClause);
     }
 
+    public async Task<List<Pracovnik>?> GetPracovniciAsync()
+    {
+        return await GetDBView<Pracovnik>(ConvertMethodNameToView());
+    }
+
+    public async Task<Pracovnik?> GetPracovniciByIdAsync(int id)
+    {
+        string whereClause = $"IDPRACOVNIK = {id}";
+        return await GetDBView<Pracovnik>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<List<Role>?> GetRoleAsync()
     {
         return await GetDBView<Role>(ConvertMethodNameToView());
@@ -298,6 +325,17 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await GetDBView<Udrzba>(ConvertMethodNameToView(), whereClause);
     }
 
+    public async Task<List<Uzivatel>?> GetUzivateleAsync()
+    {
+        return await GetDBView<Uzivatel>(ConvertMethodNameToView());
+    }
+
+    public async Task<Uzivatel?> GetUzivateleByIdAsync(int id)
+    {
+        string whereClause = $"IDUZIVATEL = {id}";
+        return await GetDBView<Uzivatel>(ConvertMethodNameToView(), whereClause);
+    }
+
     public async Task<IUser?> GetUzivatelOrPracovnikByNamePwdAsync(string name, string pwdHash)
     {
         string sql = @" DECLARE
@@ -331,28 +369,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         bool exists = false;
         result?.TryGetValue("exists", out exists);
         return exists;
-    }
-
-    public async Task<List<Uzivatel>?> GetUzivateleAsync()
-    {
-        return await GetDBView<Uzivatel>(ConvertMethodNameToView());
-    }
-
-    public async Task<Uzivatel?> GetUzivateleByIdAsync(int id)
-    {
-        string whereClause = $"IDUZIVATEL = {id}";
-        return await GetDBView<Uzivatel>(ConvertMethodNameToView(), whereClause);
-    }
-
-    public async Task<List<Pracovnik>?> GetPracovniciAsync()
-    {
-        return await GetDBView<Pracovnik>(ConvertMethodNameToView());
-    }
-
-    public async Task<Pracovnik?> GetPracovniciByIdAsync(int id)
-    {
-        string whereClause = $"IDPRACOVNIK = {id}";
-        return await GetDBView<Pracovnik>(ConvertMethodNameToView(), whereClause);
     }
 
     public async Task<List<Vozidlo>?> GetVozidlaAsync()

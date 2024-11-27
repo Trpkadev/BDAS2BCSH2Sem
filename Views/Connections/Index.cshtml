@@ -7,7 +7,7 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h2>@ViewData["Title"]</h2>
-    <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
+    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
 </div>
 
 <table class="table">
@@ -15,7 +15,6 @@
         <tr>
             <th>
                 Linka
-                @* @Html.DisplayNameFor(model => model.IdLinka) *@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.JedeVSobotu)
@@ -37,8 +36,7 @@
         {
             <tr>
                 <td>
-                    <a asp-controller="Routes" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka</a>
-                    @* @Html.DisplayFor(_ => item.IdLinka) *@
+                    <a asp-controller="Routes" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka</a>
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.JedeVSobotu)
@@ -52,8 +50,9 @@
                 <td>
                     @Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Upravit</a>
+                <td class="d-flex">
+                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Detail</a>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)" class="btn btn-secondary">Odstranit</a>
                 </td>
             </tr>

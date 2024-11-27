@@ -10,42 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class ConnectionsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Spoj spoj)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(spoj);
-            await _context.DMLSpojeAsync(spoj);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -89,8 +53,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -113,8 +77,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Spoj spoj)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Spoj spoj)
     {
         try
         {
@@ -139,7 +103,8 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View((await _context.GetSpojeAsync())?.OrderBy(item => item.IdLinka)); //TODO
+            var spoje = await _context.GetSpojeAsync() ?? [];
+            return View(spoje);
         }
         catch (Exception)
         {

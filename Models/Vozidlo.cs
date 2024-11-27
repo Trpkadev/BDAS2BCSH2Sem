@@ -42,8 +42,8 @@ public class Vozidlo
     public int IdModel { get; set; }
 
     [DisplayName("Garáž")]
-    public string GarazNazev { get; set; }
+    public string? GarazNazev { get; set; }
 
     [DisplayName("Model")]
-    public string ModelNazev { get; set; }
+    public string? ModelNazev { get; set; }
 }

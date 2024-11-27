@@ -1,0 +1,82 @@
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.Udrzba
+
+@{
+    ViewData["Title"] = "Detail údržby";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdVozidlo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdVozidlo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Datum)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Datum)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TypUdrzby)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.TypUdrzby == 'c')
+            {
+                <label>
+                    Čištění
+                </label>
+            }
+            else if (Model.TypUdrzby == 'o')
+            {
+                <label>
+                    Oprava
+                </label>
+            }
+            else
+            {
+                <label>
+                    Nespecifikováno
+                </label>
+            }
+        </dd>
+        @if (Model.TypUdrzby == 'c')
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UmytoVMycce)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UmytoVMycce)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CistenoOzonem)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CistenoOzonem)
+            </dd>
+        }
+        else if (Model.TypUdrzby == 'o')
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PopisUkonu)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PopisUkonu)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Cena)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cena)
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUdrzba)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
+</div>

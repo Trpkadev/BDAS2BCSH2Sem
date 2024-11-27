@@ -10,42 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class RecordsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] ZaznamTrasy zaznamTrasy)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(zaznamTrasy);
-            await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -89,8 +53,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -113,8 +77,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] ZaznamTrasy zaznamTrasy)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] ZaznamTrasy zaznamTrasy)
     {
         try
         {
@@ -139,7 +103,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetZaznamy_TrasyAsync());
+            var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
+            return View(zaznamyTras);
         }
         catch (Exception)
         {

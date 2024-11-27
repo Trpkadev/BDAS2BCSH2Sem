@@ -1,0 +1,49 @@
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.ZaznamTrasy
+
+@{
+    ViewData["Title"] = "Detail záznamu trasy";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdSpoj)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdSpoj)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdVozidlo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdVozidlo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdZastavka)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdZastavka)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CasPrijezdu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CasPrijezdu)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CasOdjezdu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CasOdjezdu)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdZaznam)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
+</div>

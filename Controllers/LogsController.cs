@@ -1,7 +1,5 @@
 ﻿using BCSH2BDAS2.Helpers;
-using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -17,7 +15,7 @@ public class LogsController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var logy = await _context.GetLogyAsync();
+            var logy = await _context.GetLogyAsync() ?? [];
             return View(logy);
         }
         catch (Exception)

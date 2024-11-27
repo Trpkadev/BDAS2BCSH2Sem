@@ -1,0 +1,57 @@
+﻿@model BCSH2BDAS2.Models.Schema
+
+@{
+    ViewData["Title"] = "Vytvořit/Upravit schéma";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row mb-3">
+    <div class="col-md-4">
+        <form asp-action="EditSubmit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdSchema" />
+
+            <div class="form-group mb-3">
+                <label asp-for="NazevSchematu" class="control-label"></label>
+                <input asp-for="NazevSchematu" class="form-control" />
+                <span asp-validation-for="NazevSchematu" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="NazevSouboru" class="control-label"></label>
+                <input asp-for="NazevSouboru" class="form-control" />
+                <span asp-validation-for="NazevSouboru" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="VelikostSouboru" class="control-label"></label>
+                <input asp-for="VelikostSouboru" class="form-control" />
+                <span asp-validation-for="VelikostSouboru" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="TypSouboru" class="control-label"></label>
+                <input asp-for="TypSouboru" class="form-control" />
+                <span asp-validation-for="TypSouboru" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DatumZmeny" class="control-label"></label>
+                <input asp-for="DatumZmeny" class="form-control" />
+                <span asp-validation-for="DatumZmeny" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Soubor" class="control-label"></label>
+                <input asp-for="Soubor" class="form-control" />
+                <span asp-validation-for="Soubor" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Uložit změny" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Zpět na seznam</a>
+</div>
+

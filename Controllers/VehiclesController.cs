@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -10,50 +9,6 @@ namespace BCSH2BDAS2.Controllers;
 [Route("Vehicles")]
 public class VehiclesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
-    [HttpGet]
-    [Route("Create")]
-    public async Task<IActionResult> Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
-
-            var garaze = await _context.GetGarazeAsync();
-            var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
-            ViewBag.Garaze = garazeList;
-            var modely = await _context.GetModelyAsync();
-            var modelyList = new SelectList(modely, "IdModel", "Nazev");
-            ViewBag.Modely = modelyList;
-
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Vozidlo vozidlo)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(vozidlo);
-            await _context.DMLVozidlaAsync(vozidlo);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
     [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
@@ -100,8 +55,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     }
 
     [HttpGet]
-    [Route("Details")]
-    public async Task<IActionResult> Details(string encryptedId)
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
     {
         try
         {
@@ -123,8 +78,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -138,14 +93,10 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (vozidlo == null)
                 return StatusCode(404);
 
-            var garaze = await _context.GetGarazeAsync();
-            var garazeList = new SelectList(garaze, "IdGaraz", "Nazev");
-            ViewBag.Garaze = garazeList;
-            var modely = await _context.GetModelyAsync();
-            var modelyList = new SelectList(modely, "IdModel", "Nazev");
-            ViewBag.Modely = modelyList;
+            var garaze = await _context.GetGarazeAsync() ?? [];
+            var modely = await _context.GetModelyAsync() ?? [];
 
-            return View(vozidlo);
+            return View((vozidlo, garaze, modely));
         }
         catch (Exception)
         {
@@ -155,15 +106,15 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Vozidlo vozidlo)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Vozidlo vozidlo)
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
-                return StatusCode(400);
+                return View(vozidlo);
             await _context.DMLVozidlaAsync(vozidlo);
             return RedirectToAction(nameof(Index));
         }
@@ -181,7 +132,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var vozidla = await _context.GetVozidlaAsync();
+            var vozidla = await _context.GetVozidlaAsync() ?? [];
             return View(vozidla);
         }
         catch (Exception)

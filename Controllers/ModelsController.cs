@@ -17,7 +17,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View();
+            return View("CreateEdit");
         }
         catch (Exception)
         {
@@ -35,7 +35,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
-                return View(model);
+                return View("CreateEdit", model);
             await _context.DMLModelyAsync(model);
             return RedirectToAction(nameof(Index));
         }
@@ -103,7 +103,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             var model = await _context.GetModelyByIdAsync(id);
             if (model == null)
                 return StatusCode(404);
-            return View(model);
+            return View("CreateEdit", model);
         }
         catch (Exception)
         {
@@ -121,7 +121,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
-                return View(model);
+                return View("CreateEdit", model);
             await _context.DMLModelyAsync(model);
             return RedirectToAction(nameof(Index));
         }
@@ -139,7 +139,8 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetModelyAsync());
+            var modely = await _context.GetModelyAsync() ?? [];
+            return View(modely);
         }
         catch (Exception)
         {

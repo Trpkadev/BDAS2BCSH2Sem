@@ -38,8 +38,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
             var uzivatele = await _context.GetUzivateleAsync();
-            var role = await _context.GetRoleAsync();
-            return View((uzivatele?.AsEnumerable(), role?.AsEnumerable()));
+            return View(uzivatele);
         }
         catch (Exception)
         {
@@ -73,7 +72,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Uzivatel uzivatel)
+    public async Task<IActionResult> DeleteSubmit([FromForm] Uzivatel pracovnik)
     {
         try
         {
@@ -81,30 +80,10 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetUzivateleByIdAsync(uzivatel.IdUzivatel) != null)
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", uzivatel.IdUzivatel);
+            if (await _context.GetUzivateleByIdAsync(pracovnik.IdUzivatel) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", pracovnik.IdUzivatel);
 
             return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromBody] Uzivatel uzivatel)
-    {
-        try
-        {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-            if (await _context.GetUzivateleByIdAsync(uzivatel.IdUzivatel) != null)
-                await _context.DMLUzivateleAsync(uzivatel);
-            return StatusCode(200);
         }
         catch (Exception)
         {

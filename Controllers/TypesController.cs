@@ -10,43 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class TypesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] TypVozidla typVozidla)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(typVozidla);
-            await _context.DMLTypy_VozidelAsync(typVozidla);
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -93,8 +56,8 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -116,8 +79,8 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] TypVozidla typVozidla)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] TypVozidla typVozidla)
     {
         try
         {
@@ -140,7 +103,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var typyVozidel = await _context.GetTypy_VozidelAsync();
+            var typyVozidel = await _context.GetTypy_VozidelAsync() ?? [];
             return View(typyVozidel);
         }
         catch (Exception)

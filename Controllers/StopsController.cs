@@ -11,47 +11,6 @@ namespace BCSH2BDAS2.Controllers;
 public class StopsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public async Task<IActionResult> Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-
-            var pasma = await _context.GetTarifni_PasmaAsync();
-            var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
-            ViewBag.Pasma = pasmaList;
-
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Zastavka zastavka)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(zastavka);
-            await _context.DMLZastavkyAsync(zastavka);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -97,8 +56,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     }
 
     [HttpGet]
-    [Route("Details")]
-    public async Task<IActionResult> Details(string encryptedId)
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
     {
         try
         {
@@ -121,8 +80,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -151,8 +110,8 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Zastavka zastavka)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Zastavka zastavka)
     {
         try
         {
@@ -180,7 +139,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            List<Zastavka>? zastavky = await _context.GetZastavkyAsync();
+            var zastavky = await _context.GetZastavkyAsync() ?? [];
             return View(zastavky);
         }
         catch (Exception)

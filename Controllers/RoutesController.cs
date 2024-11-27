@@ -10,42 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class RoutesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Linka linka)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(linka);
-            await _context.DMLLinkyAsync(linka);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -89,8 +53,8 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -113,8 +77,8 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Linka linka)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Linka linka)
     {
         try
         {
@@ -139,7 +103,8 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            return View(await _context.GetLinkyAsync());
+            var linky = await _context.GetLinkyAsync() ?? [];
+            return View(linky);
         }
         catch (Exception)
         {

@@ -1,0 +1,46 @@
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.Spoj
+
+@{
+    ViewData["Title"] = "Detail vozidla";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdLinka)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdLinka)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JedeVSobotu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JedeVSobotu)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JedeVNedeli)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JedeVNedeli)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JedeVeVsedniDen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GarantovaneNizkopodlazni)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSpoj)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
+</div>

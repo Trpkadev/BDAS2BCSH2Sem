@@ -1,0 +1,41 @@
+﻿@using BCSH2BDAS2.Helpers
+@model BCSH2BDAS2.Models.Model
+
+@{
+    ViewData["Title"] = "Detail modelu";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazev)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nazev)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdZnacka)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdZnacka)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdTypVozidla)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdTypVozidla)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JeNizkopodlazni)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JeNizkopodlazni)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdModel)" class="btn btn-primary mb-3">Upravit</a>
+    <p><a asp-action="Index">Zpět na seznam</a></p>
+</div>

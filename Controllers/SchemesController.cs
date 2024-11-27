@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -10,43 +9,6 @@ namespace BCSH2BDAS2.Controllers;
 [Route("Schemes")]
 public class SchemesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
-    [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Schema schema)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(schema);
-            await _context.DMLSchemataAsync(schema);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
     [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
@@ -73,7 +35,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Zastavka schema)
+    public async Task<IActionResult> DeleteSubmit([FromForm] Schema schema)
     {
         try
         {
@@ -81,8 +43,8 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetSchemataByIdAsync(schema.IdZastavka) != null)
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZASTAVKY WHERE ID_ZASTAVKA = {0}", schema.IdZastavka);
+            if (await _context.GetSchemataByIdAsync(schema.IdSchema) != null)
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SCHEMATA WHERE ID_SCHEMA = {0}", schema.IdSchema);
 
             return RedirectToAction(nameof(Index));
         }
@@ -93,8 +55,8 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
-    [Route("Details")]
-    public async Task<IActionResult> Details(string encryptedId)
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
     {
         try
         {
@@ -116,8 +78,8 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -130,10 +92,6 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             var schema = await _context.GetSchemataByIdAsync(id);
             if (schema == null)
                 return StatusCode(404);
-
-            var pasma = await _context.TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA").ToListAsync();
-            var pasmaList = new SelectList(pasma, "IdPasmo", "Nazev");
-            ViewBag.Pasma = pasmaList;
 
             return View(schema);
         }
@@ -145,8 +103,8 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] Zastavka schema)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Schema schema)
     {
         try
         {
@@ -154,7 +112,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return View(schema);
-            await _context.Database.ExecuteSqlRawAsync("UPDATE ZASTAVKY SET NAZEV = {0}, SOURADNICE_X = {1}, SOURADNICE_Y = {2}, ID_PASMO = {3} WHERE ID_ZASTAVKA = {4}", schema.Nazev, schema.SouradniceX, schema.SouradniceY, schema.IdPasmo, schema.IdZastavka);
+            await _context.DMLSchemataAsync(schema);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
@@ -171,7 +129,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            List<Schema>? schemata = await _context.GetSchemataAsync();
+            List<Schema>? schemata = await _context.GetSchemataAsync() ?? [];
             return View(schemata);
         }
         catch (Exception)

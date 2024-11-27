@@ -112,6 +112,19 @@
                                 </ul>
                             </li>
                         }
+                        @if ((ViewData["ActingUser"]) != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Schemes","Index") ? "active" : "")" asp-controller="Schemes" asp-action="Index">Schémata</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item" onmouseover="showPopup(this)" onmouseout="hidePopup(this)">
+                                <div class="popover bs-popover-auto fade show" role="tooltip" id="popover152996" style="visibility:hidden; position: absolute; transform: translate(-5rem, 2.5rem);min-width:14rem;width:14rem;max-width:14rem;padding:0.5rem;" data-popper-placement="bottom" inert>Pouze pro registrované uživatele</div>
+                                <a class="nav-link disabled @(RazorHelper.IsControllerAndAction(ViewContext, "Schemes","Index") ? "active" : "")" asp-controller="Schemes" asp-action="Index">Schémata</a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">

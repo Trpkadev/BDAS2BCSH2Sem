@@ -10,42 +10,6 @@ namespace BCSH2BDAS2.Controllers;
 public class TimetablesController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("Create")]
-    public IActionResult Create()
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [ValidateAntiForgeryToken]
-    [HttpPost]
-    [Route("CreateSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] JizniRad jizdniRad)
-    {
-        try
-        {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return View(jizdniRad);
-            await _context.DMLJizdni_RadyAsync(jizdniRad);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpGet]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string encryptedId)
     {
@@ -89,8 +53,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
     }
 
     [HttpGet]
-    [Route("Edit")]
-    public async Task<IActionResult> Edit(string encryptedId)
+    [Route("CreateEdit")]
+    public async Task<IActionResult> CreateEdit(string encryptedId)
     {
         try
         {
@@ -103,7 +67,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             var jizdniRad = await _context.GetJizdni_RadyByIdAsync(id);
             if (jizdniRad == null)
                 return StatusCode(404);
-            return View(jizdniRad);
+            return View("CreateEdit", jizdniRad);
         }
         catch (Exception)
         {
@@ -113,8 +77,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
 
     [ValidateAntiForgeryToken]
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromForm] JizniRad jizdniRad)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromForm] JizniRad jizdniRad)
     {
         try
         {
@@ -139,7 +103,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var jizdniRady = await _context.GetJizdni_RadyAsync();
+            var jizdniRady = await _context.GetJizdni_RadyAsync() ?? [];
             return View(jizdniRady);
         }
         catch (Exception)

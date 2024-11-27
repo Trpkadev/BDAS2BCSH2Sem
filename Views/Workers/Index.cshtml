@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.pracovnici.First().Nadrizeny)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.pracovnici.First().Role.Nazev)
+                @Html.DisplayNameFor(model => model.pracovnici.First().Role)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.pracovnici.First().HodinovaMzda)
@@ -46,55 +46,53 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var pracovnik in Model.pracovnici)
+        @foreach (var item in Model.pracovnici)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.UzivatelskeJmeno)
+                    @Html.DisplayFor(modelItem => item.UzivatelskeJmeno)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.Nadrizeny.ToString())
+
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdNadrizeny)" class="btn btn-secondary">@Html.DisplayFor(modelItem => item.Nadrizeny)</a>
                 </td>
                 <td>
-                    @Html.DropDownListFor(modelItem => pracovnik.IdRole,
+                    @Html.DropDownListFor(modelItem => item.IdRole,
                              new SelectList(Model.role.Where(role => role.Prava > 0).Select(role => new
                              {
                                  Value = role.IdRole,
                                  Text = role.ToString()
-                             }), "Value", "Text", pracovnik.IdRole),
-                             new { @class = "form-control", @onchange = $"submitRoleChange(this, {pracovnik.IdPracovnik},'{pracovnik.Jmeno}','{pracovnik.Heslo}')" })
+                             }), "Value", "Text", item.IdRole),
+                             new { @class = "form-control", @onchange = $"submitRoleChange(this, {item.IdPracovnik},'{item.Jmeno}','{item.Heslo}')" })
 
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.HodinovaMzda)
+                    @Html.DisplayFor(modelItem => item.HodinovaMzda)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.Jmeno)
+                    @Html.DisplayFor(modelItem => item.Jmeno)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.Prijmeni)
+                    @Html.DisplayFor(modelItem => item.Prijmeni)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.TelefonniCislo)
+                    @Html.DisplayFor(modelItem => item.TelefonniCislo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pracovnik.Email)
+                    @Html.DisplayFor(modelItem => item.Email)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(pracovnik.IdPracovnik)" class="btn btn-danger">Edit</a>
+                <td class="d-flex">
+                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPracovnik)" class="btn btn-danger">Edit</a>
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPracovnik)" class="btn btn-secondary">Detail</a>
+                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPracovnik)" class="btn btn-danger">Delete</a>
+                    @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                    {
+                        <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPracovnik)" class="btn btn-secondary">Přepnout na</a>
+                    }
                 </td>
-                <td>
-                    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(pracovnik.IdPracovnik)" class="btn btn-danger">Delete</a>
-                </td>
-                @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
-                {
-                    <td>
-                        <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(pracovnik.IdPracovnik)" class="btn btn-secondary">Přepnout na</a>
-                    </td>
-                }
             </tr>
-            @Html.HiddenFor(modelItem => pracovnik.IdPracovnik)
-            @Html.HiddenFor(modelItem => pracovnik.Heslo)
+            @Html.HiddenFor(modelItem => item.IdPracovnik)
+            @Html.HiddenFor(modelItem => item.Heslo)
         }
     </tbody>
 </table>

@@ -7,18 +7,16 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h2>@ViewData["Title"]</h2>
-    <a asp-action="Create" class="btn btn-primary">Vytvořit</a>
+    <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
 </div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @* @Html.DisplayNameFor(model => model.IdSpoj) *@
                 Spoj
             </th>
             <th>
-                @* @Html.DisplayNameFor(model => model.IdVozidlo) *@
                 Vozidlo
             </th>
             <th>
@@ -38,12 +36,10 @@
         {
             <tr>
                 <td>
-                     <a asp-controller="Connections" asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
-                    @* @Html.DisplayFor(_ => item.IdSpoj) *@
+                     <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
                 </td>
                 <td>
-                     <a asp-controller="Vehicles" asp-action="Details" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
-                    @* @Html.DisplayFor(_ => item.IdVozidlo) *@
+                     <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.ZastavkaNazev)
@@ -54,8 +50,9 @@
                 <td>
                     @item.CasOdjezdu.ToShortTimeString()
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Upravit</a>
+                <td class="d-flex">
+                    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Upravit</a>
+                    <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Detail</a>
                     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZaznam)" class="btn btn-secondary">Odstranit</a>
                 </td>
             </tr>
