@@ -103,6 +103,29 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var garaz = await _context.GetGarazeByIdAsync(id);
+            if (garaz == null)
+                return StatusCode(404);
+            return View(garaz);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

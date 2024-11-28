@@ -103,6 +103,29 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
     }
 
     [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var spoj = await _context.GetSpojeByIdAsync(id);
+            if (spoj == null)
+                return StatusCode(404);
+            return View(spoj);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

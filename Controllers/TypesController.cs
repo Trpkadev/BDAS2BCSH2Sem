@@ -24,7 +24,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             {
                 int id = GetDecryptedId(encryptedId);
                 var typVozidla = await _context.GetTypy_VozidelByIdAsync(id);
-                if (typVozidla != null)
+                if (typVozidla == null)
                     return StatusCode(404);
                 return View(typVozidla);
             }
@@ -95,6 +95,29 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             if (await _context.GetTypy_VozidelByIdAsync(typVozidla.IdTypVozidla) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM TYPY_VOZIDEL WHERE ID_TYP_VOZIDLA = {0}", typVozidla.IdTypVozidla);
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var typVozidla = await _context.GetTypy_VozidelByIdAsync(id);
+            if (typVozidla == null)
+                return StatusCode(404);
+            return View(typVozidla);
         }
         catch (Exception)
         {

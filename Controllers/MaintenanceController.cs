@@ -103,6 +103,29 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
     }
 
     [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var udrzba = await _context.GetUdrzbyByIdAsync(id);
+            if (udrzba == null)
+                return StatusCode(404);
+            return View(udrzba);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

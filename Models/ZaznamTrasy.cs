@@ -37,5 +37,5 @@ public class ZaznamTrasy
     public int IdSpoj { get; set; }
 
     [DisplayName("Zastávka")]
-    public string ZastavkaNazev { get; set; }
+    public string ZastavkaNazev { get; set; } = string.Empty;
 }

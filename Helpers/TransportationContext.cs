@@ -10,6 +10,7 @@ namespace BCSH2BDAS2.Helpers;
 
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public DbSet<Garaz> Garaze { get; set; }
     public DbSet<JizdniRad> JizdniRady { get; set; }
     public DbSet<Linka> Linky { get; set; }
@@ -24,6 +25,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
     public DbSet<Log> Logy { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     #region DML procedures
 
@@ -222,7 +224,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<JizdniRad?> GetJizdni_RadyByIdAsync(int id)
     {
-        string whereClause = $"IDJIZDNI_RAD = {id}";
+        string whereClause = $"IDJIZDNIRAD = {id}";
         return await GetDBView<JizdniRad>(ConvertMethodNameToView(), whereClause);
     }
 
@@ -299,7 +301,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<TarifniPasmo?> GetTarifni_PasmaByIdAsync(int id)
     {
-        string whereClause = $"IDTARIFNI_PASMO = {id}";
+        string whereClause = $"IDTARIFNIPASMO = {id}";
         return await GetDBView<TarifniPasmo>(ConvertMethodNameToView(), whereClause);
     }
 
@@ -310,7 +312,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<TypVozidla?> GetTypy_VozidelByIdAsync(int id)
     {
-        string whereClause = $"IDTYP_VOZIDLA = {id}";
+        string whereClause = $"IDTYPVOZIDLA = {id}";
         return await GetDBView<TypVozidla>(ConvertMethodNameToView(), whereClause);
     }
 
@@ -400,7 +402,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<ZaznamTrasy?> GetZaznamy_TrasyByIdAsync(int id)
     {
-        string whereClause = $"IDZAZNAM_TRASY = {id}";
+        string whereClause = $"IDZAZNAMTRASY = {id}";
         return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView(), whereClause);
     }
 

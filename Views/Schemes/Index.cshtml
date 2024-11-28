@@ -29,59 +29,63 @@
 
     <div class="tab-content">
         @{
-            for (int i = 0; i < Model.Count(); i++)
+            @for (int i = 0; i < Model.Count(); i++)
             {
+                var schema = Model.ElementAt(i);
+                if (schema.Soubor == null)
+                    continue;
                 var activeClass = i == 0 ? "tab-pane fade show active" : "tab-pane fade";
                 <div id="tab@i" class="@activeClass">
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ElementAt(i).Soubor)" />
-                    <p>@Model.ElementAt(i).NazevSouboru</p>
-                    <p>@Model.ElementAt(i).VelikostSouboru</p>
-                    <p>@Model.ElementAt(i).DatumZmeny</p>
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(schema.Soubor)" />
+                    <p>@schema.NazevSouboru</p>
+                    <p>@schema.VelikostSouboru</p>
+                    <p>@schema.DatumZmeny</p>
                 </div>
             }
+        }
 
-            @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
-            {
-                var activeClass = Model.Count() == 0 ? "tab-pane fade show active" : "tab-pane fade";
-                <div id="tabTable" class="@activeClass">
-                    <div class="table-responsive overflow-auto">
-                        <table class="table text-nowrap">
-                            <thead>
+        @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+        {
+            var activeClass = Model.Count() == 0 ? "tab-pane fade show active" : "tab-pane fade";
+            <div id="tabTable" class="@activeClass">
+                <div class="table-responsive overflow-auto">
+                    <table class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.NazevSchematu)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VelikostSouboru)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Soubor)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.NazevSchematu)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.VelikostSouboru)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Soubor)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(_ => item.NazevSchematu)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(_ => item.VelikostSouboru)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(_ => item.Soubor)
-                                        </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.NazevSchematu)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.VelikostSouboru)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.Soubor)
+                                    </td>
 
-                                        @await Html.PartialAsync("IndexActionButtons", item.IdSchema)
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                    @await Html.PartialAsync("IndexActionButtons", item.IdSchema)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-            }
+            </div>
+        }
         }
     </div>
 </div>

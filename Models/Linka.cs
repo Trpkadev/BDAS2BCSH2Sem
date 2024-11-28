@@ -29,7 +29,7 @@ public class Linka
     public int IdTypVozidla { get; set; }
 
     [DisplayName("Typ vozidla")]
-    public string TypVozidlaNazev { get; set; }
+    public string TypVozidlaNazev { get; set; } = string.Empty;
 
     public override string ToString() => Nazev;
 }

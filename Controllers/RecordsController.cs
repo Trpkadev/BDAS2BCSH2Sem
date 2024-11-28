@@ -103,6 +103,29 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+            if (zaznamTrasy == null)
+                return StatusCode(404);
+            return View(zaznamTrasy);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

@@ -7,26 +7,26 @@
 
 <h3>Opravdu chcete tuto položku odstranit?</h3>
 <div>
-    <h4></h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Nazev)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Nazev)
         </dd>
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Kapacita)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Kapacita)
         </dd>
     </dl>
 
-    <form asp-action="DeleteSubmit">
-        <input type="hidden" asp-for="IdGaraz" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Zpět na seznam</a>
+    <form asp-action="DeleteSubmit" class="mb-3">
+    <input type="hidden" asp-for="IdGaraz" />
+        <input type="submit" value="Odstranit" class="btn btn-danger" />
     </form>
+    <a asp-action="Index">Zpět na seznam</a>
 </div>

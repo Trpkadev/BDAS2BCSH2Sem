@@ -5,37 +5,42 @@
 
 <h3>Opravdu chcete odstranit tuto zastávku?</h3>
 <div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Nazev)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Nazev)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.SouradniceX)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.SouradniceX)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.SouradniceY)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.SouradniceY)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.IdPasmo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.IdPasmo)
         </dd>
     </dl>
-    
+
     <form asp-action="DeleteSubmit" class="mb-3">
-        <input type="hidden" asp-for="IdZastavka" />
         <input type="submit" value="Odstranit" class="btn btn-danger" />
+        <input type="hidden" asp-for="IdZastavka" />
     </form>
-    <a asp-action="Index">Zpět na seznam zastávek</a>
+    <a asp-action="Index">Zpět na seznam</a>
 </div>

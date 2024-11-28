@@ -33,10 +33,10 @@ public class Model
     public int IdTypVozidla { get; set; }
 
     [DisplayName("Značka")]
-    public string ZnackaNazev { get; set; }
+    public string ZnackaNazev { get; set; } = string.Empty;
 
     [DisplayName("Typ vozidla")]
-    public string TypVozidlaNazev { get; set; }
+    public string TypVozidlaNazev { get; set; } = string.Empty;
 
     public override string ToString() => Nazev;
 }

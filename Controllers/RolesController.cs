@@ -26,6 +26,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 var role = await _context.GetRoleByIdAsync(id);
                 if (role == null)
                     return StatusCode(404);
+                return View(role);
             }
             return View(new Role());
         }
@@ -94,6 +95,29 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
             if (await _context.GetRoleByIdAsync(role.IdRole) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ROLE WHERE ID_ROLE = {0}", role.IdRole);
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var role = await _context.GetRoleByIdAsync(id);
+            if (role == null)
+                return StatusCode(404);
+            return View(role);
         }
         catch (Exception)
         {

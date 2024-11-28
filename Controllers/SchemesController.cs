@@ -36,7 +36,6 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         }
     }
 
-    [RequestSizeLimit(50 * 1024 * 1024)]
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("CreateEditSubmit")]

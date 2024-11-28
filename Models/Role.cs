@@ -15,11 +15,11 @@ public class Role
     [JsonRequired]
     [Column("NAZEV")]
     [DisplayName("Název")]
-    public string Nazev { get; set; }
+    public string Nazev { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("PRAVA")]
-    [Range(0, 5, ErrorMessage = "Value must be between 0 and 5.")]
+    [Range(2, 7, ErrorMessage = "Value must be between 2 and 7.")]
     public int Prava { get; set; }
 
     public override string ToString() => Nazev;

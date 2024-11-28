@@ -28,6 +28,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 var model = await _context.GetModelyByIdAsync(id);
                 if (model == null)
                     return StatusCode(404);
+                return View(model);
             }
             return View(new Model());
         }
@@ -97,6 +98,29 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (await _context.GetModelyByIdAsync(model.IdModel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM MODELY WHERE ID_MODEL = {0}", model.IdModel);
             return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var model = await _context.GetModelyByIdAsync(id);
+            if (model == null)
+                return StatusCode(404);
+            return View(model);
         }
         catch (Exception)
         {

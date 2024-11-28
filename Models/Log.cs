@@ -21,21 +21,21 @@ namespace BCSH2BDAS2.Models
         [JsonRequired]
         [Column("TYP_ZMENY")]
         [DisplayName("Typ změny")]
-        public string TypZmeny { get; set; }
+        public string TypZmeny { get; set; } = string.Empty;
 
         [JsonRequired]
         [Column("TABULKA")]
         [DisplayName("Tabulka")]
-        public string Tabulka { get; set; }
+        public string Tabulka { get; set; } = string.Empty;
 
         [JsonRequired]
         [Column("NOVE_HODNOTY")]
         [DisplayName("Nové hodnoty")]
-        public string NoveHodnoty { get; set; }
+        public string NoveHodnoty { get; set; } = string.Empty;
 
         [JsonRequired]
         [Column("STARE_HODNOTY")]
         [DisplayName("Staré hodnoty")]
-        public string StareHodnoty { get; set; }
+        public string StareHodnoty { get; set; } = string.Empty;
     }
 }

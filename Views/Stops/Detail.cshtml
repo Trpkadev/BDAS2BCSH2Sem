@@ -7,29 +7,35 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Nazev)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Nazev)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.SouradniceX)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.SouradniceX)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.SouradniceY)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.SouradniceY)
         </dd>
-        <dt class = "col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.IdPasmo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.IdPasmo)
         </dd>
     </dl>

@@ -103,6 +103,29 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
     }
 
     [HttpGet]
+    [Route("Detail")]
+    public async Task<IActionResult> Detail(string encryptedId)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return RedirectToAction(nameof(Index), "Home");
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var znacka = await _context.GetZnackyByIdAsync(id);
+            if (znacka == null)
+                return StatusCode(404);
+            return View(znacka);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

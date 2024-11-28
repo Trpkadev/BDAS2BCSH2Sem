@@ -7,51 +7,59 @@
 
 <h3>Opravdu chcete tuto položku odstranit?</h3>
 <div>
-    <h4></h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.NazevSchematu)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.NazevSchematu)
         </dd>
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.NazevSouboru)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.NazevSouboru)
         </dd>
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.VelikostSouboru)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.VelikostSouboru)
         </dd>
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.TypSouboru)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.TypSouboru)
         </dd>
-
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.DatumZmeny)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.DatumZmeny)
         </dd>
-        <dt class="col-sm-2">
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Soubor)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Soubor)
         </dd>
     </dl>
 
-    <form asp-action="DeleteSubmit">
+    <form asp-action="DeleteSubmit" class="mb-3">
         <input type="hidden" asp-for="IdSchema" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Zpět na seznam</a>
+        <input type="submit" value="Odstranit" class="btn btn-danger" />
     </form>
+    <a asp-action="Index">Zpět na seznam</a>
+
 </div>
