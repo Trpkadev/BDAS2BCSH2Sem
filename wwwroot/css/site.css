@@ -33,3 +33,7 @@ p {
 th, td, select {
     text-align: center;
 }
+
+table {
+    min-width: 612px
+}

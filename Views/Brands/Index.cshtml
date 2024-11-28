@@ -5,8 +5,8 @@
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto">
-    <table class="table text-nowrap">
+<div class="table-responsive overflow-auto p-3">
+    <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
                 <th>
@@ -15,10 +15,10 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="w-auto">
             @foreach (var item in Model)
             {
-                <tr>
+                <tr  >
                     <td>
                         @Html.DisplayFor(_ => item.Nazev)
                     </td>
