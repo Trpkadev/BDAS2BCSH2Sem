@@ -22,10 +22,10 @@
                     @Html.DisplayNameFor(model => model.MaKlimatizaci)
                 </th>
                 <th class="p-2">
-                    @Html.DisplayNameFor(model => model.GarazNazev)
+                    @Html.DisplayNameFor(model => model.NazevGaraze)
                 </th>
                 <th class="p-2">
-                    @Html.DisplayNameFor(model => model.ModelNazev)
+                    @Html.DisplayNameFor(model => model.NazevVozidla)
                 </th>
                 <th class="p-2"></th>
             </tr>
@@ -47,10 +47,10 @@
                         @Html.DisplayFor(modelItem => item.MaKlimatizaci)
                     </td>
                     <td class="p-2">
-                        <a asp-controller="Garages" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdGaraz)">@Html.DisplayFor(modelItem => item.GarazNazev)</a>
+                        <a asp-controller="Garages" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdGaraz)">@Html.DisplayFor(modelItem => item.NazevGaraze)</a>
                     </td>
                     <td class="p-2">
-                        <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.ModelNazev)</a>
+                        <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.NazevVozidla)</a>
                     </td>
 
                     @await Html.PartialAsync("IndexActionButtons", item.IdVozidlo)

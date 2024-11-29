@@ -33,6 +33,7 @@ public class JizdniRad
     [Column("ID_SPOJ")]
     public int IdSpoj { get; set; }
 
+    [Column("NAZEV_ZASTAVKY")]
     [DisplayName("Název zastávky")]
-    public string ZastavkaNazev { get; set; } = string.Empty;
+    public string? NazevZastavky { get; set; }
 }

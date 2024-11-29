@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -20,7 +21,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            ViewData["Pasma"] = await _context.GetTarifni_PasmaAsync() ?? [];
+            ViewData["Pasma"] = new SelectList(await _context.GetTarifni_PasmaAsync() ?? []);
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);

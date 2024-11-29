@@ -32,9 +32,11 @@ public class Model
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 
+    [Column("NAZEV_ZNACKY")]
     [DisplayName("Značka")]
     public string ZnackaNazev { get; set; } = string.Empty;
 
+    [Column("NAZEV_TYPU_VOZIDLA")]
     [DisplayName("Typ vozidla")]
     public string TypVozidlaNazev { get; set; } = string.Empty;
 

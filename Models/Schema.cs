@@ -33,7 +33,7 @@ public class Schema
     [DisplayName("Datum změny")]
     public DateTime? DatumZmeny { get; set; }
 
-    [Column("SOUBOR")]
+    [Column("SOUBOR", TypeName = "BLOB")]
     public byte[]? Soubor { get; set; }
 
     [NotMapped]

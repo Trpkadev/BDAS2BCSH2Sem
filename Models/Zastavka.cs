@@ -33,8 +33,9 @@ public class Zastavka
     [Column("ID_PASMO")]
     public int IdPasmo { get; set; }
 
+    [Column("NAZEV_PASMA")]
     [DisplayName("Pásmo")]
-    public string? PasmoNazev { get; set; }
+    public string? NazevPasma { get; set; }
 
     public override string ToString() => Nazev;
 }

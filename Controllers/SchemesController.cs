@@ -136,6 +136,27 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
+    [Route("Download")]
+    public async Task<IActionResult> Download(string encryptedId)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return StatusCode(400);
+
+            int id = GetDecryptedId(encryptedId);
+            var schema = await _context.GetSchemataByIdAsync(id);
+            if (schema == null)
+                return StatusCode(404);
+            return File(schema.Soubor!, schema.TypSouboru!);
+    }
+        catch (Exception)
+        {
+            return StatusCode(500);
+}
+    }
+
+    [HttpGet]
     [Route("")]
     public async Task<IActionResult> Index()
     {

@@ -67,14 +67,14 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         if (linka == null)
             return StatusCode(404);
 
-        var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS ZastavkaNazev FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ST69642.ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
-        var zastavky = jr.Select(jr => jr.ZastavkaNazev).Distinct().ToList();
+        var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS NAZEV_ZASTAVKY FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
+        var zastavky = jr.Select(jr => jr.NazevZastavky).Distinct().ToList();
 
         vm.Timetable = [];
         vm.CisloLinky = linka.Cislo;
 
         foreach (var zastavka in zastavky)
-            vm.Timetable[zastavka] = jr.Where(jr => jr.ZastavkaNazev == zastavka).ToList();
+            vm.Timetable[zastavka] = jr.Where(jr => jr.NazevZastavky == zastavka).ToList();
 
         return View(vm);
     }

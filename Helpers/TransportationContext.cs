@@ -10,7 +10,6 @@ namespace BCSH2BDAS2.Helpers;
 
 public class TransportationContext(DbContextOptions<TransportationContext> options) : DbContext(options)
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public DbSet<Garaz> Garaze { get; set; }
     public DbSet<JizdniRad> JizdniRady { get; set; }
     public DbSet<Linka> Linky { get; set; }
@@ -25,7 +24,12 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
     public DbSet<Log> Logy { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    public DbSet<Pracovnik> Pracovnici { get; set; }
+    public DbSet<Role> Role { get; set; }
+    public DbSet<Schema> Schemata { get; set; }
+    public DbSet<DatabazovyObjekt> DatabazoveObjekty { get; set; }
+    public DbSet<NakladyNaVozidlo> NakladyNaVozidla { get; set; }
+
 
     #region DML procedures
 
@@ -186,8 +190,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     {
         string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idSpoj, :idZastavka, :idVozidlo, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new OracleParameter("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
-                                        new OracleParameter("idSpoj", zaznamTrasy.IdSpoj),
-                                        new OracleParameter("idZastavka", zaznamTrasy.IdZastavka),
+                                        new OracleParameter("idJizdniRad", zaznamTrasy.IdJizniRad),
                                         new OracleParameter("idVozidlo", zaznamTrasy.IdVozidlo),
                                         new OracleParameter("casPrijezdu", zaznamTrasy.CasPrijezdu),
                                         new OracleParameter("casOdjezdu", zaznamTrasy.CasOdjezdu)];
@@ -206,140 +209,129 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     #region views
 
-    public async Task<List<Garaz>?> GetGarazeAsync()
+    public async Task<List<Garaz>> GetGarazeAsync()
     {
-        return await GetDBView<Garaz>(ConvertMethodNameToView());
+        return await Garaze.FromSqlRaw("SELECT * FROM GARAZE_VIEW").ToListAsync();
     }
 
     public async Task<Garaz?> GetGarazeByIdAsync(int id)
     {
-        string whereClause = $"IDGARAZ = {id}";
-        return await GetDBView<Garaz>(ConvertMethodNameToView(), whereClause);
+        return await Garaze.FromSqlRaw("SELECT * FROM GARAZE_VIEW WHERE ID_GARAZ = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<JizdniRad>?> GetJizdni_RadyAsync()
     {
-        return await GetDBView<JizdniRad>(ConvertMethodNameToView());
+        return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW").ToListAsync();
     }
 
     public async Task<JizdniRad?> GetJizdni_RadyByIdAsync(int id)
     {
-        string whereClause = $"IDJIZDNIRAD = {id}";
-        return await GetDBView<JizdniRad>(ConvertMethodNameToView(), whereClause);
+        return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW WHERE ID_JIZDNI_RAD = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Linka>?> GetLinkyAsync()
     {
-        return await GetDBView<Linka>(ConvertMethodNameToView());
+        return await Linky.FromSqlRaw("SELECT * FROM LINKY_VIEW").ToListAsync();
     }
 
     public async Task<Linka?> GetLinkyByIdAsync(int id)
     {
-        string whereClause = $"IDLINKA = {id}";
-        return await GetDBView<Linka>(ConvertMethodNameToView(), whereClause);
+        return await Linky.FromSqlRaw("SELECT * FROM LINKY_VIEW WHERE ID_LINKA = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Model>?> GetModelyAsync()
     {
-        return await GetDBView<Model>(ConvertMethodNameToView());
+        return await Modely.FromSqlRaw("SELECT * FROM MODELY_VIEW").ToListAsync();
     }
 
     public async Task<Model?> GetModelyByIdAsync(int id)
     {
-        string whereClause = $"IDMODEL = {id}";
-        return await GetDBView<Model>(ConvertMethodNameToView(), whereClause);
+        return await Modely.FromSqlRaw("SELECT * FROM MODELY_VIEW WHERE ID_MODEL = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Pracovnik>?> GetPracovniciAsync()
     {
-        return await GetDBView<Pracovnik>(ConvertMethodNameToView());
+        return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW").ToListAsync();
     }
 
     public async Task<Pracovnik?> GetPracovniciByIdAsync(int id)
     {
-        string whereClause = $"IDPRACOVNIK = {id}";
-        return await GetDBView<Pracovnik>(ConvertMethodNameToView(), whereClause);
+        return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_PRACOVNIK = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Role>?> GetRoleAsync()
     {
-        return await GetDBView<Role>(ConvertMethodNameToView());
+        return await Role.FromSqlRaw("SELECT * FROM ROLE_VIEW").ToListAsync();
     }
 
     public async Task<Role?> GetRoleByIdAsync(int id)
     {
-        string whereClause = $"IDROLE = {id}";
-        return await GetDBView<Role>(ConvertMethodNameToView(), whereClause);
+        return await Role.FromSqlRaw("SELECT * FROM ROLE_VIEW WHERE ID_ROLE = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Schema>?> GetSchemataAsync()
     {
-        return await GetDBView<Schema>(ConvertMethodNameToView());
+        return await Schemata.FromSqlRaw("SELECT * FROM SCHEMATA_VIEW").ToListAsync();
     }
 
     public async Task<Schema?> GetSchemataByIdAsync(int id)
     {
-        string whereClause = $"IDSCHEMA = {id}";
-        return await GetDBView<Schema>(ConvertMethodNameToView(), whereClause);
+        return await Schemata.FromSqlRaw("SELECT * FROM SCHEMATA_VIEW WHERE ID_SCHEMA = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Spoj>?> GetSpojeAsync()
     {
-        return await GetDBView<Spoj>(ConvertMethodNameToView());
+        return await Spoje.FromSqlRaw("SELECT * FROM SPOJE_VIEW").ToListAsync();
     }
 
     public async Task<Spoj?> GetSpojeByIdAsync(int id)
     {
-        string whereClause = $"IDSPOJ = {id}";
-        return await GetDBView<Spoj>(ConvertMethodNameToView(), whereClause);
+        return await Spoje.FromSqlRaw("SELECT * FROM SPOJE_VIEW WHERE ID_SPOJ = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<TarifniPasmo>?> GetTarifni_PasmaAsync()
     {
-        return await GetDBView<TarifniPasmo>(ConvertMethodNameToView());
+        return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW").ToListAsync();
     }
 
     public async Task<TarifniPasmo?> GetTarifni_PasmaByIdAsync(int id)
     {
-        string whereClause = $"IDTARIFNIPASMO = {id}";
-        return await GetDBView<TarifniPasmo>(ConvertMethodNameToView(), whereClause);
+        return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW WHERE ID_PASMO = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<TypVozidla>?> GetTypy_VozidelAsync()
     {
-        return await GetDBView<TypVozidla>(ConvertMethodNameToView());
+        return await TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL_VIEW").ToListAsync();
     }
 
     public async Task<TypVozidla?> GetTypy_VozidelByIdAsync(int id)
     {
-        string whereClause = $"IDTYPVOZIDLA = {id}";
-        return await GetDBView<TypVozidla>(ConvertMethodNameToView(), whereClause);
+        return await TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL_VIEW WHERE ID_TYP_VOZIDLA = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Udrzba>?> GetUdrzbyAsync()
     {
-        return await GetDBView<Udrzba>(ConvertMethodNameToView());
+        return await Udrzby.FromSqlRaw("SELECT * FROM UDRZBY_VIEW").ToListAsync();
     }
 
     public async Task<Udrzba?> GetUdrzbyByIdAsync(int id)
     {
-        string whereClause = $"IDUDRZBA = {id}";
-        return await GetDBView<Udrzba>(ConvertMethodNameToView(), whereClause);
+        return await Udrzby.FromSqlRaw("SELECT * FROM UDRZBY_VIEW WHERE ID_UDRZBA = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<List<Uzivatel>?> GetUzivateleAsync()
     {
-        return await GetDBView<Uzivatel>(ConvertMethodNameToView());
+        return await Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE_VIEW").ToListAsync();
     }
 
     public async Task<Uzivatel?> GetUzivateleByIdAsync(int id)
     {
-        string whereClause = $"IDUZIVATEL = {id}";
-        return await GetDBView<Uzivatel>(ConvertMethodNameToView(), whereClause);
+        return await Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE_VIEW WHERE ID_UZIVATEL = {0}", id).FirstOrDefaultAsync();
     }
 
     public async Task<IUser?> GetUzivatelOrPracovnikByNamePwdAsync(string name, string pwdHash)
     {
+        //return await Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE_VIEW WHERE UZIVATELSKE_JMENO = {0} AND HESLO = {1}", name, pwdHash).FirstOrDefaultAsync();
         string sql = @" DECLARE
                         v_uzivatel_json CLOB;
                         BEGIN
@@ -373,53 +365,59 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return exists;
     }
 
-    public async Task<List<Vozidlo>?> GetVozidlaAsync()
+    public async Task<List<Vozidlo>> GetVozidlaAsync()
     {
-        return await GetDBView<Vozidlo>(ConvertMethodNameToView());
+        return await Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA_VIEW").ToListAsync();
     }
 
     public async Task<Vozidlo?> GetVozidlaByIdAsync(int id)
     {
-        string whereClause = $"IDVOZIDLO = {id}";
-        return await GetDBView<Vozidlo>(ConvertMethodNameToView(), whereClause);
+        return await Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA_VIEW WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Zastavka>?> GetZastavkyAsync()
+    public async Task<List<Zastavka>> GetZastavkyAsync()
     {
-        return await GetDBView<Zastavka>(ConvertMethodNameToView());
+        return await Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY_VIEW").ToListAsync();
     }
 
     public async Task<Zastavka?> GetZastavkyByIdAsync(int id)
     {
-        string whereClause = $"IDZASTAVKA = {id}";
-        return await GetDBView<Zastavka>(ConvertMethodNameToView(), whereClause);
+        return await Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY_VIEW WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<ZaznamTrasy>?> GetZaznamy_TrasyAsync()
+    public async Task<List<ZaznamTrasy>> GetZaznamy_TrasyAsync()
     {
-        return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView());
+        return await ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY_VIEW").ToListAsync();
     }
 
     public async Task<ZaznamTrasy?> GetZaznamy_TrasyByIdAsync(int id)
     {
-        string whereClause = $"IDZAZNAMTRASY = {id}";
-        return await GetDBView<ZaznamTrasy>(ConvertMethodNameToView(), whereClause);
+        return await ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY_VIEW WHERE ID_ZAZNAM = {0}", id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Znacka>?> GetZnackyAsync()
+    public async Task<List<Znacka>> GetZnackyAsync()
     {
-        return await GetDBView<Znacka>(ConvertMethodNameToView());
+        return await Znacky.FromSqlRaw("SELECT * FROM ZNACKY_VIEW").ToListAsync();
     }
 
     public async Task<Znacka?> GetZnackyByIdAsync(int id)
     {
-        string whereClause = $"IDZNACKA = {id}";
-        return await GetDBView<Znacka>(ConvertMethodNameToView(), whereClause);
+        return await Znacky.FromSqlRaw("SELECT * FROM ZNACKY_VIEW WHERE ID_ZNACKA = {0}", id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Log>?> GetLogyAsync()
+    public async Task<List<Log>> GetLogyAsync()
     {
-        return await GetDBView<Log>(ConvertMethodNameToView());
+        return await Logy.FromSqlRaw("SELECT * FROM LOGY_VIEW").ToListAsync();
+    }
+
+    public async Task<List<DatabazovyObjekt>> GetDBObjektyAsync()
+    {
+        return await DatabazoveObjekty.FromSqlRaw("SELECT * FROM DB_OBJEKTY").ToListAsync();
+    }
+
+    public async Task<List<NakladyNaVozidlo>> GetNakladyNaVozidla()
+    {
+        return await NakladyNaVozidla.FromSqlRaw("SELECT * FROM NAKLADY_VOZIDLA").ToListAsync();
     }
 
     #endregion views
@@ -438,6 +436,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 #elif RELEASE
         modelBuilder.HasDefaultSchema("ST69612");
 #endif
+
+        modelBuilder.Entity<DatabazovyObjekt>().HasNoKey();
+        modelBuilder.Entity<NakladyNaVozidlo>().HasNoKey();
     }
 
     #endregion EF Core config

@@ -16,7 +16,7 @@
                     Vozidlo
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ZastavkaNazev)
+                    @* @Html.DisplayNameFor(model => model.Nazev) *@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CasPrijezdu)
@@ -32,13 +32,13 @@
             {
                 <tr>
                     <td>
-                        <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
+                        <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdJizniRad)">Spoj</a>
                     </td>
                     <td>
                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.ZastavkaNazev)
+                        @* @Html.DisplayFor(_ => item.ZastavkaNazev) *@
                     </td>
                     <td>
                         @item.CasPrijezdu.ToShortTimeString()

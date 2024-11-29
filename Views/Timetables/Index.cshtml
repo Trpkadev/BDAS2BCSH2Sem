@@ -13,7 +13,7 @@
                     Spoj
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ZastavkaNazev)
+                    @Html.DisplayNameFor(model => model.NazevZastavky)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CasPrijezdu)
@@ -32,7 +32,7 @@
                         <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.ZastavkaNazev)
+                        @Html.DisplayFor(_ => item.NazevZastavky)
                     </td>
                     <td>
                         @((item.CasPrijezdu ?? item.CasOdjezdu).ToShortTimeString())

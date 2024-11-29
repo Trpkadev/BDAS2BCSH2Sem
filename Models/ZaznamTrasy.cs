@@ -29,13 +29,10 @@ public class ZaznamTrasy
     public int IdVozidlo { get; set; }
 
     [JsonRequired]
-    [Column("ID_ZASTAVKA")]
-    public int IdZastavka { get; set; }
+    [Column("ID_JIZDNI_RAD")]
+    public int IdJizniRad { get; set; }
 
-    [JsonRequired]
-    [Column("ID_SPOJ")]
-    public int IdSpoj { get; set; }
-
-    [DisplayName("Zastávka")]
-    public string ZastavkaNazev { get; set; } = string.Empty;
+    [Column("NAZEV_VOZIDLA")]
+    [DisplayName("Vozidlo")]
+    public string? NazevVozidla { get; set; }
 }

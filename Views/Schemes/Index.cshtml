@@ -14,14 +14,14 @@
             {
                 var activeClass = i == 0 ? "nav-link active" : "nav-link";
                 <li class="nav-item">
-                    <a class="@activeClass" data-bs-toggle="tab" href="#tab1">@Model.ElementAt(i).NazevSchematu</a>
+                    <a class="@activeClass" data-bs-toggle="tab" href="@("#tab" + i.ToString())">@Model.ElementAt(i).NazevSchematu</a>
                 </li>
             }
             @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
             {
                 var activeClass = Model.Count() == 0 ? "nav-link active" : "nav-link";
                 <li class="nav-item">
-                    <a class="@activeClass" data-bs-toggle="tab" href="#tabTable">Table</a>
+                    <a class="@activeClass" data-bs-toggle="tab" href="#tabTable">Tabulka</a>
                 </li>
             }
         }
@@ -35,11 +35,13 @@
                 if (schema.Soubor == null)
                     continue;
                 var activeClass = i == 0 ? "tab-pane fade show active" : "tab-pane fade";
-                <div id="tab@i" class="@activeClass">
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(schema.Soubor)" />
-                    <p>@schema.NazevSouboru</p>
-                    <p>@schema.VelikostSouboru</p>
-                    <p>@schema.DatumZmeny</p>
+                <div id="@("tab" + i.ToString())" class="@activeClass">
+                    @if (schema.TypSouboru!.Contains("image"))
+                    {
+                        <img src="Schemes/Download?encryptedId=@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="img-fluid" />
+                    }
+                    <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
+                    <p><i>Poslední změna @schema.DatumZmeny</i></p>
                 </div>
             }
         }
@@ -56,10 +58,19 @@
                                     @Html.DisplayNameFor(model => model.NazevSchematu)
                                 </th>
                                 <th>
+                                    @Html.DisplayNameFor(model => model.NazevSouboru)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TypSouboru)
+                                </th>
+                                <th>
                                     @Html.DisplayNameFor(model => model.VelikostSouboru)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Soubor)
+                                    @Html.DisplayNameFor(model => model.DatumZmeny)
+                                </th>
+                                <th>
+                                    Stáhnout
                                 </th>
                                 <th></th>
                             </tr>
@@ -72,12 +83,20 @@
                                         @Html.DisplayFor(_ => item.NazevSchematu)
                                     </td>
                                     <td>
+                                        @Html.DisplayFor(_ => item.NazevSouboru)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.TypSouboru)
+                                    </td>
+                                    <td>
                                         @Html.DisplayFor(_ => item.VelikostSouboru)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(_ => item.Soubor)
+                                        @Html.DisplayFor(_ => item.DatumZmeny)
                                     </td>
-
+                                    <td>
+                                        <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
+                                    </td>
                                     @await Html.PartialAsync("IndexActionButtons", item.IdSchema)
                                 </tr>
                             }
@@ -85,7 +104,6 @@
                     </table>
                 </div>
             </div>
-        }
         }
     </div>
 </div>

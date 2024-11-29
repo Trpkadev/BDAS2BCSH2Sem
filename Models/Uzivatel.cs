@@ -14,7 +14,7 @@ public class Uzivatel : IUser
     public int IdUzivatel { get; set; }
 
     [JsonRequired]
-    [Column("JMENO")]
+    [Column("UZIVATELSKE_JMENO")]
     [DisplayName("Uživatelské jméno")]
     public string UzivatelskeJmeno { get; set; } = string.Empty;
 
@@ -22,6 +22,7 @@ public class Uzivatel : IUser
     [Column("HESLO")]
     public string Heslo { get; set; } = string.Empty;
 
+    [NotMapped]
     public Role? Role { get; set; }
 
     public override bool Equals(object? obj)

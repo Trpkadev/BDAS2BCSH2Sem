@@ -28,8 +28,9 @@ public class Linka
     [Column("ID_TYP_VOZIDLA")]
     public int IdTypVozidla { get; set; }
 
+    [Column("NAZEV_TYPU_VOZIDLA")]
     [DisplayName("Typ vozidla")]
-    public string TypVozidlaNazev { get; set; } = string.Empty;
+    public string NazevTypuVozidla { get; set; } = string.Empty;
 
     public override string ToString() => Nazev;
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Text.Json.Serialization;
@@ -36,4 +37,8 @@ public class Udrzba
     [JsonRequired]
     [Column("TYP_UDRZBY")]
     public char TypUdrzby { get; set; }
+
+    [Column("NAZEV_VOZIDLA")]
+    [DisplayName("Vozidlo")]
+    public string? NazevVozidla { get; set; }
 }

@@ -14,12 +14,14 @@ public abstract class BaseController : Controller
         _context = context;
         try
         {
-            var serializedUser = accessor.HttpContext?.Session.GetString("LoggedUser");
-            if (serializedUser != null)
-                LoggedUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser);
-            var serializedUser2 = accessor.HttpContext?.Session.GetString("ActingUser");
-            if (serializedUser2 != null)
-                ActingUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser2);
+            //var serializedUser = accessor.HttpContext?.Session.GetString("LoggedUser");
+            //if (serializedUser != null)
+            //    LoggedUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser);
+            //var serializedUser2 = accessor.HttpContext?.Session.GetString("ActingUser");
+            //if (serializedUser2 != null)
+            //    ActingUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser2);
+            LoggedUser = new Uzivatel { IdUzivatel = 1, UzivatelskeJmeno = "Admin", Role = new Role { IdRole = 6, Nazev = "Admin", Prava = 6 } };
+            ActingUser = LoggedUser;
         }
         catch
         {

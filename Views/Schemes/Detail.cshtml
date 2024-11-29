@@ -52,7 +52,14 @@
             @Html.DisplayNameFor(model => model.Soubor)
         </dt>
         <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Soubor)
+            @if (Model.TypSouboru!.Contains("image"))
+            {
+                <img src="Schemes/Download?encryptedId=@OurCryptography.Instance.EncryptId(Model.IdSchema)" class="img-fluid" />
+            }
+            else
+            {
+                <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
+            }
         </dd>
     </dl>
 </div>

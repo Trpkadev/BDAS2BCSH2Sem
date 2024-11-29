@@ -1,0 +1,46 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.DatabazovyObjekt>
+@{
+    ViewData["Title"] = "Databázové objekty";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="table-responsive">
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Nazev)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Typ)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Vytvoreno)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.PosledniPristup)
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Nazev)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Typ)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Vytvoreno)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.PosledniPristup)
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>

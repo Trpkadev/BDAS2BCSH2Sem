@@ -41,9 +41,11 @@ public class Vozidlo
     [Column("ID_MODEL")]
     public int IdModel { get; set; }
 
+    [Column("NAZEV_GARAZE")]
     [DisplayName("Garáž")]
-    public string? GarazNazev { get; set; }
+    public string? NazevGaraze { get; set; }
 
-    [DisplayName("Model")]
-    public string? ModelNazev { get; set; }
+    [Column("NAZEV_VOZIDLA")]
+    [DisplayName("Vozidlo")]
+    public string? NazevVozidla { get; set; }
 }
