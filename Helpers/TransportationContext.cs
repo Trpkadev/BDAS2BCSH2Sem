@@ -1,8 +1,6 @@
 ﻿using BCSH2BDAS2.Models;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using System.Data;
 using System.Runtime.CompilerServices;
 
@@ -29,7 +27,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<Schema> Schemata { get; set; }
     public DbSet<DatabazovyObjekt> DatabazoveObjekty { get; set; }
     public DbSet<NakladyNaVozidlo> NakladyNaVozidla { get; set; }
-
 
     #region DML procedures
 
@@ -215,7 +212,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Garaze.FromSqlRaw("SELECT * FROM GARAZE_VIEW").ToListAsync();
     }
 
-    public async Task<Garaz?> GetGarazeByIdAsync(int id)
+    public async Task<Garaz?> GetGarazByIdAsync(int id)
     {
         return await Garaze.FromSqlRaw("SELECT * FROM GARAZE_VIEW WHERE ID_GARAZ = {0}", id).FirstOrDefaultAsync();
     }
@@ -225,7 +222,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW").ToListAsync();
     }
 
-    public async Task<JizdniRad?> GetJizdni_RadyByIdAsync(int id)
+    public async Task<JizdniRad?> GetJizdni_RadByIdAsync(int id)
     {
         return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW WHERE ID_JIZDNI_RAD = {0}", id).FirstOrDefaultAsync();
     }
@@ -235,7 +232,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Linky.FromSqlRaw("SELECT * FROM LINKY_VIEW").ToListAsync();
     }
 
-    public async Task<Linka?> GetLinkyByIdAsync(int id)
+    public async Task<Linka?> GetLinkaByIdAsync(int id)
     {
         return await Linky.FromSqlRaw("SELECT * FROM LINKY_VIEW WHERE ID_LINKA = {0}", id).FirstOrDefaultAsync();
     }
@@ -245,7 +242,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Modely.FromSqlRaw("SELECT * FROM MODELY_VIEW").ToListAsync();
     }
 
-    public async Task<Model?> GetModelyByIdAsync(int id)
+    public async Task<Model?> GetModelByIdAsync(int id)
     {
         return await Modely.FromSqlRaw("SELECT * FROM MODELY_VIEW WHERE ID_MODEL = {0}", id).FirstOrDefaultAsync();
     }
@@ -255,7 +252,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW").ToListAsync();
     }
 
-    public async Task<Pracovnik?> GetPracovniciByIdAsync(int id)
+    public async Task<Pracovnik?> GetPracovnikByIdAsync(int id)
     {
         return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_PRACOVNIK = {0}", id).FirstOrDefaultAsync();
     }
@@ -275,7 +272,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Schemata.FromSqlRaw("SELECT * FROM SCHEMATA_VIEW").ToListAsync();
     }
 
-    public async Task<Schema?> GetSchemataByIdAsync(int id)
+    public async Task<Schema?> GetSchemaByIdAsync(int id)
     {
         return await Schemata.FromSqlRaw("SELECT * FROM SCHEMATA_VIEW WHERE ID_SCHEMA = {0}", id).FirstOrDefaultAsync();
     }
@@ -285,7 +282,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Spoje.FromSqlRaw("SELECT * FROM SPOJE_VIEW").ToListAsync();
     }
 
-    public async Task<Spoj?> GetSpojeByIdAsync(int id)
+    public async Task<Spoj?> GetSpojByIdAsync(int id)
     {
         return await Spoje.FromSqlRaw("SELECT * FROM SPOJE_VIEW WHERE ID_SPOJ = {0}", id).FirstOrDefaultAsync();
     }
@@ -295,7 +292,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW").ToListAsync();
     }
 
-    public async Task<TarifniPasmo?> GetTarifni_PasmaByIdAsync(int id)
+    public async Task<TarifniPasmo?> GetTarifni_PasmoByIdAsync(int id)
     {
         return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW WHERE ID_PASMO = {0}", id).FirstOrDefaultAsync();
     }
@@ -305,7 +302,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL_VIEW").ToListAsync();
     }
 
-    public async Task<TypVozidla?> GetTypy_VozidelByIdAsync(int id)
+    public async Task<TypVozidla?> GetTyp_VozidlaByIdAsync(int id)
     {
         return await TypyVozidel.FromSqlRaw("SELECT * FROM TYPY_VOZIDEL_VIEW WHERE ID_TYP_VOZIDLA = {0}", id).FirstOrDefaultAsync();
     }
@@ -315,7 +312,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Udrzby.FromSqlRaw("SELECT * FROM UDRZBY_VIEW").ToListAsync();
     }
 
-    public async Task<Udrzba?> GetUdrzbyByIdAsync(int id)
+    public async Task<Udrzba?> GetUdrzbaByIdAsync(int id)
     {
         return await Udrzby.FromSqlRaw("SELECT * FROM UDRZBY_VIEW WHERE ID_UDRZBA = {0}", id).FirstOrDefaultAsync();
     }
@@ -325,7 +322,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE_VIEW").ToListAsync();
     }
 
-    public async Task<Uzivatel?> GetUzivateleByIdAsync(int id)
+    public async Task<Uzivatel?> GetUzivatelByIdAsync(int id)
     {
         return await Uzivatele.FromSqlRaw("SELECT * FROM UZIVATELE_VIEW WHERE ID_UZIVATEL = {0}", id).FirstOrDefaultAsync();
     }
@@ -345,7 +342,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA_VIEW").ToListAsync();
     }
 
-    public async Task<Vozidlo?> GetVozidlaByIdAsync(int id)
+    public async Task<Vozidlo?> GetVozidloByIdAsync(int id)
     {
         return await Vozidla.FromSqlRaw("SELECT * FROM VOZIDLA_VIEW WHERE ID_VOZIDLO = {0}", id).FirstOrDefaultAsync();
     }
@@ -355,7 +352,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY_VIEW").ToListAsync();
     }
 
-    public async Task<Zastavka?> GetZastavkyByIdAsync(int id)
+    public async Task<Zastavka?> GetZastavkaByIdAsync(int id)
     {
         return await Zastavky.FromSqlRaw("SELECT * FROM ZASTAVKY_VIEW WHERE ID_ZASTAVKA = {0}", id).FirstOrDefaultAsync();
     }
@@ -365,7 +362,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY_VIEW").ToListAsync();
     }
 
-    public async Task<ZaznamTrasy?> GetZaznamy_TrasyByIdAsync(int id)
+    public async Task<ZaznamTrasy?> GetZaznam_TrasyByIdAsync(int id)
     {
         return await ZaznamyTras.FromSqlRaw("SELECT * FROM ZAZNAMY_TRASY_VIEW WHERE ID_ZAZNAM = {0}", id).FirstOrDefaultAsync();
     }
@@ -375,7 +372,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Znacky.FromSqlRaw("SELECT * FROM ZNACKY_VIEW").ToListAsync();
     }
 
-    public async Task<Znacka?> GetZnackyByIdAsync(int id)
+    public async Task<Znacka?> GetZnackaByIdAsync(int id)
     {
         return await Znacky.FromSqlRaw("SELECT * FROM ZNACKY_VIEW WHERE ID_ZNACKA = {0}", id).FirstOrDefaultAsync();
     }
@@ -424,7 +421,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     private static int? ConvertId(int id) => id == 0 ? null : id;
 
-    private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.ToLower().Replace("get", string.Empty).Replace("async", string.Empty).Replace("byid", string.Empty);
+    //private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.ToLower().Replace("get", string.Empty).Replace("async", string.Empty).Replace("byid", string.Empty);
 
     private async Task DMLPackageCall(string sql, OracleParameter[] sqlParams)
     {
@@ -439,59 +436,59 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
-    private async Task<T?> GetDBView<T>(string viewName, string whereClause) where T : class
-    {
-        string sql = @$"DECLARE
-                        v_{viewName}_json CLOB;
-                        BEGIN
-                        SELECT JSON_OBJECT(*) INTO v_{viewName}_json
-                        FROM {viewName.ToUpper()}_VIEW
-                        WHERE {whereClause};
-                        :p_result := v_{viewName}_json;
-                        END;";
-        return await GetObjectFromDB<T>(sql.ToString());
-    }
+    //private async Task<T?> GetDBView<T>(string viewName, string whereClause) where T : class
+    //{
+    //    string sql = @$"DECLARE
+    //                    v_{viewName}_json CLOB;
+    //                    BEGIN
+    //                    SELECT JSON_OBJECT(*) INTO v_{viewName}_json
+    //                    FROM {viewName.ToUpper()}_VIEW
+    //                    WHERE {whereClause};
+    //                    :p_result := v_{viewName}_json;
+    //                    END;";
+    //    return await GetObjectFromDB<T>(sql.ToString());
+    //}
 
-    private async Task<List<T>?> GetDBView<T>(string viewName) where T : class
-    {
-        string sql = @$"DECLARE
-                        v_{viewName}_json CLOB;
-                        BEGIN
-                        SELECT JSON_ARRAYAGG(JSON_OBJECT(*) RETURNING CLOB) INTO v_{viewName}_json
-                        FROM {viewName.ToUpper()}_VIEW;
-                        :p_result := v_{viewName}_json;
-                        END;";
-        return await GetObjectFromDB<List<T>>(sql.ToString());
-    }
+    //private async Task<List<T>?> GetDBView<T>(string viewName) where T : class
+    //{
+    //    string sql = @$"DECLARE
+    //                    v_{viewName}_json CLOB;
+    //                    BEGIN
+    //                    SELECT JSON_ARRAYAGG(JSON_OBJECT(*) RETURNING CLOB) INTO v_{viewName}_json
+    //                    FROM {viewName.ToUpper()}_VIEW;
+    //                    :p_result := v_{viewName}_json;
+    //                    END;";
+    //    return await GetObjectFromDB<List<T>>(sql.ToString());
+    //}
 
-    private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[]? sqlParams = null) where T : class
-    {
-        try
-        {
-            var connection = Database.GetDbConnection();
-            var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
-            string resultJson = string.Empty;
+    //private async Task<T?> GetObjectFromDB<T>(string sql, OracleParameter[]? sqlParams = null) where T : class
+    //{
+    //    try
+    //    {
+    //        var connection = Database.GetDbConnection();
+    //        var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+    //        string resultJson = string.Empty;
 
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = sql;
-                if (sqlParams != null)
-                    command.Parameters.AddRange(sqlParams);
-                command.Parameters.Add(resultParam);
+    //        using (var command = connection.CreateCommand())
+    //        {
+    //            command.CommandText = sql;
+    //            if (sqlParams != null)
+    //                command.Parameters.AddRange(sqlParams);
+    //            command.Parameters.Add(resultParam);
 
-                await connection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
-                if (resultParam.Value != DBNull.Value && !((OracleClob)resultParam.Value).IsNull)
-                    resultJson = ((OracleClob)resultParam.Value).Value;
-                await connection.CloseAsync();
-            }
-            return JsonConvert.DeserializeObject<T>(resultJson);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
+    //            await connection.OpenAsync();
+    //            await command.ExecuteNonQueryAsync();
+    //            if (resultParam.Value != DBNull.Value && !((OracleClob)resultParam.Value).IsNull)
+    //                resultJson = ((OracleClob)resultParam.Value).Value;
+    //            await connection.CloseAsync();
+    //        }
+    //        return JsonConvert.DeserializeObject<T>(resultJson);
+    //    }
+    //    catch (Exception)
+    //    {
+    //        return null;
+    //    }
+    //}
 
     #endregion Helper methods
 }

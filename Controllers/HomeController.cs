@@ -63,7 +63,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
             return View(vm);
 
         int linkaId = OurCryptography.Instance.DecryptId(encryptedId);
-        var linka = await _context.GetLinkyByIdAsync(linkaId);
+        var linka = await _context.GetLinkaByIdAsync(linkaId);
         if (linka == null)
             return StatusCode(404);
 

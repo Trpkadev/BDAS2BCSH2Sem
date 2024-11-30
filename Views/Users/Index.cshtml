@@ -5,17 +5,15 @@
     ViewData["Title"] = "Seznam uživatelů";
 }
 
-@* TODO: Změna role *@
-
 <h2>@ViewData["Title"]</h2>
 <div class="table-responsive overflow-auto p-3">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
+                <th class="p-2">
                     @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
                 </th>
-                <th>
+                <th class="p-2">
                     @Html.DisplayNameFor(model => model.NazevRole)
                 </th>
                 <th></th>
@@ -25,13 +23,27 @@
             @foreach (var uzivatel in Model)
             {
                 <tr>
-                    <td>
+                    <td class="p-2">
                         @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
                     </td>
-                    <td>
-                        <a asp-controller="Roles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdRole)">@Html.DisplayFor(modelItem => uzivatel.NazevRole)</a>
+                    <td class="p-2">
+                        @if (uzivatel.IdUzivatel == ((Uzivatel?)ViewData["LoggedUser"])?.IdUzivatel)
+                        {
+                            @Html.DisplayFor(modelItem => uzivatel.NazevRole)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(modelItem => uzivatel.IdRole,
+                                     new SelectList(((IEnumerable<Role>?)ViewData["Role"])?.Where(role => role.Prava > 0).Select(role => new
+                                     {
+                                         Value = role.IdRole,
+                                         Text = role.ToString()
+                                     }), "Value", "Text", uzivatel.IdRole),
+                                     new { @class = "form-control", @style = "width:fit-content", @onchange = $"submitRoleChange(this, {uzivatel.IdUzivatel},'{uzivatel.UzivatelskeJmeno}','{uzivatel.Heslo}')" })
+                        }
                     </td>
-                    <td class="d-flex">
+
+                    <td class="d-inline-flex gap-3 p-2 w-100">
                         <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
                         <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Odstranit</a>
                         @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
@@ -46,3 +58,29 @@
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+        function submitRoleChange(dropdown, id, jmeno, heslo) {
+        var selectedRoleId = dropdown.value;
+        var uzivatel = {
+            idUzivatel: id,
+            idRole: selectedRoleId,
+            jmeno: jmeno,
+            heslo: heslo
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Users/EditSubmit",
+            contentType: "application/json",
+            data: JSON.stringify(uzivatel),
+            success: function(response) {
+                alert("Role updated successfully!");
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    }
+</script>

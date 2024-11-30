@@ -23,7 +23,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var znacka = await _context.GetZnackyByIdAsync(id);
+                var znacka = await _context.GetZnackaByIdAsync(id);
                 if (znacka == null)
                     return StatusCode(404);
                 return View(znacka);
@@ -69,7 +69,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var znacka = await _context.GetZnackyByIdAsync(id);
+            var znacka = await _context.GetZnackaByIdAsync(id);
             if (znacka == null)
                 return StatusCode(404);
             return View(znacka);
@@ -92,7 +92,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetZnackyByIdAsync(znacka.IdZnacka) != null)
+            if (await _context.GetZnackaByIdAsync(znacka.IdZnacka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZNACKY WHERE ID_ZNACKA = {0}", znacka.IdZnacka);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var znacka = await _context.GetZnackyByIdAsync(id);
+            var znacka = await _context.GetZnackaByIdAsync(id);
             if (znacka == null)
                 return StatusCode(404);
             return View(znacka);

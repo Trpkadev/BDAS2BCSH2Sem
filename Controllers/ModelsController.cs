@@ -25,7 +25,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var model = await _context.GetModelyByIdAsync(id);
+                var model = await _context.GetModelByIdAsync(id);
                 if (model == null)
                     return StatusCode(404);
                 return View(model);
@@ -50,7 +50,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return View("CreateEdit", model);
 
-            if (await _context.GetModelyByIdAsync(model.IdModel) != null)
+            if (await _context.GetModelByIdAsync(model.IdModel) != null)
                 await _context.DMLModelyAsync(model);
             return RedirectToAction(nameof(Index));
         }
@@ -72,7 +72,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var model = await _context.GetModelyByIdAsync(id);
+            var model = await _context.GetModelByIdAsync(id);
             if (model == null)
                 return StatusCode(404);
             return View(model);
@@ -95,7 +95,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetModelyByIdAsync(model.IdModel) != null)
+            if (await _context.GetModelByIdAsync(model.IdModel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM MODELY WHERE ID_MODEL = {0}", model.IdModel);
             return RedirectToAction(nameof(Index));
         }
@@ -117,7 +117,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var model = await _context.GetModelyByIdAsync(id);
+            var model = await _context.GetModelByIdAsync(id);
             if (model == null)
                 return StatusCode(404);
             return View(model);

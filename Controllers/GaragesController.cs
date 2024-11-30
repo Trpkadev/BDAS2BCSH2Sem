@@ -23,7 +23,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var garaz = await _context.GetGarazeByIdAsync(id);
+                var garaz = await _context.GetGarazByIdAsync(id);
                 if (garaz == null)
                     return StatusCode(404);
                 return View(garaz);
@@ -69,7 +69,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var garaz = await _context.GetGarazeByIdAsync(id);
+            var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz == null)
                 return StatusCode(404);
             return View(garaz);
@@ -92,7 +92,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetGarazeByIdAsync(garaz.IdGaraz) != null)
+            if (await _context.GetGarazByIdAsync(garaz.IdGaraz) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM GARAZE WHERE ID_GARAZ = {0}", garaz.IdGaraz);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var garaz = await _context.GetGarazeByIdAsync(id);
+            var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz == null)
                 return StatusCode(404);
             return View(garaz);

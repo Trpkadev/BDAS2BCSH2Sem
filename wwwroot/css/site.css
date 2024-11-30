@@ -32,8 +32,14 @@ p {
 
 th, td, select {
     text-align: center;
+    align-content: center;
+    min-width: fit-content;
 }
 
 table {
     min-width: 612px
+}
+
+input {
+    width: fit-content
 }

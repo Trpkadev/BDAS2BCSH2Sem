@@ -42,7 +42,6 @@ public class Spoj
     [DisplayName("Číslo linky")]
     public int? CisloLinky { get; set; }
 
-
     [Column("NAZEV_LINKY")]
     [DisplayName("Název linky")]
     public string? NazevLinky { get; set; }

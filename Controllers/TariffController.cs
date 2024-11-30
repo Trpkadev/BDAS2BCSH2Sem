@@ -23,7 +23,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var tarifniPasmo = await _context.GetTarifni_PasmaByIdAsync(id);
+                var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
                 if (tarifniPasmo == null)
                     return StatusCode(404);
                 return View(tarifniPasmo);
@@ -69,7 +69,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var tarifniPasmo = await _context.GetTarifni_PasmaByIdAsync(id);
+            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
             if (tarifniPasmo == null)
                 return StatusCode(404);
             return View(tarifniPasmo);
@@ -92,7 +92,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetTarifni_PasmaByIdAsync(tarifniPasmo.IdPasmo) != null)
+            if (await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM TARIFNI_PASMA WHERE ID_PASMO = {0}", tarifniPasmo.IdPasmo);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var tarifniPasmo = await _context.GetTarifni_PasmaByIdAsync(id);
+            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
             if (tarifniPasmo == null)
                 return StatusCode(404);
             return View(tarifniPasmo);

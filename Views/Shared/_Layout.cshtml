@@ -22,8 +22,8 @@
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img src="~/logo.png" alt="Logo" width="68" height="32" class="d-inline-block align-text-top">
                 </a>
-                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                     <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -109,13 +109,13 @@
                         @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("DBObjects",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administrátor
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index">Logy</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "DBObjects",null) ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects">Databázové objekty</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects">Databázové objekty</a>
 
                                     </li>
                                 </ul>
@@ -161,14 +161,12 @@
         </nav>
     </header>
     <main class="container mw-100 w-auto pt-3 text-nowrap" role="main">
-        @{
-            if (TempData["error"] != null)
-            {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>@TempData["error"]</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>@TempData["error"]</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         }
         @RenderBody()
     </main>

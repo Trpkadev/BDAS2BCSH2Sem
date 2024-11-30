@@ -42,7 +42,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var uzivatel = await _context.GetUzivateleByIdAsync(id);
+            var uzivatel = await _context.GetUzivatelByIdAsync(id);
             if (uzivatel == null)
                 return StatusCode(404);
             return View(uzivatel);
@@ -65,7 +65,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetUzivateleByIdAsync(pracovnik.IdUzivatel) != null)
+            if (await _context.GetUzivatelByIdAsync(pracovnik.IdUzivatel) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", pracovnik.IdUzivatel);
             return RedirectToAction(nameof(Index));
         }
@@ -87,7 +87,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var uzivatel = await _context.GetUzivateleByIdAsync(id);
+            var uzivatel = await _context.GetUzivatelByIdAsync(id);
             if (uzivatel == null)
                 return StatusCode(404);
             return View(uzivatel);
@@ -108,6 +108,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index), "Home");
 
             var uzivatele = await _context.GetUzivateleAsync();
+            ViewData["Role"] = await _context.GetRoleAsync();
             return View(uzivatele);
         }
         catch (Exception)

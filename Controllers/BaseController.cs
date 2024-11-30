@@ -41,7 +41,7 @@ public abstract class BaseController : Controller
     {
         if (LoggedUser == null || !LoggedUser.HasAdminRights())
             return;
-        ActingUser = id == null ? LoggedUser : _context.GetUzivateleByIdAsync((int)id).Result;
+        ActingUser = id == null ? LoggedUser : _context.GetUzivatelByIdAsync((int)id).Result;
         var serializedUser = JsonConvert.SerializeObject(ActingUser);
         HttpContext.Session.SetString("ActingUser", serializedUser);
     }

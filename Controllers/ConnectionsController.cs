@@ -23,7 +23,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var spoj = await _context.GetSpojeByIdAsync(id);
+                var spoj = await _context.GetSpojByIdAsync(id);
                 if (spoj == null)
                     return StatusCode(404);
                 return View(spoj);
@@ -69,7 +69,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var spoj = await _context.GetSpojeByIdAsync(id);
+            var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj == null)
                 return StatusCode(404);
             return View(spoj);
@@ -92,7 +92,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetSpojeByIdAsync(spoj.IdSpoj) == null)
+            if (await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM SPOJE WHERE ID_SPOJ = {0}", spoj.IdSpoj);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var spoj = await _context.GetSpojeByIdAsync(id);
+            var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj == null)
                 return StatusCode(404);
             return View(spoj);

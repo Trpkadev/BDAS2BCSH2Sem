@@ -23,7 +23,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var udrzba = await _context.GetUdrzbyByIdAsync(id);
+                var udrzba = await _context.GetUdrzbaByIdAsync(id);
                 if (udrzba == null)
                     return StatusCode(404);
                 return View(udrzba);
@@ -69,7 +69,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var udrzba = await _context.GetUdrzbyByIdAsync(id);
+            var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba == null)
                 return StatusCode(404);
             return View(udrzba);
@@ -92,7 +92,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetUdrzbyByIdAsync(udrzba.IdUdrzba) != null)
+            if (await _context.GetUdrzbaByIdAsync(udrzba.IdUdrzba) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM UDRZBY WHERE ID_UDRZBA = {0}", udrzba.IdUdrzba);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var udrzba = await _context.GetUdrzbyByIdAsync(id);
+            var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba == null)
                 return StatusCode(404);
             return View(udrzba);

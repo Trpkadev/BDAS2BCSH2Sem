@@ -23,7 +23,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var jizdniRad = await _context.GetJizdni_RadyByIdAsync(id);
+                var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
                 if (jizdniRad == null)
                     return StatusCode(404);
                 return View(jizdniRad);
@@ -69,7 +69,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var jizdniRad = await _context.GetJizdni_RadyByIdAsync(id);
+            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
             if (jizdniRad == null)
                 return StatusCode(404);
             return View(jizdniRad);
@@ -92,7 +92,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetJizdni_RadyByIdAsync(jizdniRad.IdJizdniRad) != null)
+            if (await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM JIZDNI_RADY WHERE ID_JIZDNI_RAD = {0}", jizdniRad.IdJizdniRad);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var jizdniRad = await _context.GetJizdni_RadyByIdAsync(id);
+            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
             if (jizdniRad == null)
                 return StatusCode(404);
             return View(jizdniRad);

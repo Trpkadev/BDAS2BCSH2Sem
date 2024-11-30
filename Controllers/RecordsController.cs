@@ -23,7 +23,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+                var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
                 if (zaznamTrasy == null)
                     return StatusCode(404);
                 return View(zaznamTrasy);
@@ -69,7 +69,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+            var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
             if (zaznamTrasy == null)
                 return StatusCode(404);
             return View(zaznamTrasy);
@@ -92,7 +92,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetZaznamy_TrasyByIdAsync(zaznamTrasy.IdZaznam) != null)
+            if (await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZAZNAMY_TRASY WHERE ID_LINKA = {0}", zaznamTrasy.IdZaznam);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var zaznamTrasy = await _context.GetZaznamy_TrasyByIdAsync(id);
+            var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
             if (zaznamTrasy == null)
                 return StatusCode(404);
             return View(zaznamTrasy);

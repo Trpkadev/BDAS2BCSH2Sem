@@ -27,7 +27,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var pracovnik = await _context.GetPracovniciByIdAsync(id);
+                var pracovnik = await _context.GetPracovnikByIdAsync(id);
                 if (pracovnik == null)
                     return StatusCode(404);
                 return View(pracovnik);
@@ -52,7 +52,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var pracovnik = await _context.GetPracovniciByIdAsync(id);
+            var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik == null)
                 return StatusCode(404);
             return View(pracovnik);
@@ -75,7 +75,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetPracovniciByIdAsync(pracovnik.IdPracovnik) != null)
+            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM PRACOVNICI WHERE ID_UZIVATEL = {0}", pracovnik.IdPracovnik);
             return RedirectToAction(nameof(Index));
         }
@@ -97,7 +97,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var pracovnik = await _context.GetPracovniciByIdAsync(id);
+            var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik == null)
                 return StatusCode(404);
             return View(pracovnik);

@@ -25,7 +25,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var vozidlo = await _context.GetVozidlaByIdAsync(id);
+                var vozidlo = await _context.GetVozidloByIdAsync(id);
                 if (vozidlo == null)
                     return StatusCode(404);
                 return View(vozidlo);
@@ -71,7 +71,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var vehicle = await _context.GetVozidlaByIdAsync(id);
+            var vehicle = await _context.GetVozidloByIdAsync(id);
             if (vehicle == null)
                 return StatusCode(404);
             return View(vehicle);
@@ -94,7 +94,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetVozidlaByIdAsync(vozidlo.IdVozidlo) != null)
+            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
 
             return RedirectToAction(nameof(Index));
@@ -117,7 +117,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var vozidlo = await _context.GetVozidlaByIdAsync(id);
+            var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo == null)
                 return StatusCode(404);
             return View(vozidlo);

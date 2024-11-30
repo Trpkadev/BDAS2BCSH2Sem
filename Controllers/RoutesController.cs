@@ -23,7 +23,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var linka = await _context.GetLinkyByIdAsync(id);
+                var linka = await _context.GetLinkaByIdAsync(id);
                 if (linka == null)
                     return StatusCode(404);
                 return View(linka);
@@ -69,7 +69,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var linka = await _context.GetLinkyByIdAsync(id);
+            var linka = await _context.GetLinkaByIdAsync(id);
             if (linka == null)
                 return StatusCode(404);
             return View(linka);
@@ -92,7 +92,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetLinkyByIdAsync(linka.IdLinka) != null)
+            if (await _context.GetLinkaByIdAsync(linka.IdLinka) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM LINKY WHERE ID_LINKA = {0}", linka.IdLinka);
             return RedirectToAction(nameof(Index));
         }
@@ -114,7 +114,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var linka = await _context.GetLinkyByIdAsync(id);
+            var linka = await _context.GetLinkaByIdAsync(id);
             if (linka == null)
                 return StatusCode(404);
             return View(linka);

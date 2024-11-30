@@ -23,7 +23,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
-                var schema = await _context.GetSchemataByIdAsync(id);
+                var schema = await _context.GetSchemaByIdAsync(id);
                 if (schema == null)
                     return StatusCode(404);
                 return View(schema);
@@ -78,7 +78,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var schema = await _context.GetSchemataByIdAsync(id);
+            var schema = await _context.GetSchemaByIdAsync(id);
             if (schema == null)
                 return StatusCode(404);
 
@@ -101,7 +101,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
                 return StatusCode(400);
-            if (await _context.GetSchemataByIdAsync(schema.IdSchema) != null)
+            if (await _context.GetSchemaByIdAsync(schema.IdSchema) != null)
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM SCHEMATA WHERE ID_SCHEMA = {0}", schema.IdSchema);
 
             return RedirectToAction(nameof(Index));
@@ -124,7 +124,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var schema = await _context.GetSchemataByIdAsync(id);
+            var schema = await _context.GetSchemaByIdAsync(id);
             if (schema == null)
                 return StatusCode(404);
             return View(schema);
@@ -145,15 +145,15 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return StatusCode(400);
 
             int id = GetDecryptedId(encryptedId);
-            var schema = await _context.GetSchemataByIdAsync(id);
+            var schema = await _context.GetSchemaByIdAsync(id);
             if (schema == null)
                 return StatusCode(404);
             return File(schema.Soubor!, schema.TypSouboru!);
-    }
+        }
         catch (Exception)
         {
             return StatusCode(500);
-}
+        }
     }
 
     [HttpGet]
