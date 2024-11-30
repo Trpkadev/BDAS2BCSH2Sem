@@ -42,13 +42,7 @@ public class Uzivatel
 
     public bool HasWorkerRights() => Prava is 2 or 6;
 
-    public override bool Equals(object? obj)
-    {
-        return obj is Uzivatel uzivatel &&
-               IdUzivatel == uzivatel.IdUzivatel &&
-               UzivatelskeJmeno == uzivatel.UzivatelskeJmeno &&
-               Heslo == uzivatel.Heslo;
-    }
+    public override bool Equals(object? obj) => obj is Uzivatel uzivatel && IdUzivatel == uzivatel.IdUzivatel && UzivatelskeJmeno == uzivatel.UzivatelskeJmeno && Heslo == uzivatel.Heslo;
 
     public override string ToString() => UzivatelskeJmeno;
 

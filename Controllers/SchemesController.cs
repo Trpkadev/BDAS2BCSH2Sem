@@ -16,23 +16,29 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var schema = await _context.GetSchemaByIdAsync(id);
-                if (schema == null)
-                    return StatusCode(404);
-                return View(schema);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new Schema());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new Schema());
+            int id = GetDecryptedId(encryptedId);
+            var schema = await _context.GetSchemaByIdAsync(id);
+            if (schema != null)
+                return View(schema);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,11 +50,19 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return View(schema);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), schema);
+            }
 
-            if (schema.UploadedFile != null)
+            if (await _context.GetSchemaByIdAsync(schema.IdSchema) == null || schema.UploadedFile == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
             {
                 using var memoryStream = new MemoryStream();
                 await schema.UploadedFile.CopyToAsync(memoryStream);
@@ -57,12 +71,14 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 schema.TypSouboru = schema.UploadedFile.ContentType;
                 schema.VelikostSouboru = (int)memoryStream.Length;
                 await _context.DMLSchemataAsync(schema);
+                SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -73,20 +89,27 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var schema = await _context.GetSchemaByIdAsync(id);
-            if (schema == null)
-                return StatusCode(404);
-
-            return View(schema);
+            if (schema != null)
+                return View(schema);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -98,17 +121,29 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
-            if (await _context.GetSchemaByIdAsync(schema.IdSchema) != null)
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SCHEMATA WHERE ID_SCHEMA = {0}", schema.IdSchema);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
+            if (await _context.GetSchemaByIdAsync(schema.IdSchema) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SCHEMATA WHERE ID_SCHEMA = {0}", schema.IdSchema);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -119,19 +154,27 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var schema = await _context.GetSchemaByIdAsync(id);
-            if (schema == null)
-                return StatusCode(404);
-            return View(schema);
+            if (schema != null)
+                return View(schema);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -142,17 +185,24 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var schema = await _context.GetSchemaByIdAsync(id);
             if (schema == null)
-                return StatusCode(404);
+            {
+                SetErrorMessage("Objekt v databázi neexistuje");
+                return View(nameof(Index));
+            }
             return File(schema.Soubor!, schema.TypSouboru!);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -163,13 +213,18 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null)
-                return RedirectToAction(nameof(Index), "Home");
-            List<Schema>? schemata = await _context.GetSchemataAsync() ?? [];
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
+
+            var schemata = await _context.GetSchemataAsync() ?? [];
             return View(schemata);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

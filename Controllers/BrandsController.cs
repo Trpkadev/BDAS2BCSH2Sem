@@ -16,23 +16,29 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var znacka = await _context.GetZnackaByIdAsync(id);
-                if (znacka == null)
-                    return StatusCode(404);
-                return View(znacka);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new Znacka());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new Znacka());
+            int id = GetDecryptedId(encryptedId);
+            var znacka = await _context.GetZnackaByIdAsync(id);
+            if (znacka != null)
+                return View(znacka);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,16 +50,29 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return View("CreateEdit", znacka);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), znacka);
+            }
 
-            await _context.DMLZnackyAsync(znacka);
+            if (await _context.GetZnackaByIdAsync(znacka.IdZnacka) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLZnackyAsync(znacka);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -64,19 +83,27 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var znacka = await _context.GetZnackaByIdAsync(id);
-            if (znacka == null)
-                return StatusCode(404);
-            return View(znacka);
+            if (znacka != null)
+                return View(znacka);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -88,17 +115,29 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetZnackaByIdAsync(znacka.IdZnacka) != null)
+            if (await _context.GetZnackaByIdAsync(znacka.IdZnacka) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZNACKY WHERE ID_ZNACKA = {0}", znacka.IdZnacka);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -109,19 +148,27 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var znacka = await _context.GetZnackaByIdAsync(id);
-            if (znacka == null)
-                return StatusCode(404);
-            return View(znacka);
+            if (znacka != null)
+                return View(znacka);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -132,14 +179,18 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var znacky = await _context.GetZnackyAsync() ?? [];
             return View(znacky);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

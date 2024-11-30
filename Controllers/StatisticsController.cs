@@ -11,15 +11,43 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
     [Route("DBObjects")]
     public async Task<IActionResult> DBObjects()
     {
-        var objekty = await _context.GetDBObjektyAsync();
-        return View(objekty);
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
+
+            var objekty = await _context.GetDBObjektyAsync();
+            return View(objekty);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
+        }
     }
 
     [HttpGet]
     [Route("VehiclesExpenses")]
     public async Task<IActionResult> VehiclesExpenses()
     {
-        var naklady = await _context.GetNakladyNaVozidla();
-        return View(naklady);
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
+
+            var naklady = await _context.GetNakladyNaVozidla();
+            return View(naklady);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

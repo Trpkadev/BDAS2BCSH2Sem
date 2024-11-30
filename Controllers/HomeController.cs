@@ -14,14 +14,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     [Route("")]
     public IActionResult Index()
     {
-        try
-        {
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
-        }
+        return View();
     }
 
     [HttpGet]
@@ -31,13 +24,22 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         try
         {
             if (ActingUser == null)
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index));
-
-            return View(await _context.GetZastavkyAsync());
+            }
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+            var zastavky = await _context.GetZastavkyAsync() ?? [];
+            return View(zastavky);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 
@@ -45,37 +47,78 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     [Route("Plan")]
     public async Task<ActionResult> Plan(string? od, string? _do, string? cas)
     {
-        // TODO Použít funkci v DB a zobrazit výsledek
-        var zastavky = await _context.GetZastavkyAsync();
-        ViewBag.Zastavky = new SelectList(zastavky);
-        return View();
+        try
+        {
+            if (ActingUser == null)
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Plan));
+            }
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Plan));
+            }
+
+            // TODO Použít funkci v DB a zobrazit výsledek
+            var zastavky = await _context.GetZastavkyAsync();
+            ViewBag.Zastavky = new SelectList(zastavky);
+            return View();
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index), "Home");
+        }
     }
 
     [HttpGet]
     [Route("Timetable")]
     public async Task<ActionResult> Timetable(string? encryptedId)
     {
-        var vm = new TimetableViewModel()
+        try
         {
-            Routes = await _context.GetLinkyAsync() ?? [],
-        };
-        if (encryptedId == null)
+            if (ActingUser == null)
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Plan));
+            }
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Plan));
+            }
+
+            var vm = new TimetableViewModel()
+            {
+                Routes = await _context.GetLinkyAsync() ?? [],
+            };
+            if (encryptedId == null)
+                return View(vm);
+
+            int linkaId = OurCryptography.Instance.DecryptId(encryptedId);
+            var linka = await _context.GetLinkaByIdAsync(linkaId);
+            if (linka == null)
+            {
+                SetErrorMessage("Objekt v databázi neexistuje");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS NAZEV_ZASTAVKY FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
+            var zastavky = jr.Select(jr => jr.NazevZastavky).Distinct().ToList();
+
+            vm.Timetable = [];
+            vm.CisloLinky = linka.Cislo;
+
+            foreach (var zastavka in zastavky.Cast<string>())
+                vm.Timetable[zastavka] = jr.Where(jr => jr.NazevZastavky == zastavka).ToList();
+
             return View(vm);
-
-        int linkaId = OurCryptography.Instance.DecryptId(encryptedId);
-        var linka = await _context.GetLinkaByIdAsync(linkaId);
-        if (linka == null)
-            return StatusCode(404);
-
-        var jr = await _context.JizdniRady.FromSql($"SELECT JR.*, Z.NAZEV AS NAZEV_ZASTAVKY FROM JIZDNI_RADY JR JOIN SPOJE S ON S.ID_SPOJ = JR.ID_SPOJ JOIN ZASTAVKY Z ON JR.ID_ZASTAVKA = Z.ID_ZASTAVKA WHERE ID_LINKA = {linkaId}").ToListAsync();
-        var zastavky = jr.Select(jr => jr.NazevZastavky).Distinct().ToList();
-
-        vm.Timetable = [];
-        vm.CisloLinky = linka.Cislo;
-
-        foreach (var zastavka in zastavky)
-            vm.Timetable[zastavka] = jr.Where(jr => jr.NazevZastavky == zastavka).ToList();
-
-        return View(vm);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index), "Home");
+        }
     }
 }

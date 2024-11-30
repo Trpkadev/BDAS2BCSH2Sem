@@ -10,6 +10,25 @@ namespace BCSH2BDAS2.Controllers;
 [Route("Workers")]
 public class WorkersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
+    [HttpPost]
+    [Route("AddPay")]
+    public async Task<IActionResult> AddPay()
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+                return RedirectToAction(nameof(Index), "Home");
+
+            var pracovnici = await _context.GetPracovniciAsync() ?? [];
+            return View(pracovnici);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
     [HttpGet]
     [Route("CreateEdit")]
     public async Task<IActionResult> CreateEdit(string? encryptedId)
@@ -17,26 +36,64 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             ViewBag.Uzivatele = new SelectList(await _context.GetUzivateleAsync());
             ViewBag.Pracovnici = new SelectList(await _context.GetPracovniciAsync());
-
-            if (encryptedId != null)
-            {
-                int id = GetDecryptedId(encryptedId);
-                var pracovnik = await _context.GetPracovnikByIdAsync(id);
-                if (pracovnik == null)
-                    return StatusCode(404);
+            if (encryptedId == null)
+                return View(new Pracovnik());
+            int id = GetDecryptedId(encryptedId);
+            var pracovnik = await _context.GetPracovnikByIdAsync(id);
+            if (pracovnik != null)
                 return View(pracovnik);
-            }
-            return View(new Pracovnik());
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    [HttpPost]
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromBody] Pracovnik pracovnik)
+    {
+        try
+        {
+            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index), "Home");
+            }
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLPracovniciAsync(pracovnik);
+                SetSuccessMessage();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -47,19 +104,27 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
-            if (pracovnik == null)
-                return StatusCode(404);
-            return View(pracovnik);
+            if (pracovnik != null)
+                return View(pracovnik);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -73,15 +138,24 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) != null)
+            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM PRACOVNICI WHERE ID_UZIVATEL = {0}", pracovnik.IdPracovnik);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -92,39 +166,27 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
-            if (pracovnik == null)
-                return StatusCode(404);
-            return View(pracovnik);
+            if (pracovnik != null)
+                return View(pracovnik);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
-        }
-    }
-
-    [HttpPost]
-    [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromBody] Pracovnik pracovnik)
-    {
-        try
-        {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            await _context.DMLPracovniciAsync(pracovnik);
-            return StatusCode(200);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -134,7 +196,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (LoggedUser == null || LoggedUser.HasManagerRights())
                 return RedirectToAction(nameof(Index), "Home");
 
             var pracovnici = await _context.GetPracovniciAsync() ?? [];
@@ -142,7 +204,8 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

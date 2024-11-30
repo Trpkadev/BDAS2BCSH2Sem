@@ -16,25 +16,31 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             ViewData["Garaze"] = await _context.GetGarazeAsync() ?? [];
             ViewData["Modely"] = await _context.GetModelyAsync() ?? [];
-            if (encryptedId != null)
-            {
-                int id = GetDecryptedId(encryptedId);
-                var vozidlo = await _context.GetVozidloByIdAsync(id);
-                if (vozidlo == null)
-                    return StatusCode(404);
+            if (encryptedId == null)
+                return View(new Vozidlo());
+            int id = GetDecryptedId(encryptedId);
+            var vozidlo = await _context.GetVozidloByIdAsync(id);
+            if (vozidlo != null)
                 return View(vozidlo);
-            }
-            return View(new Vozidlo());
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 
@@ -46,16 +52,29 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return View(vozidlo);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), vozidlo);
+            }
 
-            await _context.DMLVozidlaAsync(vozidlo);
+            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLVozidlaAsync(vozidlo);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -66,19 +85,27 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var vehicle = await _context.GetVozidloByIdAsync(id);
-            if (vehicle == null)
-                return StatusCode(404);
-            return View(vehicle);
+            if (vehicle != null)
+                return View(vehicle);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -90,18 +117,29 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) != null)
+            if (await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM VOZIDLA WHERE ID_VOZIDLO = {0}", vozidlo.IdVozidlo);
-
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -112,19 +150,27 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var vozidlo = await _context.GetVozidloByIdAsync(id);
-            if (vozidlo == null)
-                return StatusCode(404);
-            return View(vozidlo);
+            if (vozidlo != null)
+                return View(vozidlo);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -135,14 +181,18 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
 
             var vozidla = await _context.GetVozidlaAsync() ?? [];
             return View(vozidla);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

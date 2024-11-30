@@ -16,23 +16,29 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
-                if (tarifniPasmo == null)
-                    return StatusCode(404);
-                return View(tarifniPasmo);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new TarifniPasmo());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new TarifniPasmo());
+            int id = GetDecryptedId(encryptedId);
+            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
+            if (tarifniPasmo == null)
+                return View(tarifniPasmo);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,16 +50,29 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
             if (!ModelState.IsValid)
-                return View(tarifniPasmo);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), tarifniPasmo);
+            }
 
-            await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+            if (await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLTarifni_PasmaAsync(tarifniPasmo);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -64,19 +83,27 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
-            if (tarifniPasmo == null)
-                return StatusCode(404);
-            return View(tarifniPasmo);
+            if (tarifniPasmo != null)
+                return View(tarifniPasmo);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -88,17 +115,29 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) != null)
+            if (await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM TARIFNI_PASMA WHERE ID_PASMO = {0}", tarifniPasmo.IdPasmo);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -109,19 +148,27 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
-            if (tarifniPasmo == null)
-                return StatusCode(404);
-            return View(tarifniPasmo);
+            if (tarifniPasmo != null)
+                return View(tarifniPasmo);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -132,14 +179,18 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var tarifniPasma = await _context.GetTarifni_PasmaAsync() ?? [];
             return View(tarifniPasma);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

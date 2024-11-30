@@ -16,23 +16,29 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
-                if (jizdniRad == null)
-                    return StatusCode(404);
-                return View(jizdniRad);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new JizdniRad());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new JizdniRad());
+            int id = GetDecryptedId(encryptedId);
+            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
+            if (jizdniRad != null)
+                return View(jizdniRad);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,16 +50,29 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
             if (!ModelState.IsValid)
-                return View(jizdniRad);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), jizdniRad);
+            }
 
-            await _context.DMLJizdni_RadyAsync(jizdniRad);
+            if (await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLJizdni_RadyAsync(jizdniRad);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -64,19 +83,27 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
-            if (jizdniRad == null)
-                return StatusCode(404);
-            return View(jizdniRad);
+            if (jizdniRad != null)
+                return View(jizdniRad);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -88,17 +115,29 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) != null)
+            if (await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM JIZDNI_RADY WHERE ID_JIZDNI_RAD = {0}", jizdniRad.IdJizdniRad);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -109,19 +148,27 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
-            if (jizdniRad == null)
-                return StatusCode(404);
-            return View(jizdniRad);
+            if (jizdniRad != null)
+                return View(jizdniRad);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -132,14 +179,18 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var jizdniRady = await _context.GetJizdni_RadyAsync() ?? [];
             return View(jizdniRady);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

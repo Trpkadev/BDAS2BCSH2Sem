@@ -16,25 +16,31 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             ViewData["Znacky"] = await _context.GetZnackyAsync() ?? [];
             ViewData["TypyVozidel"] = await _context.GetTypy_VozidelAsync() ?? [];
-            if (encryptedId != null)
-            {
-                int id = GetDecryptedId(encryptedId);
-                var model = await _context.GetModelByIdAsync(id);
-                if (model == null)
-                    return StatusCode(404);
+            if (encryptedId == null)
+                return View(new Model());
+            int id = GetDecryptedId(encryptedId);
+            var model = await _context.GetModelByIdAsync(id);
+            if (model != null)
                 return View(model);
-            }
-            return View(new Model());
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -48,15 +54,21 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
-                return View("CreateEdit", model);
+                return RedirectToAction(nameof(CreateEdit), model);
 
-            if (await _context.GetModelByIdAsync(model.IdModel) != null)
+            if (await _context.GetModelByIdAsync(model.IdModel) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.DMLModelyAsync(model);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -67,19 +79,27 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var model = await _context.GetModelByIdAsync(id);
-            if (model == null)
-                return StatusCode(404);
-            return View(model);
+            if (model != null)
+                return View(model);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -91,17 +111,29 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetModelByIdAsync(model.IdModel) != null)
+            if (await _context.GetModelByIdAsync(model.IdModel) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM MODELY WHERE ID_MODEL = {0}", model.IdModel);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -112,19 +144,27 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var model = await _context.GetModelByIdAsync(id);
-            if (model == null)
-                return StatusCode(404);
-            return View(model);
+            if (model != null)
+                return View(model);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -135,14 +175,18 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var modely = await _context.GetModelyAsync() ?? [];
             return View(modely);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

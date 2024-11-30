@@ -16,23 +16,29 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
-                if (zaznamTrasy == null)
-                    return StatusCode(404);
-                return View(zaznamTrasy);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new ZaznamTrasy());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new ZaznamTrasy());
+            int id = GetDecryptedId(encryptedId);
+            var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
+            if (zaznamTrasy != null)
+                return View(zaznamTrasy);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,16 +50,29 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
             if (!ModelState.IsValid)
-                return View("CreateEdit", zaznamTrasy);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), zaznamTrasy);
+            }
 
-            await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
+            if (await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLZaznamy_TrasyAsync(zaznamTrasy);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -64,19 +83,27 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
-            if (zaznamTrasy == null)
-                return StatusCode(404);
-            return View(zaznamTrasy);
+            if (zaznamTrasy != null)
+                return View(zaznamTrasy);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -88,17 +115,29 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) != null)
+            if (await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM ZAZNAMY_TRASY WHERE ID_LINKA = {0}", zaznamTrasy.IdZaznam);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -109,19 +148,27 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
-            if (zaznamTrasy == null)
-                return StatusCode(404);
-            return View(zaznamTrasy);
+            if (zaznamTrasy != null)
+                return View(zaznamTrasy);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -132,14 +179,18 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
             return View(zaznamyTras);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

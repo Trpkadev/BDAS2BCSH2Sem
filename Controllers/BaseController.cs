@@ -65,4 +65,8 @@ public abstract class BaseController : Controller
         HttpContext.Session.Remove("LoggedUser");
         HttpContext.Session.Remove("ActingUser");
     }
+
+    protected void SetErrorMessage(string message = "Nastala chyba") => TempData["error"] = message;
+
+    protected void SetSuccessMessage(string message = "Akce provedena úspěšně") => TempData["success"] = message;
 }

@@ -16,23 +16,29 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
-            if (!ModelState.IsValid)
-                return StatusCode(400);
-
-            if (encryptedId != null)
             {
-                int id = GetDecryptedId(encryptedId);
-                var typVozidla = await _context.GetTyp_VozidlaByIdAsync(id);
-                if (typVozidla == null)
-                    return StatusCode(404);
-                return View(typVozidla);
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
             }
-            return View(new TypVozidla());
+            if (!ModelState.IsValid)
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (encryptedId == null)
+                return View(new TypVozidla());
+            int id = GetDecryptedId(encryptedId);
+            var typVozidla = await _context.GetTyp_VozidlaByIdAsync(id);
+            if (typVozidla != null)
+                return View(typVozidla);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return View(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -44,16 +50,29 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage("Nedostačující oprávnění");
                 return RedirectToAction(nameof(Index), "Home");
+            }
             if (!ModelState.IsValid)
-                return View(typVozidla);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(CreateEdit), typVozidla);
+            }
 
-            await _context.DMLTypy_VozidelAsync(typVozidla);
+            if (await _context.GetTyp_VozidlaByIdAsync(typVozidla.IdTypVozidla) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
+                await _context.DMLTypy_VozidelAsync(typVozidla);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -64,19 +83,27 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var typVozidla = await _context.GetTyp_VozidlaByIdAsync(id);
-            if (typVozidla == null)
-                return StatusCode(404);
-            return View(typVozidla);
+            if (typVozidla != null)
+                return View(typVozidla);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -88,17 +115,29 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
-            if (await _context.GetTyp_VozidlaByIdAsync(typVozidla.IdTypVozidla) != null)
+            if (await _context.GetTyp_VozidlaByIdAsync(typVozidla.IdTypVozidla) == null)
+                SetErrorMessage("Objekt v databázi neexistuje");
+            else
+            {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM TYPY_VOZIDEL WHERE ID_TYP_VOZIDLA = {0}", typVozidla.IdTypVozidla);
+                SetSuccessMessage();
+            }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -109,19 +148,27 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
-                return StatusCode(400);
+            {
+                SetErrorMessage("Neplatná data požadavku");
+                return RedirectToAction(nameof(Index));
+            }
 
             int id = GetDecryptedId(encryptedId);
             var typVozidla = await _context.GetTyp_VozidlaByIdAsync(id);
-            if (typVozidla == null)
-                return StatusCode(404);
-            return View(typVozidla);
+            if (typVozidla != null)
+                return View(typVozidla);
+            SetErrorMessage("Objekt v databázi neexistuje");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -130,14 +177,18 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+            {
+                SetErrorMessage("Nedostačující oprávnění");
+                return RedirectToAction("Index", "Home");
+            }
 
             var typyVozidel = await _context.GetTypy_VozidelAsync() ?? [];
             return View(typyVozidel);
         }
         catch (Exception)
         {
-            return StatusCode(500);
+            SetErrorMessage("Chyba serveru");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
