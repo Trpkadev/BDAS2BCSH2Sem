@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BCSH2BDAS2.Controllers;
 
 [GetLoggedInUser]
-[Route("Brands")]
+[Route("Statistics")]
 public class StatisticsController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
