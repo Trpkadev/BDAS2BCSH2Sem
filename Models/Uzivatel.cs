@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace BCSH2BDAS2.Models;
 
 [Table("UZIVATELE")]
-public class Uzivatel : IUser
+public class Uzivatel
 {
     [Key]
     [JsonRequired]
@@ -22,8 +22,25 @@ public class Uzivatel : IUser
     [Column("HESLO")]
     public string Heslo { get; set; } = string.Empty;
 
-    [NotMapped]
-    public Role? Role { get; set; }
+    [Column("ID_ROLE")]
+    public int IdRole { get; set; }
+
+    [Column("NAZEV_ROLE")]
+    [DisplayName("Role")]
+    public string NazevRole { get; set; } = string.Empty;
+
+    [Column("PRAVA")]
+    public int Prava { get; set; }
+
+    public bool HasMaintainerRights() => Prava is 3 or 6;
+
+    public bool HasDispatchRights() => Prava is 4 or 6;
+
+    public bool HasManagerRights() => Prava is 5 or 6;
+
+    public bool HasAdminRights() => Prava == 6;
+
+    public bool HasWorkerRights() => Prava is 2 or 6;
 
     public override bool Equals(object? obj)
     {

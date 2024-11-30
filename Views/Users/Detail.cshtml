@@ -15,6 +15,14 @@
             @Html.DisplayFor(model => model.UzivatelskeJmeno)
         </dd>
     </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
+            @Html.DisplayNameFor(model => model.NazevRole)
+        </dt>
+        <dd class="col-auto p-1">
+            @Html.DisplayFor(model => model.NazevRole)
+        </dd>
+    </dl>
 </div>
 <div>
     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)" class="btn btn-danger mb-3">Odstranit</a>

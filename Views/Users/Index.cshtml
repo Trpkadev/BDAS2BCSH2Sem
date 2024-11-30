@@ -5,6 +5,8 @@
     ViewData["Title"] = "Seznam uživatelů";
 }
 
+@* TODO: Změna role *@
+
 <h2>@ViewData["Title"]</h2>
 <div class="table-responsive overflow-auto p-3">
     <table class="table text-nowrap w-auto m-auto">
@@ -13,11 +15,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NazevRole)
+                </th>
                 <th></th>
-                @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
-                {
-                    <th></th>
-                }
             </tr>
         </thead>
         <tbody>
@@ -27,10 +28,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
                     </td>
+                    <td>
+                        <a asp-controller="Roles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdRole)">@Html.DisplayFor(modelItem => uzivatel.NazevRole)</a>
+                    </td>
                     <td class="d-flex">
                         <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
                         <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Odstranit</a>
-                        @if (((IUser?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
                         {
                             <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
                         }

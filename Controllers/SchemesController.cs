@@ -162,7 +162,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            if (ActingUser == null)
                 return RedirectToAction(nameof(Index), "Home");
             List<Schema>? schemata = await _context.GetSchemataAsync() ?? [];
             return View(schemata);

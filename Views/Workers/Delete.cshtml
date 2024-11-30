@@ -1,31 +1,12 @@
 ﻿@using BCSH2BDAS2.Models
 @model BCSH2BDAS2.Models.Pracovnik
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Odstranit";
 }
 
-<h1>Delete</h1>
+<h1>Odstranit</h1>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.UzivatelskeJmeno)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DropDownList("IdRole",
-                     new SelectList(((List<Role>?)ViewData["Role"])?.AsEnumerable(), "IdRole", "Nazev", Model.IdRole),
-                     new { @class = "form-control" })
-        </dd>
-    </dl>
     <dl class="row row-cols-2 m-1">
         <dt class="col-auto p-1">
             @Html.DisplayNameFor(model => model.Jmeno)
@@ -56,6 +37,30 @@
         </dt>
         <dd class="col-auto p-1">
             @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
+            @Html.DisplayNameFor(model => model.RodneCislo)
+        </dt>
+        <dd class="col-auto p-1">
+            @Html.DisplayFor(model => model.RodneCislo)
+        </dd>
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
+            @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
+        </dt>
+        <dd class="col-auto p-1">
+            @Html.DisplayFor(model => model.JmenoNadrizeneho)
+        </dd>
+    </dl>
+    <dl class="row row-cols-2 m-1">
+        <dt class="col-auto p-1">
+            @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
+        </dt>
+        <dd class="col-auto p-1">
+            @Html.DisplayFor(model => model.UzivatelskeJmeno)
         </dd>
     </dl>
 

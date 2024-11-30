@@ -6,21 +6,12 @@ using System.Text.Json.Serialization;
 namespace BCSH2BDAS2.Models;
 
 [Table("PRACOVNICI")]
-public class Pracovnik : IUser
+public class Pracovnik
 {
     [Key]
     [JsonRequired]
     [Column("ID_PRACOVNIK")]
     public int IdPracovnik { get; set; }
-
-    [JsonRequired]
-    [Column("UZIVATELSKE_JMENO")]
-    [DisplayName("Uživatelské jméno")]
-    public string UzivatelskeJmeno { get; set; } = string.Empty;
-
-    [JsonRequired]
-    [Column("HESLO")]
-    public string Heslo { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("JMENO")]
@@ -45,36 +36,39 @@ public class Pracovnik : IUser
     public string Email { get; set; } = string.Empty;
 
     [JsonRequired]
-    [Column("ID_ROLE")]
-    [Range(2, 7, ErrorMessage = "Value must be between 2 and 7.")]
-    public int IdRole { get; set; }
+    [Column("RODNE_CISLO")]
+    [DisplayName("Rodné číslo")]
+    [RegularExpression(@"\d{6}/\d{4}", ErrorMessage = "Invalid birth number.")]
+    public string RodneCislo { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("HODINOVA_MZDA")]
     [DisplayName("Hodinová mzda")]
     [Range(0, 999999999, ErrorMessage = "Value must be between 0 and 999999999.")]
-    public int? HodinovaMzda { get; set; }
+    public int HodinovaMzda { get; set; }
 
     [JsonRequired]
     [Column("ID_NADRIZENY")]
     public int? IdNadrizeny { get; set; }
 
-    [JsonIgnore]
+    [Column("JMENO_NADRIZENEHO")]
     [DisplayName("Nadřízený")]
-    public Pracovnik? Nadrizeny { get; set; }
+    public string? JmenoNadrizeneho { get; set; } = string.Empty;
 
-    public Role? Role { get; set; }
+    [Column("ID_UZIVATEL")]
+    public int? IdUzivatel { get; set; }
+
+    [Column("UZIVATELSKE_JMENO")]
+    [DisplayName("Uživatel")]
+    public string? UzivatelskeJmeno { get; set; } = string.Empty;
 
     public override bool Equals(object? obj)
     {
         return obj is Pracovnik pracovnik &&
-               IdPracovnik == pracovnik.IdPracovnik &&
-               UzivatelskeJmeno == pracovnik.UzivatelskeJmeno &&
-               Heslo == pracovnik.Heslo &&
-               IdRole == pracovnik.IdRole;
+               IdPracovnik == pracovnik.IdPracovnik;
     }
 
     public override string ToString() => $"{Jmeno} {Prijmeni}";
 
-    public override int GetHashCode() => HashCode.Combine(IdPracovnik, UzivatelskeJmeno, Heslo, IdRole);
+    public override int GetHashCode() => HashCode.Combine(IdPracovnik);
 }

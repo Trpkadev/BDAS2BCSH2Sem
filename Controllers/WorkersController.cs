@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
@@ -20,7 +21,9 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            ViewData["Role"] = await _context.GetRoleAsync() ?? [];
+            ViewBag.Uzivatele = new SelectList(await _context.GetUzivateleAsync());
+            ViewBag.Pracovnici = new SelectList(await _context.GetPracovniciAsync());
+
             if (encryptedId != null)
             {
                 int id = GetDecryptedId(encryptedId);
@@ -106,8 +109,8 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpPost]
-    [Route("EditSubmit")]
-    public async Task<IActionResult> EditSubmit([FromBody] Pracovnik pracovnik)
+    [Route("CreateEditSubmit")]
+    public async Task<IActionResult> CreateEditSubmit([FromBody] Pracovnik pracovnik)
     {
         try
         {
@@ -116,8 +119,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
                 return StatusCode(400);
 
-            if (await _context.GetPracovniciByIdAsync(pracovnik.IdPracovnik) != null)
-                await _context.DMLPracovniciAsync(pracovnik);
+            await _context.DMLPracovniciAsync(pracovnik);
             return StatusCode(200);
         }
         catch (Exception)
@@ -136,7 +138,6 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index), "Home");
 
             var pracovnici = await _context.GetPracovniciAsync() ?? [];
-            ViewData["Role"] = await _context.GetRoleAsync() ?? [];
             return View(pracovnici);
         }
         catch (Exception)

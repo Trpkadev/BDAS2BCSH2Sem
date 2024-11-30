@@ -195,12 +195,15 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
                 return View(uzivatel);
 
-            if ((await _context.GetUzivatelOrPracovnikUsernameExistsAsync(uzivatel.UzivatelskeJmeno)))
+            if ((await _context.GetUzivatelUsernameExistsAsync(uzivatel.UzivatelskeJmeno)))
             {
                 TempData["error"] = "Jméno již existuje";
                 return View(uzivatel);
             }
+
             uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);
+            uzivatel.IdRole = 1;
+
             await _context.DMLUzivateleAsync(uzivatel);
             return RedirectToAction(nameof(Login));
         }

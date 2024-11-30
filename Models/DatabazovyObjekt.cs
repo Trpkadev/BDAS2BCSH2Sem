@@ -7,11 +7,11 @@ public class DatabazovyObjekt
 {
     [Column("NAZEV")]
     [DisplayName("Název")]
-    public string Nazev { get; set; }
+    public string Nazev { get; set; } = string.Empty;
 
     [Column("TYP")]
     [DisplayName("Typ")]
-    public string Typ { get; set; }
+    public string Typ { get; set; } = string.Empty;
 
     [Column("VYTVORENO")]
     [DisplayName("Vytvořeno")]

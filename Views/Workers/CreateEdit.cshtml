@@ -12,13 +12,9 @@
         <form asp-action="CreateEditSubmit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdPracovnik" />
+
             <div class="form-group mb-3">
-                <label asp-for="UzivatelskeJmeno" class="control-label">Rok výroby</label>
-                <input asp-for="UzivatelskeJmeno" class="form-control" />
-                <span asp-validation-for="UzivatelskeJmeno" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="Jmeno" class="control-label">Najeté kilometry</label>
+                <label asp-for="Jmeno" class="control-label"></label>
                 <input asp-for="Jmeno" class="form-control" />
                 <span asp-validation-for="Jmeno" class="text-danger"></span>
             </div>
@@ -37,13 +33,25 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-
             <div class="form-group mb-3">
-                <label asp-for="IdRole" class="control-label">Garáž</label>
-                @Html.DropDownList("IdRole",
-                         new SelectList(((List<Role>?)ViewData["Role"])?.AsEnumerable(), "IdRole", "Nazev", Model.IdRole),
-                         new { @class = "form-control" })
-                <span asp-validation-for="IdRole" class="text-danger"></span>
+                <label asp-for="RodneCislo" class="control-label"></label>
+                <input asp-for="RodneCislo" class="form-control" />
+                <span asp-validation-for="RodneCislo" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="HodinovaMzda" class="control-label"></label>
+                <input asp-for="HodinovaMzda" class="form-control" />
+                <span asp-validation-for="HodinovaMzda" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="JmenoNadrizeneho" class="control-label"></label>
+                @Html.DropDownList("IdNadrizeny", (SelectList)ViewBag.Pracovnici, new { @class = "form-control" })
+                <span asp-validation-for="IdNadrizeny" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UzivatelskeJmeno" class="control-label"></label>
+                @Html.DropDownList("IdUzivatel", (SelectList)ViewBag.Uzivatele, new { @class = "form-control" })
+                <span asp-validation-for="IdUzivatel" class="text-danger"></span>
             </div>
 
             <div class="form-group">

@@ -5,7 +5,13 @@
     ViewData["Title"] = "Seznam schémat";
 }
 
-@await Html.PartialAsync("IndexCreateTitle")
+<div class="d-flex justify-content-between align-items-center">
+    <h2>@ViewData["Title"]</h2>
+    @if (((Uzivatel?)ViewData["ActingUser"])?.HasManagerRights() == true || ((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+    {
+        <a asp-action="CreateEdit" class="btn btn-primary">Vytvořit</a>
+    }
+</div>
 
 <div class="container mt-4">
     <ul class="nav nav-tabs">
@@ -17,7 +23,7 @@
                     <a class="@activeClass" data-bs-toggle="tab" href="@("#tab" + i.ToString())">@Model.ElementAt(i).NazevSchematu</a>
                 </li>
             }
-            @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+            @if (((Uzivatel?)ViewData["ActingUser"])?.HasManagerRights() == true || ((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
             {
                 var activeClass = Model.Count() == 0 ? "nav-link active" : "nav-link";
                 <li class="nav-item">
@@ -38,15 +44,15 @@
                 <div id="@("tab" + i.ToString())" class="@activeClass">
                     @if (schema.TypSouboru!.Contains("image"))
                     {
-                        <img src="Schemes/Download?encryptedId=@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="img-fluid" />
+                        <img src="Schemes/Download?encryptedId=@Html.UrlEncoder.Encode(OurCryptography.Instance.EncryptId(schema.IdSchema))" class="img-fluid" />
                     }
-                    <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
+                    <p><a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a></p>
                     <p><i>Poslední změna @schema.DatumZmeny</i></p>
                 </div>
             }
         }
 
-        @if (((IUser?)ViewData["ActingUser"])?.HasManagerRights() == true || ((IUser?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+        @if (((Uzivatel?)ViewData["ActingUser"])?.HasManagerRights() == true || ((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
         {
             var activeClass = Model.Count() == 0 ? "tab-pane fade show active" : "tab-pane fade";
             <div id="tabTable" class="@activeClass">
