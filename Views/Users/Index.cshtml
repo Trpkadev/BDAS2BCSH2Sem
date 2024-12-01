@@ -27,7 +27,7 @@
                         @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
                     </td>
                     <td class="p-2">
-                        @if (uzivatel.IdUzivatel == ((Uzivatel?)ViewData["LoggedUser"])?.IdUzivatel)
+                        @if (uzivatel.IdUzivatel == ((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)
                         {
                             @Html.DisplayFor(modelItem => uzivatel.NazevRole)
                         }
@@ -46,7 +46,7 @@
                     <td class="d-inline-flex gap-3 p-2 w-100">
                         <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Detail</a>
                         <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-danger">Odstranit</a>
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                         {
                             <a asp-action="ActBehalf" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel)" class="btn btn-secondary">Přepnout na</a>
                         }

@@ -14,10 +14,10 @@ public abstract class BaseController : Controller
         _context = context;
         try
         {
-            var serializedUser = accessor.HttpContext?.Session.GetString("LoggedUser");
+            var serializedUser = accessor.HttpContext?.Session.GetString(Resource.LOGGED_USER);
             if (serializedUser != null)
                 LoggedUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser);
-            var serializedUser2 = accessor.HttpContext?.Session.GetString("ActingUser");
+            var serializedUser2 = accessor.HttpContext?.Session.GetString(Resource.ACTING_USER);
             if (serializedUser2 != null)
                 ActingUser = JsonConvert.DeserializeObject<Uzivatel>(serializedUser2);
         }
@@ -43,7 +43,7 @@ public abstract class BaseController : Controller
             return;
         ActingUser = id == null ? LoggedUser : _context.GetUzivatelByIdAsync((int)id).Result;
         var serializedUser = JsonConvert.SerializeObject(ActingUser);
-        HttpContext.Session.SetString("ActingUser", serializedUser);
+        HttpContext.Session.SetString(Resource.ACTING_USER, serializedUser);
     }
 
     protected async Task<bool> LoginInternal(string username, string password)
@@ -54,19 +54,19 @@ public abstract class BaseController : Controller
         if (user == null)
             return false;
         var serializedUser = JsonConvert.SerializeObject(user);
-        HttpContext.Session.SetString("LoggedUser", serializedUser);
-        HttpContext.Session.SetString("ActingUser", serializedUser);
+        HttpContext.Session.SetString(Resource.LOGGED_USER, serializedUser);
+        HttpContext.Session.SetString(Resource.ACTING_USER, serializedUser);
         return true;
     }
 
     protected void LogoutInternal()
     {
         LoggedUser = null;
-        HttpContext.Session.Remove("LoggedUser");
-        HttpContext.Session.Remove("ActingUser");
+        HttpContext.Session.Remove(Resource.LOGGED_USER);
+        HttpContext.Session.Remove(Resource.ACTING_USER);
     }
 
-    protected void SetErrorMessage(string message = "Nastala chyba") => TempData["error"] = message;
+    protected void SetErrorMessage(string? message = null) => TempData[Resource.TEMPDATA_ERROR] = message ?? Resource.GENERIC_ERROR;
 
-    protected void SetSuccessMessage(string message = "Akce provedena úspěšně") => TempData["success"] = message;
+    protected void SetSuccessMessage(string? message = null) => TempData[Resource.TEMPDATA_SUCCESS] = message ?? Resource.GENERIC_SUCCESS;
 }

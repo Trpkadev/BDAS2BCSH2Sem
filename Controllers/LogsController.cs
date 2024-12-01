@@ -15,7 +15,7 @@ public class LogsController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -24,7 +24,7 @@ public class LogsController(TransportationContext context, IHttpContextAccessor 
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

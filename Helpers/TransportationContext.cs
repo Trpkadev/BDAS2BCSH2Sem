@@ -436,6 +436,16 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
+    public async Task DeleteFromTableAsync(string table, string paramName, object param)
+    {
+        using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = $"DELETE FROM {table} WHERE {paramName} = :Param";
+        command.Parameters.Add(new OracleParameter(":Param", param));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
+    }
+
     //private async Task<T?> GetDBView<T>(string viewName, string whereClause) where T : class
     //{
     //    string sql = @$"DECLARE

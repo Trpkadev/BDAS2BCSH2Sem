@@ -25,12 +25,12 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null)
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
             var zastavky = await _context.GetZastavkyAsync() ?? [];
@@ -38,7 +38,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index), "Home");
         }
     }
@@ -51,12 +51,12 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null)
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Plan));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Plan));
             }
 
@@ -67,7 +67,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index), "Home");
         }
     }
@@ -80,12 +80,12 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         {
             if (ActingUser == null)
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Plan));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Plan));
             }
 
@@ -100,7 +100,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
             var linka = await _context.GetLinkaByIdAsync(linkaId);
             if (linka == null)
             {
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -117,7 +117,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

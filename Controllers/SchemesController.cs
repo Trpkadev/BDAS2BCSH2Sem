@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -17,12 +16,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -32,12 +31,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             var schema = await _context.GetSchemaByIdAsync(id);
             if (schema != null)
                 return View(schema);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -51,17 +50,17 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(CreateEdit), schema);
             }
 
-            if (await _context.GetSchemaByIdAsync(schema.IdSchema) == null || schema.UploadedFile == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+            if (schema.IdSchema != 0 && await _context.GetSchemaByIdAsync(schema.IdSchema) == null || schema.UploadedFile == null)
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
                 using var memoryStream = new MemoryStream();
@@ -77,7 +76,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -90,12 +89,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -103,12 +102,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             var schema = await _context.GetSchemaByIdAsync(id);
             if (schema != null)
                 return View(schema);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -122,27 +121,27 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             if (await _context.GetSchemaByIdAsync(schema.IdSchema) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SCHEMATA WHERE ID_SCHEMA = {0}", schema.IdSchema);
+                await _context.DeleteFromTableAsync("SCHEMATA", "ID_SCHEMA", schema.IdSchema);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -155,12 +154,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -168,12 +167,12 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             var schema = await _context.GetSchemaByIdAsync(id);
             if (schema != null)
                 return View(schema);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -184,9 +183,14 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
+            if (ActingUser == null)
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                return RedirectToAction(nameof(Index));
+            }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -194,14 +198,14 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             var schema = await _context.GetSchemaByIdAsync(id);
             if (schema == null)
             {
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
                 return View(nameof(Index));
             }
             return File(schema.Soubor!, schema.TypSouboru!);
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -214,7 +218,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null)
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -223,7 +227,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

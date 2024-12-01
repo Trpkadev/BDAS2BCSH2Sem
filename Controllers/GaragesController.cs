@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -15,14 +14,14 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -32,12 +31,12 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz != null)
                 return View(garaz);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -49,19 +48,19 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index), "Home");
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(CreateEdit), garaz);
             }
 
-            if (await _context.GetGarazByIdAsync(garaz.IdGaraz) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+            if (garaz.IdGaraz != 0 && await _context.GetGarazByIdAsync(garaz.IdGaraz) == null)
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
                 await _context.DMLGarazeAsync(garaz);
@@ -71,7 +70,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -82,14 +81,14 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -97,12 +96,12 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz == null)
                 return View(garaz);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -114,29 +113,29 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             if (await _context.GetGarazByIdAsync(garaz.IdGaraz) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM GARAZE WHERE ID_GARAZ = {0}", garaz.IdGaraz);
+                await _context.DeleteFromTableAsync("GARAZE", "ID_GARAZ", garaz.IdGaraz);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -149,12 +148,12 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -162,12 +161,12 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz == null)
                 return View(garaz);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -178,9 +177,9 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -189,7 +188,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

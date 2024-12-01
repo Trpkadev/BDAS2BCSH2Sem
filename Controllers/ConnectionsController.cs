@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -17,12 +16,12 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -32,12 +31,12 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj != null)
                 return View(spoj);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -51,17 +50,17 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index), "Home");
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(CreateEdit), spoj);
             }
 
-            if (await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+            if (spoj.IdSpoj != 0 && await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
                 await _context.DMLSpojeAsync(spoj);
@@ -71,7 +70,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -84,12 +83,12 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -97,12 +96,12 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj == null)
                 return View(spoj);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -116,27 +115,27 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             if (await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM SPOJE WHERE ID_SPOJ = {0}", spoj.IdSpoj);
+                await _context.DeleteFromTableAsync("SPOJE", "ID_SPOJ", spoj.IdSpoj);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -147,14 +146,14 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -162,12 +161,12 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj == null)
                 return View(spoj);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -178,9 +177,9 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -189,7 +188,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

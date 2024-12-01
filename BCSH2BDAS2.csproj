@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
+    <NeutralLanguage>cs-CZ</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,21 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.23.60" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Helpers\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Helpers\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

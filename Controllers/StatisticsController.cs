@@ -15,7 +15,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -24,7 +24,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -35,9 +35,9 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -46,7 +46,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

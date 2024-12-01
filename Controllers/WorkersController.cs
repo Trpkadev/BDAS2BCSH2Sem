@@ -2,7 +2,6 @@
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -12,19 +11,19 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
 {
     [HttpPost]
     [Route("AddPay")]
-    public async Task<IActionResult> AddPay()
+    public async Task<IActionResult> AddPay(double multiplier)
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
                 return RedirectToAction(nameof(Index), "Home");
-
+            //TODO
             var pracovnici = await _context.GetPracovniciAsync() ?? [];
             return View(pracovnici);
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -35,14 +34,14 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -54,12 +53,12 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik != null)
                 return View(pracovnik);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -70,19 +69,19 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index), "Home");
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+            if (pracovnik.IdPracovnik != 0 && await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
                 await _context.DMLPracovniciAsync(pracovnik);
@@ -92,7 +91,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -103,14 +102,14 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index), "Home");
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -118,12 +117,12 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik != null)
                 return View(pracovnik);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -135,26 +134,26 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction(nameof(Index), "Home");
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM PRACOVNICI WHERE ID_UZIVATEL = {0}", pracovnik.IdPracovnik);
+                await _context.DeleteFromTableAsync("PRACOVNICI", "ID_UZIVATEL", pracovnik.IdPracovnik);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -167,12 +166,12 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -180,12 +179,12 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik != null)
                 return View(pracovnik);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -196,7 +195,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (LoggedUser == null || LoggedUser.HasManagerRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
                 return RedirectToAction(nameof(Index), "Home");
 
             var pracovnici = await _context.GetPracovniciAsync() ?? [];
@@ -204,7 +203,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }

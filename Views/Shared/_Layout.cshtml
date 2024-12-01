@@ -30,7 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Index") ? "active" : "")" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
-                        @if ((ViewData["ActingUser"]) != null)
+                        @if ((ViewData[Resource.ACTING_USER]) != null)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Home","Plan"),new("Home","Timetable")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,7 +54,7 @@
                                 </a>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasMaintainerRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasMaintainerRights() == true)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Vehicles",null),new("Garages",null),new("Models",null),new("Brands",null),new("Types",null),new("Maintenance",null), new("VehiclesExpenses",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,7 +73,7 @@
                                 </ul>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasDispatchRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasDispatchRights() == true)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Stops",null),new("Connections",null),new("Routes",null),new("Timetables",null),new("Tariff",null),new("Records",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,7 +91,7 @@
                                 </ul>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasManagerRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasManagerRights() == true)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Workers",null),new("Users",null),new("Roles",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -106,7 +106,7 @@
                                 </ul>
                             </li>
                         }
-                        @if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -125,19 +125,19 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        @if (ViewData["ActingUser"] != null)
+                        @if (ViewData[Resource.ACTING_USER] != null)
                         {
-                            @if (ViewData["LoggedUser"]?.Equals(ViewData["ActingUser"]) == true)
+                            @if (ViewData[Resource.LOGGED_USER]?.Equals(ViewData[Resource.ACTING_USER]) == true)
                             {
                                 <li class="nav-item">
-                                    <span class="nav-link" inert>Přihlášený uživatel: @ViewData["LoggedUser"]</span>
+                                    <span class="nav-link" inert>Přihlášený uživatel: @ViewData[Resource.LOGGED_USER]</span>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
                                     <span class="nav-link" style="display:flex">
-                                        Jednáte za uživatele: @ViewData["ActingUser"]
+                                        Jednáte za uživatele: @ViewData[Resource.ACTING_USER]
                                         (<a class="nav-link" style="padding:0;color:orangered;" asp-controller="Users" asp-action="StopActingBehalf">Zrušit</a>)
                                     </span>
                                 </li>
@@ -161,17 +161,17 @@
         </nav>
     </header>
     <main class="container mw-100 w-auto pt-3 text-nowrap" role="main">
-        @if (TempData["error"] != null)
+        @if (TempData[Resource.TEMPDATA_ERROR] != null)
         {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>@TempData["error"]</strong>
+                <strong>@TempData[Resource.TEMPDATA_ERROR]</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
-        @if (TempData["success"] != null)
+        @if (TempData[Resource.TEMPDATA_SUCCESS] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>@TempData["success"]</strong>
+                <strong>@TempData[Resource.TEMPDATA_SUCCESS]</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }

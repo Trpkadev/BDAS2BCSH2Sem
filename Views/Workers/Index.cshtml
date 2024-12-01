@@ -34,7 +34,7 @@
 				<th>
 					@Html.DisplayNameFor(model => model.UzivatelskeJmeno)
 				</th>
-				@if (((Uzivatel?)ViewData["ActingUser"])?.HasAdminRights() == true)
+				@if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
 				{
 					<th></th>
 				}

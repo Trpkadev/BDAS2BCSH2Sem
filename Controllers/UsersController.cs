@@ -1,7 +1,6 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -15,21 +14,21 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
                 return RedirectToAction("Index", "Home");
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -40,14 +39,14 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -55,12 +54,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             var uzivatel = await _context.GetUzivatelByIdAsync(id);
             if (uzivatel != null)
                 return View(uzivatel);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -72,29 +71,29 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
             if (await _context.GetUzivatelByIdAsync(pracovnik.IdUzivatel) == null)
-                SetErrorMessage("Objekt v databázi neexistuje");
+                SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM UZIVATELE WHERE ID_UZIVATEL = {0}", pracovnik.IdUzivatel);
+                await _context.DeleteFromTableAsync("UZIVATELE", "ID_UZIVATEL", pracovnik.IdUzivatel);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -105,14 +104,14 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -120,12 +119,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             var uzivatel = await _context.GetUzivatelByIdAsync(id);
             if (uzivatel != null)
                 return View(uzivatel);
-            SetErrorMessage("Objekt v databázi neexistuje");
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
         }
     }
@@ -136,9 +135,9 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (LoggedUser == null || !LoggedUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -148,7 +147,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -163,7 +162,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -177,18 +176,18 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction("Index", "Home");
             }
 
             if (await LoginInternal(uzivatel.UzivatelskeJmeno, uzivatel.Heslo))
                 return RedirectToAction("Index", "Home");
-            SetErrorMessage("Nesprávné jméno nebo heslo");
+            SetErrorMessage(Resource.INVALID_LOGIN);
             return RedirectToAction("Index", "Home");
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -205,7 +204,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -220,7 +219,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -236,19 +235,19 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return View(uzivatel);
             if (await _context.GetUzivatelUsernameExistsAsync(uzivatel.UzivatelskeJmeno))
             {
-                SetErrorMessage("Jméno již existuje");
+                SetErrorMessage(Resource.REGISTER_NAME_EXISTS);
                 return View(uzivatel);
             }
 
             uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);
             uzivatel.IdRole = 1;
             await _context.DMLUzivateleAsync(uzivatel);
-            SetSuccessMessage("Registrace proběhla úspěšně!");
+            SetSuccessMessage(Resource.REGISTER_SUCCESS);
             return RedirectToAction(nameof(Login));
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
@@ -261,12 +260,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
             {
-                SetErrorMessage("Nedostačující oprávnění");
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction("Index", "Home");
             }
             if (!ModelState.IsValid)
             {
-                SetErrorMessage("Neplatná data požadavku");
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -275,7 +274,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         }
         catch (Exception)
         {
-            SetErrorMessage("Chyba serveru");
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction("Index", "Home");
         }
     }
