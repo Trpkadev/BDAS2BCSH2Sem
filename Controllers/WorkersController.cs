@@ -204,7 +204,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

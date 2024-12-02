@@ -180,7 +180,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var tarifniPasma = await _context.GetTarifni_PasmaAsync() ?? [];
@@ -189,7 +189,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

@@ -16,7 +16,7 @@ public class LogsController(TransportationContext context, IHttpContextAccessor 
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var logy = await _context.GetLogyAsync() ?? [];
@@ -25,7 +25,7 @@ public class LogsController(TransportationContext context, IHttpContextAccessor 
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

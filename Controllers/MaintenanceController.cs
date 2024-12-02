@@ -180,7 +180,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var udrzba = await _context.GetUdrzbyAsync();
@@ -189,7 +189,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

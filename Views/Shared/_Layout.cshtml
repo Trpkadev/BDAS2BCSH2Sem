@@ -76,7 +76,7 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasDispatchRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Stops",null),new("Connections",null),new("Routes",null),new("Timetables",null),new("Tariff",null),new("Records",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Stops",null),new("Connections",null),new("Routes",null),new("Timetables",null),new("Tariff",null),new("Records",null),new("ImportExport","ImportRecords")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Dispečer
                                 </a>
                                 <ul class="dropdown-menu">
@@ -87,6 +87,7 @@
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables",null) ? "active" : "")" asp-controller="Timetables" asp-action="Index">Jízdní řády</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index">Tarifní pásma</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index">Záznamy tras</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords">Importovat záznamy tras</a>
                                     </li>
                                 </ul>
                             </li>
@@ -109,14 +110,14 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects"), new("ImportExport","ExportCSV")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administrátor
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index">Logy</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects">Databázové objekty</a>
-
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ExportCSV") ? "active" : "")" asp-controller="ImportExport" asp-action="ExportCSV">Export do CSV</a>
                                     </li>
                                 </ul>
                             </li>
@@ -160,7 +161,7 @@
             </div>
         </nav>
     </header>
-    <main class="container mw-100 w-auto pt-3 text-nowrap" role="main">
+    <main class="container pt-3 text-nowrap" role="main">
         @if (TempData[Resource.TEMPDATA_ERROR] != null)
         {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">

@@ -180,7 +180,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var spoje = await _context.GetSpojeAsync() ?? [];
@@ -189,7 +189,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

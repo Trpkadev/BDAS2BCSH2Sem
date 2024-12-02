@@ -39,7 +39,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -191,7 +191,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

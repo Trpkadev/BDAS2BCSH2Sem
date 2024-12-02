@@ -15,7 +15,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
@@ -24,7 +24,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
 
             int id = GetDecryptedId(encryptedId);
             ActBehalfInternal(id);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
         catch (Exception)
         {
@@ -138,7 +138,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var uzivatele = await _context.GetUzivateleAsync();
@@ -148,7 +148,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -163,7 +163,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -177,18 +177,18 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             if (await LoginInternal(uzivatel.UzivatelskeJmeno, uzivatel.Heslo))
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             SetErrorMessage(Resource.INVALID_LOGIN);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -200,12 +200,12 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             if (LoggedUser != null)
                 LogoutInternal();
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -220,7 +220,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -248,7 +248,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -261,21 +261,21 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             if (LoggedUser == null || !LoggedUser.HasAdminRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             ActBehalfInternal(null);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

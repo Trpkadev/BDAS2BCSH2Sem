@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Import záznamů trasy";
+}
+
+<div class="d-flex justify-content-between">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<form asp-action="ImportRecordsSubmit" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label for="soubor" class="control-label">Soubor CSV</label>
+        <input type="file" name="soubor" id="soubor" class="form-control" accept="text/csv" required />
+    </div>
+    <div class="form-group mb-3">
+        <label for="oddelovac" class="control-label">Oddělovač hodnot</label>
+        <input type="text" name="oddelovac" id="oddelovac" class="form-control" value=";" />
+    </div>
+    <div class="form-group mb-3">
+        <input type="submit" value="Importovat" class="btn btn-primary" />
+    </div>
+</form>

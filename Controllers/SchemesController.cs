@@ -219,7 +219,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null)
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var schemata = await _context.GetSchemataAsync() ?? [];
@@ -228,7 +228,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

@@ -180,7 +180,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var garaze = await _context.GetGarazeAsync() ?? [];
@@ -189,7 +189,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

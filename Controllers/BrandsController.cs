@@ -180,7 +180,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var znacky = await _context.GetZnackyAsync() ?? [];
@@ -189,7 +189,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

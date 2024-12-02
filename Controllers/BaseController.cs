@@ -69,4 +69,6 @@ public abstract class BaseController : Controller
     protected void SetErrorMessage(string? message = null) => TempData[Resource.TEMPDATA_ERROR] = message ?? Resource.GENERIC_ERROR;
 
     protected void SetSuccessMessage(string? message = null) => TempData[Resource.TEMPDATA_SUCCESS] = message ?? Resource.GENERIC_SUCCESS;
+
+    protected IActionResult RedirectToHome() => RedirectToAction("Index", "Home");
 }

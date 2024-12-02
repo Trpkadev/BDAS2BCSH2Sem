@@ -176,7 +176,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var modely = await _context.GetModelyAsync() ?? [];
@@ -185,7 +185,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

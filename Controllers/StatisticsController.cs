@@ -16,7 +16,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var objekty = await _context.GetDBObjektyAsync();
@@ -25,7 +25,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 
@@ -38,7 +38,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var naklady = await _context.GetNakladyNaVozidla();
@@ -47,7 +47,7 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

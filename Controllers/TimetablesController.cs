@@ -180,7 +180,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasAdminRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var jizdniRady = await _context.GetJizdni_RadyAsync() ?? [];
@@ -189,7 +189,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

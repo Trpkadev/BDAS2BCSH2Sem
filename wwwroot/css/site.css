@@ -43,3 +43,7 @@ table {
 input {
     width: fit-content
 }
+
+form {
+    max-width: 500px
+}

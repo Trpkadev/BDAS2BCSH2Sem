@@ -20,4 +20,9 @@ public class DatabazovyObjekt
     [Column("POSLEDNI_PRISTUP")]
     [DisplayName("Poslední přístup")]
     public DateTime? PosledniPristup { get; set; }
+
+    public override string ToString()
+    {
+        return Nazev;
+    }
 }

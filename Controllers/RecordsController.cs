@@ -180,7 +180,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
@@ -189,7 +189,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using System.Runtime.CompilerServices;
+using Oracle.ManagedDataAccess.Types;
 
 namespace BCSH2BDAS2.Helpers;
 
@@ -28,178 +29,234 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<DatabazovyObjekt> DatabazoveObjekty { get; set; }
     public DbSet<NakladyNaVozidlo> NakladyNaVozidla { get; set; }
 
+    #region Procedury
+
+    public async Task ImportRecords(string csv, char oddelovac)
+    {
+        const string sql = """
+                           
+                           DECLARE
+                               v_csv CLOB;
+                           BEGIN
+                               v_csv := :p_csv;
+                               CSV_DO_ZAZNAMU_TRASY(v_csv, :p_oddelovac);
+                           END;
+                           """;
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.Add(new OracleParameter("p_csv", csv));
+        command.Parameters.Add(new OracleParameter("p_oddelovac", oddelovac));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
+    }
+
+    #endregion
+
+    #region Funkce
+
+    public async Task<string?> GetTabulkaDoCsv(string nazev, char oddelovac)
+    {
+        const string sql = """
+                           DECLARE
+                               v_csv CLOB;
+                           BEGIN
+                               SELECT TABULKA_DO_CSV(:p_nazev, :p_oddelovac) INTO v_csv
+                               FROM DUAL;
+                               :p_result := v_csv;
+                           END;
+                           """;
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+
+        command.Parameters.Add(new OracleParameter("p_nazev", nazev));
+        command.Parameters.Add(new OracleParameter("p_oddelovac", oddelovac));
+        command.Parameters.Add(resultParam);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        var result = resultParam.Value;
+        var str = ((OracleClob?)result)?.Value;
+        await Database.CloseConnectionAsync();
+        return str;
+    }
+
+    #endregion
+
     #region DML procedures
 
     public async Task DMLGarazeAsync(Garaz garaz)
     {
         string sql = $"{ConvertDMLMethodName()}(:idGaraz, :nazev, :kapacita);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idGaraz", ConvertId(garaz.IdGaraz)),
-                                        new OracleParameter("nazev", garaz.Nazev),
-                                        new OracleParameter("kapacita", garaz.Kapacita)];
+        OracleParameter[] sqlParams = [ new("idGaraz", ConvertId(garaz.IdGaraz)),
+                                        new("nazev", garaz.Nazev),
+                                        new("kapacita", garaz.Kapacita)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLJizdni_RadyAsync(JizdniRad jizdniRad)
     {
         string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idSpoj", jizdniRad.IdSpoj),
-                                        new OracleParameter("idZastavka", jizdniRad.IdZastavka),
-                                        new OracleParameter("casPrijezdu", jizdniRad.CasPrijezdu),
-                                        new OracleParameter("casOdjezdu", jizdniRad.CasOdjezdu)];
+        OracleParameter[] sqlParams = [ new("idSpoj", jizdniRad.IdSpoj),
+                                        new("idZastavka", jizdniRad.IdZastavka),
+                                        new("casPrijezdu", jizdniRad.CasPrijezdu),
+                                        new("casOdjezdu", jizdniRad.CasOdjezdu)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLLinkyAsync(Linka linka)
     {
         string sql = $"{ConvertDMLMethodName()}(:idLinka, :nazev, :typVozidla, :cislo);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idLinka", ConvertId(linka.IdLinka)),
-                                        new OracleParameter("nazev", linka.Nazev),
-                                        new OracleParameter("typVozidla", linka.IdTypVozidla),
-                                        new OracleParameter("cislo", linka.Cislo)];
+        OracleParameter[] sqlParams = [ new("idLinka", ConvertId(linka.IdLinka)),
+                                        new("nazev", linka.Nazev),
+                                        new("typVozidla", linka.IdTypVozidla),
+                                        new("cislo", linka.Cislo)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLModelyAsync(Model model)
     {
         string sql = $"{ConvertDMLMethodName()}(:idModel, :idTypVozidla, :idZnacka, :nazev, :jeNizkopodlazni);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idModel", ConvertId(model.IdModel)),
-                                        new OracleParameter("idTypVozidla", model.IdTypVozidla),
-                                        new OracleParameter("idZnacka", model.IdZnacka),
-                                        new OracleParameter("nazev", model.Nazev),
-                                        new OracleParameter("jeNizkopodlazni", model.JeNizkopodlazni)];
+        OracleParameter[] sqlParams = [ new("idModel", ConvertId(model.IdModel)),
+                                        new("idTypVozidla", model.IdTypVozidla),
+                                        new("idZnacka", model.IdZnacka),
+                                        new("nazev", model.Nazev),
+                                        new("jeNizkopodlazni", model.JeNizkopodlazni)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLPracovniciAsync(Pracovnik pracovnik)
     {
         string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :uzivatelskeJmeno, :heslo, :idNadrizeny, :idRole, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email, :rodneCislo, :idUzivatel);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idPracovnik", ConvertId(pracovnik.IdPracovnik)),
-                                        new OracleParameter("idNadrizeny", pracovnik.IdNadrizeny),
-                                        new OracleParameter("idRole", pracovnik.IdNadrizeny),
-                                        new OracleParameter("hodinovaMzda", pracovnik.HodinovaMzda),
-                                        new OracleParameter("jmeno", pracovnik.Jmeno),
-                                        new OracleParameter("prijmeni", pracovnik.Prijmeni),
-                                        new OracleParameter("telefonniCislo", pracovnik.TelefonniCislo),
-                                        new OracleParameter("email", pracovnik.Email),
-                                        new OracleParameter("rodneCislo", pracovnik.RodneCislo),
-                                        new OracleParameter("idUzivatel", pracovnik.IdUzivatel)];
+        OracleParameter[] sqlParams = [ new("idPracovnik", ConvertId(pracovnik.IdPracovnik)),
+                                        new("idNadrizeny", pracovnik.IdNadrizeny),
+                                        new("idRole", pracovnik.IdNadrizeny),
+                                        new("hodinovaMzda", pracovnik.HodinovaMzda),
+                                        new("jmeno", pracovnik.Jmeno),
+                                        new("prijmeni", pracovnik.Prijmeni),
+                                        new("telefonniCislo", pracovnik.TelefonniCislo),
+                                        new("email", pracovnik.Email),
+                                        new("rodneCislo", pracovnik.RodneCislo),
+                                        new("idUzivatel", pracovnik.IdUzivatel)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLRoleAsync(Role role)
     {
         string sql = $"{ConvertDMLMethodName()}(:idRole, :nazev, :prava);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idRole", ConvertId(role.IdRole)),
-                                        new OracleParameter("nazev", role.Nazev),
-                                        new OracleParameter("prava", role.Prava)];
+        OracleParameter[] sqlParams = [ new("idRole", ConvertId(role.IdRole)),
+                                        new("nazev", role.Nazev),
+                                        new("prava", role.Prava)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLSchemataAsync(Schema schema)
     {
         string sql = $"{ConvertDMLMethodName()}(:idSchema, :nazevSchematu, :nazevSouboru, :typSouboru, :velikostSouboru, :datumZmeny, :soubor);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idSchema", ConvertId(schema.IdSchema)),
-                                        new OracleParameter("nazevSchematu", schema.NazevSchematu),
-                                        new OracleParameter("nazevSouboru", schema.NazevSouboru),
-                                        new OracleParameter("typSouboru", schema.TypSouboru),
-                                        new OracleParameter("velikostSouboru", schema.VelikostSouboru),
-                                        new OracleParameter("datumZmeny", schema.DatumZmeny),
-                                        new OracleParameter("soubor", schema.Soubor)];
+        OracleParameter[] sqlParams = [ new("idSchema", ConvertId(schema.IdSchema)),
+                                        new("nazevSchematu", schema.NazevSchematu),
+                                        new("nazevSouboru", schema.NazevSouboru),
+                                        new("typSouboru", schema.TypSouboru),
+                                        new("velikostSouboru", schema.VelikostSouboru),
+                                        new("datumZmeny", schema.DatumZmeny),
+                                        new("soubor", schema.Soubor)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLSpojeAsync(Spoj spoj)
     {
         string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :garantovaneNizkopodlazni, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idSpoj", ConvertId(spoj.IdSpoj)),
-                                        new OracleParameter("idLinka", spoj.IdLinka),
-                                        new OracleParameter("garantovaneNizkopodlazni", spoj.GarantovaneNizkopodlazni),
-                                        new OracleParameter("jedeVeVsedniDen", spoj.JedeVeVsedniDen),
-                                        new OracleParameter("jedeVSobotu", spoj.JedeVSobotu ? 1 : 0),
-                                        new OracleParameter("jedeVNedeli", spoj.JedeVNedeli)];
+        OracleParameter[] sqlParams = [ new("idSpoj", ConvertId(spoj.IdSpoj)),
+                                        new("idLinka", spoj.IdLinka),
+                                        new("garantovaneNizkopodlazni", spoj.GarantovaneNizkopodlazni),
+                                        new("jedeVeVsedniDen", spoj.JedeVeVsedniDen),
+                                        new("jedeVSobotu", spoj.JedeVSobotu ? 1 : 0),
+                                        new("jedeVNedeli", spoj.JedeVNedeli)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLTarifni_PasmaAsync(TarifniPasmo tarifniPasmo)
     {
         string sql = $"{ConvertDMLMethodName()}(:idPasmo, :nazev);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idPasmo", ConvertId(tarifniPasmo.IdPasmo)),
-                                        new OracleParameter("nazev", tarifniPasmo.Nazev)];
+        OracleParameter[] sqlParams = [ new("idPasmo", ConvertId(tarifniPasmo.IdPasmo)),
+                                        new("nazev", tarifniPasmo.Nazev)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLTypy_VozidelAsync(TypVozidla typVozidla)
     {
         string sql = $"{ConvertDMLMethodName()}(:idTypVozidla, :nazev);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idTypVozidla", ConvertId(typVozidla.IdTypVozidla)),
-                                        new OracleParameter("nazev", typVozidla.Nazev)];
+        OracleParameter[] sqlParams = [ new("idTypVozidla", ConvertId(typVozidla.IdTypVozidla)),
+                                        new("nazev", typVozidla.Nazev)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLUdrzbyAsync(Udrzba udrzba)
     {
         string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum,:typUdrzby, :umytoVMycce, :cistenoOzonem, :typUdrzby, :popisUkonu, :cena);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idUdrzba", ConvertId(udrzba.IdUdrzba)),
-                                        new OracleParameter("idVozidlo", udrzba.IdVozidlo),
-                                        new OracleParameter("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
-                                        new OracleParameter("popisUkonu", udrzba.PopisUkonu),
-                                        new OracleParameter("cena", udrzba.Cena),
-                                        new OracleParameter("umytoVMycce", udrzba.UmytoVMycce),
-                                        new OracleParameter("cistenoOzonem", udrzba.CistenoOzonem),
-                                        new OracleParameter("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
-        await DMLPackageCall(sql.ToString(), sqlParams);
+        OracleParameter[] sqlParams = [ new("idUdrzba", ConvertId(udrzba.IdUdrzba)),
+                                        new("idVozidlo", udrzba.IdVozidlo),
+                                        new("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
+                                        new("popisUkonu", udrzba.PopisUkonu),
+                                        new("cena", udrzba.Cena),
+                                        new("umytoVMycce", udrzba.UmytoVMycce),
+                                        new("cistenoOzonem", udrzba.CistenoOzonem),
+                                        new("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
+        await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLUzivateleAsync(Uzivatel uzivatel)
     {
         string sql = $"{ConvertDMLMethodName()}(:idUzivatel, :jmeno, :heslo, :role);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idUzivatel", ConvertId(uzivatel.IdUzivatel)),
-                                        new OracleParameter("jmeno", uzivatel.UzivatelskeJmeno),
-                                        new OracleParameter("heslo", uzivatel.Heslo),
-                                        new OracleParameter("role", uzivatel.IdRole)];
+        OracleParameter[] sqlParams = [ new("idUzivatel", ConvertId(uzivatel.IdUzivatel)),
+                                        new("jmeno", uzivatel.UzivatelskeJmeno),
+                                        new("heslo", uzivatel.Heslo),
+                                        new("role", uzivatel.IdRole)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLVozidlaAsync(Vozidlo vozidlo)
     {
         string sql = $"{ConvertDMLMethodName()}(:idVozidlo,:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idVozidlo", ConvertId(vozidlo.IdVozidlo)),
-                                        new OracleParameter("rokVyroby", vozidlo.RokVyroby),
-                                        new OracleParameter("najeteKilometry", vozidlo.NajeteKilometry),
-                                        new OracleParameter("kapacita", vozidlo.Kapacita),
-                                        new OracleParameter("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
-                                        new OracleParameter("idGaraz", vozidlo.IdGaraz),
-                                        new OracleParameter("idModel", vozidlo.IdModel)];
+        OracleParameter[] sqlParams = [ new("idVozidlo", ConvertId(vozidlo.IdVozidlo)),
+                                        new("rokVyroby", vozidlo.RokVyroby),
+                                        new("najeteKilometry", vozidlo.NajeteKilometry),
+                                        new("kapacita", vozidlo.Kapacita),
+                                        new("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
+                                        new("idGaraz", vozidlo.IdGaraz),
+                                        new("idModel", vozidlo.IdModel)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLZastavkyAsync(Zastavka zastavka)
     {
         string sql = $"{ConvertDMLMethodName()}(:idZastavka, :nazev, :souradniceX, :souradniceY, :idPasmo);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idZastavka", ConvertId(zastavka.IdZastavka)),
-                                        new OracleParameter("nazev", zastavka.Nazev),
-                                        new OracleParameter("souradniceX", zastavka.SouradniceX),
-                                        new OracleParameter("souradniceY", zastavka.SouradniceY),
-                                        new OracleParameter("idPasmo", zastavka.IdPasmo)];
+        OracleParameter[] sqlParams = [ new("idZastavka", ConvertId(zastavka.IdZastavka)),
+                                        new("nazev", zastavka.Nazev),
+                                        new("souradniceX", zastavka.SouradniceX),
+                                        new("souradniceY", zastavka.SouradniceY),
+                                        new("idPasmo", zastavka.IdPasmo)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLZaznamy_TrasyAsync(ZaznamTrasy zaznamTrasy)
     {
         string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idSpoj, :idZastavka, :idVozidlo, :casPrijezdu, :casOdjezdu);";
-        OracleParameter[] sqlParams = [ new OracleParameter("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
-                                        new OracleParameter("idJizdniRad", zaznamTrasy.IdJizniRad),
-                                        new OracleParameter("idVozidlo", zaznamTrasy.IdVozidlo),
-                                        new OracleParameter("casPrijezdu", zaznamTrasy.CasPrijezdu),
-                                        new OracleParameter("casOdjezdu", zaznamTrasy.CasOdjezdu)];
+        OracleParameter[] sqlParams = [ new("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
+                                        new("idJizdniRad", zaznamTrasy.IdJizniRad),
+                                        new("idVozidlo", zaznamTrasy.IdVozidlo),
+                                        new("casPrijezdu", zaznamTrasy.CasPrijezdu),
+                                        new("casOdjezdu", zaznamTrasy.CasOdjezdu)];
         await DMLPackageCall(sql, sqlParams);
     }
 
     public async Task DMLZnackyAsync(Znacka znacka)
     {
         string sql = $"{ConvertDMLMethodName()}(:ídZnacka, :nazev);";
-        OracleParameter[] sqlParams = [ new OracleParameter("ídZnacka", ConvertId(znacka.IdZnacka)),
-                                        new OracleParameter("nazev", znacka.Nazev)];
+        OracleParameter[] sqlParams = [ new("ídZnacka", ConvertId(znacka.IdZnacka)),
+                                        new("nazev", znacka.Nazev)];
         await DMLPackageCall(sql, sqlParams);
     }
 

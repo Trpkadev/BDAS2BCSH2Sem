@@ -180,7 +180,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction("Index", "Home");
+                return RedirectToHome();
             }
 
             var linky = await _context.GetLinkyAsync() ?? [];
@@ -189,7 +189,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction("Index", "Home");
+            return RedirectToHome();
         }
     }
 }
