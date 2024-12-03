@@ -156,4 +156,7 @@
   <data name="REGISTER_SUCCESS" xml:space="preserve">
     <value>Registrace proběhla úspěšně</value>
   </data>
+  <data name="DB_RESPONSE_NO_DATA" xml:space="preserve">
+    <value>No data</value>
+  </data>
 </root>

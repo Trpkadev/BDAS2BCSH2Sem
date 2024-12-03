@@ -1,8 +1,8 @@
 using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -33,8 +33,8 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
-            var zastavky = await _context.GetZastavkyAsync() ?? [];
-            return View(zastavky);
+            ViewData["zastavky"] = await _context.GetZastavkyAsync() ?? [];
+            return View();
         }
         catch (Exception)
         {
@@ -45,7 +45,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
 
     [HttpPost]
     [Route("Plan")]
-    public async Task<ActionResult> Plan(string? od, string? _do, string? cas)
+    public async Task<ActionResult> Plan(string from, string to, string time)
     {
         try
         {
@@ -54,16 +54,17 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Plan));
             }
-            if (!ModelState.IsValid)
+            int idZastavkaFrom = OurCryptography.Instance.DecryptId(from);
+            int idZastavkaTo = OurCryptography.Instance.DecryptId(to);
+            if (!ModelState.IsValid || idZastavkaFrom == idZastavkaTo)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Plan));
             }
 
-            // TODO Použít funkci v DB a zobrazit výsledek
-            var zastavky = await _context.GetZastavkyAsync();
-            ViewBag.Zastavky = new SelectList(zastavky);
-            return View();
+            string a = await _context.DijkstraAsync(idZastavkaFrom, idZastavkaTo, DateTime.Parse(time, CultureInfo.CurrentCulture));
+            ViewData["zastavky"] = await _context.GetZastavkyAsync() ?? [];
+            return View(model: a);
         }
         catch (Exception)
         {

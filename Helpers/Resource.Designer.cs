@@ -79,6 +79,15 @@ namespace BCSH2BDAS2.Helpers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No data.
+        /// </summary>
+        internal static string DB_RESPONSE_NO_DATA {
+            get {
+                return ResourceManager.GetString("DB_RESPONSE_NO_DATA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nastala chyba.
         /// </summary>
         internal static string GENERIC_ERROR {

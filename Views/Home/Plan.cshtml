@@ -1,4 +1,6 @@
-﻿@using BCSH2BDAS2.Models;
+﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models;
+@model string?;
 @{
     ViewData["Title"] = "Vyhledat spojení";
 }
@@ -8,28 +10,55 @@
 <hr />
 <div class="row mb-3">
     <div class="col-md-4 w-100">
-        <form method="get" action="Plan">
+        <form method="post" action="Plan">
             <div class="form-group mb-3">
-                <label for="od" class="control-label">Ze zastávky</label>
-                <input list="zastavkyList" id="od" name="od" class="form-control" />
+                <label for="from" class="control-label">Ze zastávky</label>
+                <input list="zastavkyList" class="form-control" oninput="setHiddenInput(this, 'from')" />
+                <input type="hidden" id="from" name="from" required />
             </div>
             <div class="form-group mb-3">
-                <label for="do" class="control-label">Do zastávky</label>
-                <input list="zastavkyList" id="do" name="do" class="form-control" />
+                <label for="to" class="control-label">Do zastávky</label>
+                <input list="zastavkyList" class="form-control" onchange="setHiddenInput(this, 'to')" />
+                <input type="hidden" id="to" name="to" required />
             </div>
             <div class="form-group mb-3">
-                <label for="cas" class="control-label">Datum a čas odjezdu</label>
-                <input type="datetime-local" id="cas" name="cas" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                <label for="time" class="control-label">Datum a čas odjezdu</label>
+                <input type="datetime-local" id="time" name="time" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
             </div>
             <div class="form-group mb-3">
                 <input type="submit" value="Vyhledat" class="btn btn-primary" />
             </div>
-            <datalist id="zastavkyList">
-                @foreach (var item in Model)
+            @if (Model == Resource.DB_RESPONSE_NO_DATA)
+            {
+                <div>@Model</div>
+            }
+            else if (Model != null)
+            {
+                @foreach (string str in Model.Split("},"))
                 {
-                    <option value="@item.Nazev">@item.Nazev</option>
+                    <div>@str},</div>
+                }
+            }
+            <datalist id="zastavkyList">
+                @if (ViewData["zastavky"] is IEnumerable<Zastavka> zastavky)
+                {
+                    var encryptedZastavky = zastavky.Select(item => new { item.Nazev, EncryptedId = OurCryptography.Instance.EncryptId(item.IdZastavka) }).ToList();
+                    foreach (var item in encryptedZastavky)
+                    {
+                        <option id="@item.EncryptedId" value="@item.Nazev">@item.Nazev</option>
+                    }
                 }
             </datalist>
         </form>
     </div>
 </div>
+
+
+<script>
+    function setHiddenInput(inputElement, hiddenInputId) {
+        console.log("A");
+        const selectedOption = [...document.getElementById('zastavkyList').options].find(option => option.value === inputElement.value);
+        if (selectedOption)
+            document.getElementById(hiddenInputId).value = selectedOption.id;
+    }
+</script>
