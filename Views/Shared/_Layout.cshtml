@@ -117,7 +117,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index">Logy</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects">Databázové objekty</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ExportCSV") ? "active" : "")" asp-controller="ImportExport" asp-action="ExportCSV">Export do CSV</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export">Export dat</a>
                                     </li>
                                 </ul>
                             </li>

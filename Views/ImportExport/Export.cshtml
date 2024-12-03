@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Export dat";
+}
+
+<div class="d-flex justify-content-between">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<form asp-action="Export" method="get">
+	<div class="form-group mb-3">
+		<label for="typ" class="control-label">Formát exportu</label>
+		<select id="typ" name="typ" class="form-control">
+			<option value="csv">CSV</option>
+			<option value="json">JSON</option>
+		</select>
+	</div>
+	<div class="form-group mb-3">
+		<label for="nazev" class="control-label">Tabulka nebo pohled</label>
+		@Html.DropDownList("nazev", (SelectList)ViewBag.Tabulky, new { @class = "form-control" })
+	</div>
+	<div class="form-group mb-3">
+		<label for="oddelovac" class="control-label">Oddělovač hodnot (platí pro CSV)</label>
+		<input type="text" name="oddelovac" id="oddelovac" class="form-control" value=";"/>
+	</div>
+	<div class="form-group mb-3">
+		<input type="submit" value="Exportovat" class="btn btn-primary"/>
+	</div>
+</form>
+
+@if (ViewBag.Preview != null)
+{
+    <h3>
+        Náhled exportu 
+        <a asp-action="ExportDownload" asp-route-typ="@ViewBag.Typ" asp-route-nazev="@ViewBag.Nazev" asp-route-oddelovac="@ViewBag.Oddelovac" class="btn btn-secondary">Stáhnout</a>
+    </h3>
+    <pre>@ViewBag.Preview.ToString()</pre>
+}

@@ -83,6 +83,32 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return str;
     }
 
+    public async Task<string?> GetTabulkaDoJson(string nazev)
+    {
+        const string sql = """
+                           DECLARE
+                               v_json CLOB;
+                           BEGIN
+                               SELECT TABULKA_DO_JSON(:p_nazev) INTO v_json
+                               FROM DUAL;
+                               :p_result := v_json;
+                           END;
+                           """;
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+
+        command.Parameters.Add(new OracleParameter("p_nazev", nazev));
+        command.Parameters.Add(resultParam);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        var result = resultParam.Value;
+        var str = ((OracleClob?)result)?.Value;
+        await Database.CloseConnectionAsync();
+        return str;
+    }
+
     #endregion
 
     #region DML procedures
@@ -274,12 +300,12 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await Garaze.FromSqlRaw("SELECT * FROM GARAZE_VIEW WHERE ID_GARAZ = {0}", id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<JizdniRad>> GetJizdni_RadyAsync()
+    public async Task<List<JizdniRad>> GetJizdniRadyAsync()
     {
         return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW").ToListAsync();
     }
 
-    public async Task<JizdniRad?> GetJizdni_RadByIdAsync(int id)
+    public async Task<JizdniRad?> GetJizdniRadByIdAsync(int id)
     {
         return await JizdniRady.FromSqlRaw("SELECT * FROM JIZDNI_RADY_VIEW WHERE ID_JIZDNI_RAD = {0}", id).FirstOrDefaultAsync();
     }

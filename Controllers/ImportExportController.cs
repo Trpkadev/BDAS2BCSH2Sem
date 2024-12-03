@@ -10,9 +10,10 @@ public class ImportExportController(TransportationContext context, IHttpContextA
     : BaseController(context, accessor)
 {
     [HttpGet]
-    [Route("ExportCSV")]
-    public async Task<IActionResult> ExportCsv(string? nazev, char oddelovac = ';')
+    [Route("Export")]
+    public async Task<IActionResult> Export(string? typ, string? nazev, char oddelovac = ';')
     {
+        ViewBag.Typ = typ;
         ViewBag.Nazev = nazev;
         ViewBag.Oddelovac = oddelovac;
 
@@ -28,10 +29,18 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             var tabulky = objekty.Where(o => o.Typ is "TABLE" or "VIEW");
             ViewBag.Tabulky = new SelectList(tabulky);
 
-            if (nazev != null)
+            if (typ != null && nazev != null)
             {
-                var csv = await _context.GetTabulkaDoCsv(nazev, oddelovac);
-                ViewBag.Csv = csv;
+                if (typ == "csv")
+                {
+                    var csv = await _context.GetTabulkaDoCsv(nazev, oddelovac);
+                    ViewBag.Preview = csv;
+                }
+                else
+                {
+                    var json = await _context.GetTabulkaDoJson(nazev);
+                    ViewBag.Preview = json;
+                }
             }
 
             return View();
@@ -44,8 +53,8 @@ public class ImportExportController(TransportationContext context, IHttpContextA
     }
 
     [HttpGet]
-    [Route("ExportCSVDownload")]
-    public async Task<IActionResult> ExportCsvDownload(string nazev, char oddelovac = ';')
+    [Route("ExportDownload")]
+    public async Task<IActionResult> ExportDownload(string typ, string nazev, char oddelovac = ';')
     {
         try
         {
@@ -55,11 +64,29 @@ public class ImportExportController(TransportationContext context, IHttpContextA
                 return RedirectToHome();
             }
 
-            var csv = await _context.GetTabulkaDoCsv(nazev, oddelovac);
+            string? data;
+            if (typ == "csv")
+            {
+                data = await _context.GetTabulkaDoCsv(nazev, oddelovac);
+            }
+            else
+            {
+                data = await _context.GetTabulkaDoJson(nazev);
+            }
+
             using var ms = new MemoryStream();
             await using var tw = new StreamWriter(ms);
-            await tw.WriteAsync(csv);
-            return File(ms.ToArray(), "text/csv", $"Export_{nazev}.csv");
+            await tw.WriteAsync(data);
+            var arr = ms.ToArray();
+
+            if (typ == "csv")
+            {
+                return File(arr, "text/csv", $"Export_{nazev}.csv");
+            }
+            else
+            {
+                return File(arr, "application/json", $"Export_{nazev}.json");
+            }
         }
         catch (Exception)
         {

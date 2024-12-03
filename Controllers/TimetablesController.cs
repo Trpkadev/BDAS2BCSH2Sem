@@ -28,7 +28,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (encryptedId == null)
                 return View(new JizdniRad());
             int id = GetDecryptedId(encryptedId);
-            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
+            var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
                 return View(jizdniRad);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
@@ -59,7 +59,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(CreateEdit), jizdniRad);
             }
 
-            if (jizdniRad.IdJizdniRad != 0 && await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) == null)
+            if (jizdniRad.IdJizdniRad != 0 && await _context.GetJizdniRadByIdAsync(jizdniRad.IdJizdniRad) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
@@ -93,7 +93,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             }
 
             int id = GetDecryptedId(encryptedId);
-            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
+            var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
                 return View(jizdniRad);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
@@ -124,7 +124,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetJizdni_RadByIdAsync(jizdniRad.IdJizdniRad) == null)
+            if (await _context.GetJizdniRadByIdAsync(jizdniRad.IdJizdniRad) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
@@ -158,7 +158,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             }
 
             int id = GetDecryptedId(encryptedId);
-            var jizdniRad = await _context.GetJizdni_RadByIdAsync(id);
+            var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
                 return View(jizdniRad);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
@@ -183,7 +183,23 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToHome();
             }
 
-            var jizdniRady = await _context.GetJizdni_RadyAsync() ?? [];
+            var jizdniRady = await _context.GetJizdniRadyAsync() ?? [];
+            return View(jizdniRady);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
+
+    public async Task<IActionResult> MakeOfExisting()
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+            var jizdniRady = await _context.GetJizdniRadyAsync();
             return View(jizdniRady);
         }
         catch (Exception)
