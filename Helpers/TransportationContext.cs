@@ -57,6 +57,25 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
+    public async Task MakeOfExisting(int id_spoj, TimeOnly od, TimeOnly _do, int interval)
+    {
+        const string sql = """
+                           BEGIN
+                               PLANOVANI_JR(:p_id_spoj, POM_FCE.CAS_NA_DATE(:p_od), POM_FCE.CAS_NA_DATE(:p_do), :p_interval);
+                           END;
+                           """;
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.Add(new OracleParameter("p_id_spoj", id_spoj));
+        command.Parameters.Add(new OracleParameter("p_od", od.ToString("t")));
+        command.Parameters.Add(new OracleParameter("p_do", _do.ToString("t")));
+        command.Parameters.Add(new OracleParameter("p_interval", interval));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
+    }
+
     #endregion Procedury
 
     #region Funkce
@@ -107,6 +126,32 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
         command.Parameters.Add(new OracleParameter("p_nazev", nazev));
         command.Parameters.Add(new OracleParameter("p_oddelovac", oddelovac));
+        command.Parameters.Add(resultParam);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        var result = resultParam.Value;
+        var str = ((OracleClob?)result)?.Value;
+        await Database.CloseConnectionAsync();
+        return str;
+    }
+
+    public async Task<string?> GetTabulkaDoJson(string nazev)
+    {
+        const string sql = """
+                           DECLARE
+                               v_json CLOB;
+                           BEGIN
+                               SELECT TABULKA_DO_JSON(:p_nazev) INTO v_json
+                               FROM DUAL;
+                               :p_result := v_json;
+                           END;
+                           """;
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+
+        command.Parameters.Add(new OracleParameter("p_nazev", nazev));
         command.Parameters.Add(resultParam);
         await Database.OpenConnectionAsync();
         await command.ExecuteNonQueryAsync();
