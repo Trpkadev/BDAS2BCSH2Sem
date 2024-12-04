@@ -1,6 +1,7 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model int
-<td class="d-inline-flex gap-3 p-2 w-100">
+
+<td class="d-inline-flex justify-content-end gap-3 p-2 w-100">
     <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-primary">Upravit</a>
     <a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-primary">Detail</a>
     <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-danger">Odstranit</a>

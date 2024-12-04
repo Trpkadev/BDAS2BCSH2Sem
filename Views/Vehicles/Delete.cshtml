@@ -3,60 +3,71 @@
     ViewData["Title"] = "Odstranit";
 }
 
-<h3>Opravdu chcete odstranit toto vozidlo?</h3>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.RokVyroby)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.RokVyroby)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.NajeteKilometry)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.NajeteKilometry)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Kapacita)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Kapacita)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.MaKlimatizaci)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.MaKlimatizaci)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdGaraz)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdGaraz)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdModel)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdModel)
-        </dd>
-    </dl>
+<h3>Opravdu chcete tuto položku odstranit?</h3>
 
-    <form asp-action="DeleteSubmit" class="mb-3">
-        <input type="hidden" asp-for="IdVozidlo" />
-        <input type="submit" value="Odstranit" class="btn btn-danger" />
-    </form>
-    <a asp-action="Index">Zpět na seznam</a>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.RokVyroby)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.RokVyroby)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.NajeteKilometry)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.NajeteKilometry)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Kapacita)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Kapacita)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.MaKlimatizaci)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.MaKlimatizaci)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdGaraz)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdGaraz)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdModel)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdModel)
+                </dd>
+            </dl>
+
+            <form asp-action="DeleteSubmit" class="row m-1">
+                <input type="hidden" asp-for="IdVozidlo" />
+                <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
+                <div class="col"></div>
+                <a asp-action="Index" class="btn btn-secondary col-auto align-content-end">Zpět na seznam</a>
+            </form>
+        </div>
+    </div>
 </div>

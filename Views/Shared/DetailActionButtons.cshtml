@@ -1,11 +1,8 @@
 ﻿@using BCSH2BDAS2.Helpers
 @model int
 
-<div>
-    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-primary">Upravit</a>
-    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-danger">Odstranit</a>
-</div>
-<br />
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Zpět na seznam</a>
+<div class="row-cols-3 row-gap-3">
+    <a asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-primary col-auto">Upravit</a>
+    <a asp-action="Delete" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model)" class="btn btn-danger col-auto">Odstranit</a>
+    <a asp-action="Index" class="btn btn-secondary col-auto" style="margin-left:1rem">Zpět na seznam</a>
 </div>

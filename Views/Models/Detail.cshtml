@@ -6,38 +6,45 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Nazev)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Nazev)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdZnacka)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdZnacka)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdTypVozidla)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdTypVozidla)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.JeNizkopodlazni)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.JeNizkopodlazni)
-        </dd>
-    </dl>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Nazev)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Nazev)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdZnacka)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdZnacka)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdTypVozidla)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdTypVozidla)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.JeNizkopodlazni)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.JeNizkopodlazni)
+                </dd>
+            </dl>
+            @await Html.PartialAsync("DetailActionButtons", Model.IdModel)
+        </div>
+    </div>
 </div>
-@await Html.PartialAsync("DetailActionButtons", Model.IdModel)

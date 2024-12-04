@@ -10,13 +10,10 @@
         <thead>
             <tr>
                 <th>
-                    Spoj
+                    @Html.DisplayNameFor(model => model.IdJizniRad)
                 </th>
                 <th>
-                    Vozidlo
-                </th>
-                <th>
-                    @* @Html.DisplayNameFor(model => model.Nazev) *@
+                    @Html.DisplayNameFor(model => model.NazevVozidla)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CasPrijezdu)
@@ -38,15 +35,11 @@
                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">Vozidlo</a>
                     </td>
                     <td>
-                        @* @Html.DisplayFor(_ => item.ZastavkaNazev) *@
-                    </td>
-                    <td>
                         @item.CasPrijezdu.ToShortTimeString()
                     </td>
                     <td>
                         @item.CasOdjezdu.ToShortTimeString()
                     </td>
-
                     @await Html.PartialAsync("IndexActionButtons", item.IdZaznam)
                 </tr>
             }

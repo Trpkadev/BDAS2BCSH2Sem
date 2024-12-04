@@ -7,114 +7,121 @@
 @await Html.PartialAsync("IndexCreateTitle")
 <div class="container">
     <div class="row-cols-auto">
-        <div class="col-sm">
-            <h2 class="text-center">Opravy</h2>
-            <div class="table-responsive overflow-auto p-3">
-                <table class="table text-nowrap w-auto m-auto">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IdVozidlo)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Datum)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.KonecUdrzby)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PopisUkonu)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Cena)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Where(item => item.TypUdrzby == 'o'))
-                        {
+        @if (Model.Where(item => item.TypUdrzby == 'o').Any())
+        {
+            <div class="col-sm">
+                <h2 class="text-center">Opravy</h2>
+                <div class="table-responsive overflow-auto p-3">
+                    <table class="table text-nowrap w-auto m-auto">
+                        <thead>
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(_ => item.IdVozidlo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.Datum)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.KonecUdrzby)
-                                    @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
-                                    {
-                                        <span class="badge bg-warning text-dark">>72h</span>
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.PopisUkonu)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.Cena)
-                                </td>
-                                @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                                <th>
+                                    @Html.DisplayNameFor(model => model.NazevVozidla)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Datum)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PopisUkonu)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Cena)
+                                </th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(item => item.TypUdrzby == 'o'))
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.Datum)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.KonecUdrzby)
+                                        @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                        {
+                                            <span class="badge bg-warning text-dark">>72h</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.PopisUkonu)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.Cena)
+                                    </td>
+                                    @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <div class="col-sm">
-            <h2 class="text-center">Čístění</h2>
-            <div class="table-responsive overflow-auto p-3">
-                <table class="table text-nowrap w-auto m-auto">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IdVozidlo)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Datum)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.KonecUdrzby)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CistenoOzonem)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UmytoVMycce)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Where(item => item.TypUdrzby == 'c'))
-                        {
+        }
+        @if (Model.Where(item => item.TypUdrzby == 'c').Any())
+        {
+            <div class="col-sm">
+                <h2 class="text-center">Čístění</h2>
+                <div class="table-responsive overflow-auto p-3">
+                    <table class="table text-nowrap w-auto m-auto">
+                        <thead>
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(_ => item.IdVozidlo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.Datum)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.KonecUdrzby)
-                                    @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
-                                    {
-                                        <span class="badge bg-warning text-dark">>72h</span>
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.CistenoOzonem)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(_ => item.UmytoVMycce)
-                                </td>
-                                @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IdVozidlo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Datum)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CistenoOzonem)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UmytoVMycce)
+                                </th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(item => item.TypUdrzby == 'c'))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.IdVozidlo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.Datum)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.KonecUdrzby)
+                                        @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                        {
+                                            <span class="badge bg-warning text-dark">>72h</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.CistenoOzonem)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(_ => item.UmytoVMycce)
+                                    </td>
+                                    @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        }
+
         @if (Model.Where(item => item.TypUdrzby == 'x').Any())
         {
             <div class="row">

@@ -15,10 +15,11 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-            {
-                SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index));
-            }
+                if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                {
+                    SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                    return RedirectToAction(nameof(Index));
+                }
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
@@ -94,7 +95,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
 
             int id = GetDecryptedId(encryptedId);
             var garaz = await _context.GetGarazByIdAsync(id);
-            if (garaz == null)
+            if (garaz != null)
                 return View(garaz);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
@@ -159,7 +160,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
 
             int id = GetDecryptedId(encryptedId);
             var garaz = await _context.GetGarazByIdAsync(id);
-            if (garaz == null)
+            if (garaz != null)
                 return View(garaz);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));

@@ -8,55 +8,59 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row mb-3">
-    <div class="col-md-4 w-100">
-        <form method="post" action="Plan">
-            <div class="form-group mb-3">
-                <label for="from" class="control-label">Ze zastávky</label>
-                <input list="zastavkyList" class="form-control" oninput="setHiddenInput(this, 'from')" />
-                <input type="hidden" id="from" name="from" required />
-            </div>
-            <div class="form-group mb-3">
-                <label for="to" class="control-label">Do zastávky</label>
-                <input list="zastavkyList" class="form-control" onchange="setHiddenInput(this, 'to')" />
-                <input type="hidden" id="to" name="to" required />
-            </div>
-            <div class="form-group mb-3">
-                <label for="time" class="control-label">Datum a čas odjezdu</label>
-                <input type="datetime-local" id="time" name="time" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Vyhledat" class="btn btn-primary" />
-            </div>
-            @if (Model == Resource.DB_RESPONSE_NO_DATA)
-            {
-                <div>@Model</div>
-            }
-            else if (Model != null)
-            {
-                @foreach (string str in Model.Split("},"))
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" action="Plan">
+                <div class="form-group mb-3">
+                    <label for="from" class="control-label">Ze zastávky</label>
+                    <input list="zastavkyList" class="form-control" oninput="setHiddenInput(this, 'from')" />
+                    <input type="hidden" id="from" name="from" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="to" class="control-label">Do zastávky</label>
+                    <input list="zastavkyList" class="form-control" onchange="setHiddenInput(this, 'to')" />
+                    <input type="hidden" id="to" name="to" required />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="time" class="control-label">Datum a čas odjezdu</label>
+                    <input type="datetime-local" id="time" name="time" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                </div>
+
+                <div>
+                    <input type="submit" value="Vyhledat" class="btn btn-primary" />
+                </div>
+                @if (Model == Resource.DB_RESPONSE_NO_DATA)
                 {
-                    <div>@str},</div>
+                    <div>@Model</div>
                 }
-            }
-            <datalist id="zastavkyList">
-                @if (ViewData["zastavky"] is IEnumerable<Zastavka> zastavky)
+                else if (Model != null)
                 {
-                    var encryptedZastavky = zastavky.Select(item => new { item.Nazev, EncryptedId = OurCryptography.Instance.EncryptId(item.IdZastavka) }).ToList();
-                    foreach (var item in encryptedZastavky)
+                    @foreach (string str in Model.Split("},"))
                     {
-                        <option id="@item.EncryptedId" value="@item.Nazev">@item.Nazev</option>
+                        <div>@str},</div>
                     }
                 }
-            </datalist>
-        </form>
+                <datalist id="zastavkyList">
+                    @if (ViewData["zastavky"] is IEnumerable<Zastavka> zastavky)
+                    {
+                        var encryptedZastavky = zastavky.Select(item => new { item.Nazev, EncryptedId = OurCryptography.Instance.EncryptId(item.IdZastavka) }).ToList();
+                        foreach (var item in encryptedZastavky)
+                        {
+                            <option id="@item.EncryptedId" value="@item.Nazev">@item.Nazev</option>
+                        }
+                    }
+                </datalist>
+            </form>
+        </div>
     </div>
 </div>
 
 
 <script>
     function setHiddenInput(inputElement, hiddenInputId) {
-        console.log("A");
         const selectedOption = [...document.getElementById('zastavkyList').options].find(option => option.value === inputElement.value);
         if (selectedOption)
             document.getElementById(hiddenInputId).value = selectedOption.id;

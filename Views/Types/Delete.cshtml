@@ -1,24 +1,28 @@
 ﻿@model BCSH2BDAS2.Models.TypVozidla
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Odstranit";
 }
 
-<h1>Odstranit</h1>
-
 <h3>Opravdu chcete tuto položku odstranit?</h3>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Nazev)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Nazev)
-        </dd>
-    </dl>
 
-    <form asp-action="DeleteSubmit" class="mb-3">
-        <input type="hidden" asp-for="IdTypVozidla" />
-        <input type="submit" value="Odstranit" class="btn btn-danger" />
-    </form>
-    <a asp-action="Index">Zpět na seznam</a>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Nazev)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Nazev)
+                </dd>
+            </dl>
+
+            <form asp-action="DeleteSubmit" class="row m-1">
+                <input type="hidden" asp-for="IdTypVozidla" />
+                <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
+                <div class="col w-100"></div>
+                <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>
+            </form>
+        </div>
+    </div>
 </div>

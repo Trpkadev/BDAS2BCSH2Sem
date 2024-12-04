@@ -29,7 +29,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 return View(new Role());
             int id = GetDecryptedId(encryptedId);
             var role = await _context.GetRoleByIdAsync(id);
-            if (role == null)
+            if (role != null)
                 return View(role);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));

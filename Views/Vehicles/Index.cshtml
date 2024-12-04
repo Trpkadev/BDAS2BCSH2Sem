@@ -52,7 +52,6 @@
                     <td class="p-2">
                         <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdModel)">@Html.DisplayFor(modelItem => item.NazevVozidla)</a>
                     </td>
-
                     @await Html.PartialAsync("IndexActionButtons", item.IdVozidlo)
                 </tr>
             }

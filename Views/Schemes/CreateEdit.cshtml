@@ -6,33 +6,35 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row mb-3">
-    <div class="col-md-4 w-100">
-        <form enctype="multipart/form-data" method="post" asp-action="CreateEditSubmit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdSchema" />
-            <input type="hidden" asp-for="DatumZmeny" />
-            <input type="hidden" asp-for="NazevSouboru" />
-            <input type="hidden" asp-for="VelikostSouboru" />
-            <input type="hidden" asp-for="TypSouboru" />
-            <div class="form-group mb-3">
-                <label asp-for="NazevSchematu" class="control-label"></label>
-                <input asp-for="NazevSchematu" class="form-control" />
-                <span asp-validation-for="NazevSchematu" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="UploadedFile" class="control-label"></label>
-                <input asp-for="UploadedFile" type="file" class="form-control" />
-                <span asp-validation-for="UploadedFile" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Uložit změny" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form enctype="multipart/form-data" method="post" asp-action="CreateEditSubmit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdSchema" />
+                <input type="hidden" asp-for="DatumZmeny" />
+                <input type="hidden" asp-for="NazevSouboru" />
+                <input type="hidden" asp-for="VelikostSouboru" />
+                <input type="hidden" asp-for="TypSouboru" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="NazevSchematu" class="control-label"></label>
+                    <input asp-for="NazevSchematu" class="form-control" />
+                    <span asp-validation-for="NazevSchematu" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="UploadedFile" class="control-label"></label>
+                    <input asp-for="UploadedFile" type="file" class="form-control" />
+                    <span asp-validation-for="UploadedFile" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row m-1">
+                    <input type="submit" value="Uložit změny" class="btn btn-primary col" />
+                    <div class="col w-100"></div>
+                    <a asp-action="Index" class="btn btn-secondary col align-content-end" style="margin-left:1rem">Zpět na seznam</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Zpět na seznam</a>
-</div>
-

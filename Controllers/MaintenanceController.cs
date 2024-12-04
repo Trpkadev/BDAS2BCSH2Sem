@@ -159,7 +159,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
 
             int id = GetDecryptedId(encryptedId);
             var udrzba = await _context.GetUdrzbaByIdAsync(id);
-            if (udrzba == null)
+            if (udrzba != null)
                 return View(udrzba);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));

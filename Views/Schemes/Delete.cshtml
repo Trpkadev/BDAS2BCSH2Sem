@@ -1,65 +1,73 @@
 ﻿@model BCSH2BDAS2.Models.Schema
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Odstranit";
 }
 
-<h1>Odstranit</h1>
-
 <h3>Opravdu chcete tuto položku odstranit?</h3>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.NazevSchematu)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.NazevSchematu)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.NazevSouboru)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.NazevSouboru)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.VelikostSouboru)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.VelikostSouboru)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.TypSouboru)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.TypSouboru)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.DatumZmeny)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.DatumZmeny)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Soubor)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Soubor)
-        </dd>
-    </dl>
 
-    <form asp-action="DeleteSubmit" class="mb-3">
-        <input type="hidden" asp-for="IdSchema" />
-        <input type="submit" value="Odstranit" class="btn btn-danger" />
-    </form>
-    <a asp-action="Index">Zpět na seznam</a>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.NazevSchematu)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.NazevSchematu)
+                </dd>
+            </dl>
 
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.NazevSouboru)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.NazevSouboru)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.VelikostSouboru)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.VelikostSouboru)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.TypSouboru)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.TypSouboru)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.DatumZmeny)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.DatumZmeny)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Soubor)
+                </dt>
+                <dd class="col-auto p-1">
+                    <img class="img-fluid" />
+                </dd>
+            </dl>
+
+            <form asp-action="DeleteSubmit" class="row m-1">
+                <input type="hidden" asp-for="IdSchema" />
+                <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
+                <div class="col w-100"></div>
+                <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>
+            </form>
+        </div>
+    </div>
 </div>

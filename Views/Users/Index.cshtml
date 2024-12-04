@@ -24,7 +24,6 @@
             @foreach (var uzivatel in Model)
             {
                 var encryptedUserId = OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel);
-
                 <tr>
                     <td class="p-2">
                         @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
@@ -49,7 +48,7 @@
                     <td class="d-inline-flex gap-3 p-2 w-100">
                         <a asp-action="Detail" asp-route-encryptedId="@encryptedUserId" class="btn btn-primary">Detail</a>
                         <a asp-action="Delete" asp-route-encryptedId="@encryptedUserId" class="btn btn-danger">Odstranit</a>
-                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                        @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true && uzivatel.IdUzivatel != ((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)
                         {
                             <a asp-action="ActBehalf" asp-route-encryptedId="@encryptedUserId" class="btn btn-secondary">Přepnout na</a>
                         }
@@ -57,11 +56,12 @@
                 </tr>
                 @Html.HiddenFor(modelItem => uzivatel.IdUzivatel)
                 @Html.HiddenFor(modelItem => uzivatel.Heslo)
+                @Html.AntiForgeryToken()
             }
         </tbody>
     </table>
 </div>
-@Html.AntiForgeryToken()
+
 <script type="text/javascript">
     function submitRoleChange(dropdown, id) {
         var selectedRoleId = dropdown.value;

@@ -10,7 +10,7 @@
         <thead>
             <tr>
                 <th>
-                    Spoj
+                    @Html.DisplayNameFor(model => model.IdSpoj)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.NazevZastavky)
@@ -40,7 +40,6 @@
                     <td>
                         @item.CasOdjezdu.ToShortTimeString()
                     </td>
-
                     @await Html.PartialAsync("IndexActionButtons", item.IdJizdniRad)
                 </tr>
             }

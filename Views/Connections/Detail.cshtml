@@ -5,46 +5,55 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdLinka)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdLinka)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.JedeVSobotu)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.JedeVSobotu)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.JedeVNedeli)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.JedeVNedeli)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.JedeVeVsedniDen)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.GarantovaneNizkopodlazni)
-        </dd>
-    </dl>
+
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdLinka)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdLinka)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.JedeVSobotu)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.JedeVSobotu)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.JedeVNedeli)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.JedeVNedeli)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.JedeVeVsedniDen)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.GarantovaneNizkopodlazni)
+                </dd>
+            </dl>
+            @await Html.PartialAsync("DetailActionButtons", Model.IdSpoj)
+        </div>
+    </div>
 </div>
-@await Html.PartialAsync("DetailActionButtons", Model.IdSpoj)

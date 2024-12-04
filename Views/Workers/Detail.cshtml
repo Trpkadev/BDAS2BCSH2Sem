@@ -6,62 +6,72 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Jmeno)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Jmeno)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Prijmeni)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Prijmeni)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.TelefonniCislo)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.TelefonniCislo)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.RodneCislo)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.RodneCislo)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
-        </dt>
-        <dd class="col-auto p-1">
-            <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.UzivatelskeJmeno)
-        </dd>
-    </dl>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Jmeno)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Jmeno)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Prijmeni)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Prijmeni)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.TelefonniCislo)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.TelefonniCislo)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.RodneCislo)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.RodneCislo)
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
+                </dt>
+                <dd class="col-auto p-1">
+                    <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
+                </dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.UzivatelskeJmeno)
+                </dd>
+            </dl>
+            @await Html.PartialAsync("DetailActionButtons", Model.IdPracovnik)
+        </div>
+    </div>
 </div>
-@await Html.PartialAsync("DetailActionButtons", Model.IdPracovnik)

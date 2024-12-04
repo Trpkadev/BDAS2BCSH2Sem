@@ -3,44 +3,53 @@
     ViewData["Title"] = "Odstranit";
 }
 
-<h3>Opravdu chcete odstranit tuto zastávku?</h3>
-<div>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.Nazev)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.Nazev)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.SouradniceX)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.SouradniceX)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.SouradniceY)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.SouradniceY)
-        </dd>
-    </dl>
-    <dl class="row row-cols-2 m-1">
-        <dt class="col-auto p-1">
-            @Html.DisplayNameFor(model => model.IdPasmo)
-        </dt>
-        <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.IdPasmo)
-        </dd>
-    </dl>
+<h3>Opravdu chcete tuto položku odstranit?</h3>
 
-    <form asp-action="DeleteSubmit" class="mb-3">
-        <input type="submit" value="Odstranit" class="btn btn-danger" />
-        <input type="hidden" asp-for="IdZastavka" />
-    </form>
-    <a asp-action="Index">Zpět na seznam</a>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.Nazev)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.Nazev)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.SouradniceX)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.SouradniceX)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.SouradniceY)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.SouradniceY)
+                </dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">
+                    @Html.DisplayNameFor(model => model.IdPasmo)
+                </dt>
+                <dd class="col-auto p-1">
+                    @Html.DisplayFor(model => model.IdPasmo)
+                </dd>
+            </dl>
+
+            <form asp-action="DeleteSubmit" class="row m-1">
+                <input type="hidden" asp-for="IdZastavka" />
+                <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
+                <div class="col w-100"></div>
+                <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>
+            </form>
+        </div>
+    </div>
 </div>

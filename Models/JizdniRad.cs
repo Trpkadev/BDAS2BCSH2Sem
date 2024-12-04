@@ -31,6 +31,7 @@ public class JizdniRad
 
     [JsonRequired]
     [Column("ID_SPOJ")]
+    [DisplayName("Spoj")]
     public int IdSpoj { get; set; }
 
     [Column("NAZEV_ZASTAVKY")]

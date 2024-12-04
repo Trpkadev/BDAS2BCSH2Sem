@@ -40,7 +40,6 @@
                     <td>
                         <a asp-controller="Tariff" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)">@Html.DisplayFor(modelItem => item.NazevPasma)</a>
                     </td>
-
                     @await Html.PartialAsync("IndexActionButtons", item.IdZastavka)
                 </tr>
             }

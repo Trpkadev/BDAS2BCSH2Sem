@@ -6,39 +6,43 @@
 <h1>@ViewData["Title"]</h1>
 
 <hr />
-<div class="row mb-3">
-    <div class="col-md-4 w-100">
-        <form asp-action="CreateEditSubmit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdZastavka" />
-            <div class="form-group mb-3">
-                <label asp-for="Nazev" class="control-label">Název</label>
-                <input asp-for="Nazev" class="form-control" />
-                <span asp-validation-for="Nazev" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="SouradniceX" class="control-label">Souřadnice X</label>
-                <input asp-for="SouradniceX" class="form-control" />
-                <span asp-validation-for="SouradniceX" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="SouradniceY" class="control-label">Souřadnice Y</label>
-                <input asp-for="SouradniceY" class="form-control" />
-                <span asp-validation-for="SouradniceY" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="IdPasmo" class="control-label">Tarifní pásmo</label>
-                @Html.DropDownList("IdPasmo", (SelectList)ViewBag.Pasma, new { @class = "form-control" })
-                <span asp-validation-for="IdPasmo" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input type="submit" value="Uložit změny" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="CreateEditSubmit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdZastavka" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Nazev" class="control-label">Název</label>
+                    <input asp-for="Nazev" class="form-control" />
+                    <span asp-validation-for="Nazev" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="SouradniceX" class="control-label">Souřadnice X</label>
+                    <input asp-for="SouradniceX" class="form-control" />
+                    <span asp-validation-for="SouradniceX" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="SouradniceY" class="control-label">Souřadnice Y</label>
+                    <input asp-for="SouradniceY" class="form-control" />
+                    <span asp-validation-for="SouradniceY" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="IdPasmo" class="control-label">Tarifní pásmo</label>
+                    @Html.DropDownList("IdPasmo", (SelectList)ViewBag.Pasma, new { @class = "form-control" })
+                    <span asp-validation-for="IdPasmo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row m-1">
+                    <input type="submit" value="Uložit změny" class="btn btn-primary col" />
+                    <div class="col w-100"></div>
+                    <a asp-action="Index" class="btn btn-secondary col align-content-end" style="margin-left:1rem">Zpět na seznam</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Zpět na seznam</a>
-</div>
-

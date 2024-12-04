@@ -30,6 +30,7 @@ public class ZaznamTrasy
 
     [JsonRequired]
     [Column("ID_JIZDNI_RAD")]
+    [DisplayName("Jízdní řád")]
     public int IdJizniRad { get; set; }
 
     [Column("NAZEV_VOZIDLA")]
