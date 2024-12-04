@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BCSH2BDAS2</title>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" src="~/css/dataTables.bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap5.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -62,13 +63,13 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles",null) ? "active" : "")" asp-controller="Vehicles" asp-action="Index">Vozidla</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Garages",null) ? "active" : "")" asp-controller="Garages" asp-action="Index">Garáže</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Models",null) ? "active" : "")" asp-controller="Models" asp-action="Index">Modely</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Brands",null) ? "active" : "")" asp-controller="Brands" asp-action="Index">Značky vozidel</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Types",null) ? "active" : "")" asp-controller="Types" asp-action="Index">Typy vozidel</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Maintenance",null) ? "active" : "")" asp-controller="Maintenance" asp-action="Index">Údržby</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "VehiclesExpenses",null) ? "active" : "")" asp-controller="Statistics" asp-action="VehiclesExpenses">Náklady na vozidla</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles",null) ? "active" : "")" asp-controller="Vehicles" asp-action="Index"><i class="bi bi-table"></i> Vozidla</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Garages",null) ? "active" : "")" asp-controller="Garages" asp-action="Index"><i class="bi bi-table"></i> Garáže</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Models",null) ? "active" : "")" asp-controller="Models" asp-action="Index"><i class="bi bi-table"></i> Modely</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Brands",null) ? "active" : "")" asp-controller="Brands" asp-action="Index"><i class="bi bi-table"></i> Značky vozidel</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Types",null) ? "active" : "")" asp-controller="Types" asp-action="Index"><i class="bi bi-table"></i> Typy vozidel</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Maintenance",null) ? "active" : "")" asp-controller="Maintenance" asp-action="Index"><i class="bi bi-table"></i> Údržby</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "VehiclesExpenses",null) ? "active" : "")" asp-controller="Statistics" asp-action="VehiclesExpenses"><i class="bi bi-clipboard-data"></i> Náklady na vozidla</a>
                                     </li>
                                 </ul>
                             </li>
@@ -81,14 +82,14 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops", null) ? "active" : "")" asp-controller="Stops" asp-action="Index">Zastávky</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Connections",null) ? "active" : "")" asp-controller="Connections" asp-action="Index">Spoje</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Routes",null) ? "active" : "")" asp-controller="Routes" asp-action="Index">Linky</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables",null) ? "active" : "")" asp-controller="Timetables" asp-action="Index">Jízdní řády</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index">Tarifní pásma</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index">Záznamy tras</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords">Importovat záznamy tras</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting">Vytvořit JŘ</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops", null) ? "active" : "")" asp-controller="Stops" asp-action="Index"><i class="bi bi-table"></i> Zastávky</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Connections",null) ? "active" : "")" asp-controller="Connections" asp-action="Index"><i class="bi bi-table"></i> Spoje</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Routes",null) ? "active" : "")" asp-controller="Routes" asp-action="Index"><i class="bi bi-table"></i> Linky</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables",null) ? "active" : "")" asp-controller="Timetables" asp-action="Index"><i class="bi bi-table"></i> Jízdní řády</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index"><i class="bi bi-table"></i> Tarifní pásma</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index"><i class="bi bi-table"></i> Záznamy tras</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords"><i class="bi bi-code-slash"></i> Importovat záznamy tras</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting"><i class="bi bi-code-slash"></i> Vytvořit JŘ</a>
                                     </li>
                                 </ul>
                             </li>
@@ -101,9 +102,9 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Workers",null) ? "active" : "")" asp-controller="Workers" asp-action="Index">Pracovníci</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users",null) ? "active" : "")" asp-controller="Users" asp-action="Index">Uživatelé</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Roles",null) ? "active" : "")" asp-controller="Roles" asp-action="Index">Uživatelské role</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Workers",null) ? "active" : "")" asp-controller="Workers" asp-action="Index"><i class="bi bi-table"></i> Pracovníci</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users",null) ? "active" : "")" asp-controller="Users" asp-action="Index"><i class="bi bi-table"></i> Uživatelé</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Roles",null) ? "active" : "")" asp-controller="Roles" asp-action="Index"><i class="bi bi-table"></i> Uživatelské role</a>
                                     </li>
                                 </ul>
                             </li>
@@ -116,9 +117,9 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index">Logy</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects">Databázové objekty</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export">Export dat</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index"><i class="bi bi-clipboard-data"></i> Logy</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects"><i class="bi bi-clipboard-data"></i> Databázové objekty</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export"><i class="bi bi-code-slash"></i> Export dat</a>
                                     </li>
                                 </ul>
                             </li>

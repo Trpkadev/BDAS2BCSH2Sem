@@ -73,7 +73,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.IdVozidlo)
+                                    @Html.DisplayNameFor(model => model.NazevVozidla)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.Datum)
@@ -95,7 +95,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(_ => item.IdVozidlo)
+	                                    <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
                                     </td>
                                     <td>
                                         @Html.DisplayFor(_ => item.Datum)
