@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,12 +26,17 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Zastavky = new SelectList(await _context.GetZastavkyAsync());
+            ViewBag.Spoje = new SelectList(await _context.GetSpojeAsync());
+
             if (encryptedId == null)
                 return View(new JizdniRad());
+
             int id = GetDecryptedId(encryptedId);
             var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
                 return View(jizdniRad);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -192,14 +198,40 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         }
     }
 
+    [HttpGet]
+    [Route("MakeOfExisting")]
     public async Task<IActionResult> MakeOfExisting()
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
-            var jizdniRady = await _context.GetJizdniRadyAsync();
-            return View(jizdniRady);
+
+            var spoje = await _context.GetSpojeAsync();
+            ViewBag.Spoje = new SelectList(spoje);
+
+            return View();
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToHome();
+        }
+    }
+
+    [HttpGet]
+    [Route("MakeOfExistingSubmit")]
+    public async Task<IActionResult> MakeOfExistingSubmit(int idSpoj, TimeOnly od, TimeOnly _do, int interval)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+                return RedirectToAction(nameof(Index), "Home");
+
+            //await _context.MakeOfExisting(idSpoj, od, _do, interval);
+
+            SetSuccessMessage("Úspěšně vytvořeno");
+            return RedirectToAction(nameof(MakeOfExisting));
         }
         catch (Exception)
         {

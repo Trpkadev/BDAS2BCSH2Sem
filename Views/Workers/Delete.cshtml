@@ -69,7 +69,7 @@
                     @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
                 </dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.UzivatelskeJmeno)
+                    <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)">@Html.DisplayFor(_ => Model.UzivatelskeJmeno)</a>
                 </dd>
             </dl>
 

@@ -1,5 +1,28 @@
 ﻿@using BCSH2BDAS2.Helpers
-@model IEnumerable<BCSH2BDAS2.Models.JizdniRad>
 @{
-    ViewData["Title"] = "Seznam jízdních řádů";
+    ViewData["Title"] = "Vytvoření jízních řádů";
 }
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="MakeOfExistingSubmit" method="post">
+    <div class="form-group mb-3">
+        <label for="id_spoj" class="control-label">Referenční spoj</label>
+        @Html.DropDownList("IdSpoj", (SelectList)ViewBag.Spoje, new { @class = "form-control" })
+    </div>
+    <div class="form-group mb-3">
+	    <label for="od" class="control-label">Od</label>
+	    <input type="time" id="od" name="od" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+	    <label for="do" class="control-label">Do</label>
+        <input type="time" id="do" name="do" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+	    <label for="interval" class="control-label">Interval (min)</label>
+        <input type="number" id="interval" name="interval" min="1" class="form-control" value="20" />
+    </div>
+    <div class="form-group mb-3">
+        <input type="submit" value="Vytvořit" class="btn btn-primary" />
+    </div>
+</form>

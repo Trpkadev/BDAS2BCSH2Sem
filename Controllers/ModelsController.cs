@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,8 +26,9 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Znacky"] = await _context.GetZnackyAsync() ?? [];
-            ViewData["TypyVozidel"] = await _context.GetTypy_VozidelAsync() ?? [];
+            ViewData["Znacky"] = new SelectList(await _context.GetZnackyAsync() ?? []);
+            ViewData["TypyVozidel"] = new SelectList(await _context.GetTypy_VozidelAsync() ?? []);
+
             if (encryptedId == null)
                 return View(new Model());
             int id = GetDecryptedId(encryptedId);
@@ -46,7 +48,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateSubmit([FromForm] Model model)
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Model model)
     {
         try
         {

@@ -37,4 +37,9 @@ public class JizdniRad
     [Column("NAZEV_ZASTAVKY")]
     [DisplayName("Název zastávky")]
     public string? NazevZastavky { get; set; }
+
+    public override string ToString()
+    {
+        return $"JŘ s odjezdem {CasOdjezdu} ze {NazevZastavky}";
+    }
 }

@@ -38,6 +38,7 @@ public class Vozidlo
     public int IdGaraz { get; set; }
 
     [JsonRequired]
+    [DisplayName("Model")]
     [Column("ID_MODEL")]
     public int IdModel { get; set; }
 
@@ -48,4 +49,9 @@ public class Vozidlo
     [Column("NAZEV_VOZIDLA")]
     [DisplayName("Vozidlo")]
     public string? NazevVozidla { get; set; }
+
+    public override string ToString()
+    {
+        return NazevVozidla ?? "Vozidlo";
+    }
 }

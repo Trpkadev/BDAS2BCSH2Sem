@@ -47,19 +47,19 @@
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.IdGaraz)
+                    @Html.DisplayNameFor(model => model.NazevGaraze)
                 </dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.IdGaraz)
+                    @Html.DisplayFor(model => model.NazevGaraze)
                 </dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.IdModel)
+                    @Html.DisplayNameFor(model => model.NazevVozidla)
                 </dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.IdModel)
+                    @Html.DisplayFor(model => model.NazevVozidla)
                 </dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdVozidlo)

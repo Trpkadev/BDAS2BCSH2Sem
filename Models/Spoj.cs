@@ -45,4 +45,10 @@ public class Spoj
     [Column("NAZEV_LINKY")]
     [DisplayName("Název linky")]
     public string? NazevLinky { get; set; }
+
+
+    public override string ToString()
+    {
+        return $"Spoj linky {CisloLinky}";
+    }
 }

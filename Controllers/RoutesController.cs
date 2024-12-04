@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,12 +26,16 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync());
+
             if (encryptedId == null)
                 return View(new Linka());
+
             int id = GetDecryptedId(encryptedId);
             var linka = await _context.GetLinkaByIdAsync(id);
-            if (linka == null)
+            if (linka != null)
                 return View(linka);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }

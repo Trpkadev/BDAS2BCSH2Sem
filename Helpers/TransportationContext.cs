@@ -447,7 +447,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW").ToListAsync();
     }
 
-    public async Task<TarifniPasmo?> GetTarifni_PasmoByIdAsync(int id)
+    public async Task<TarifniPasmo?> GetTarifniPasmoByIdAsync(int id)
     {
         return await TarifniPasma.FromSqlRaw("SELECT * FROM TARIFNI_PASMA_VIEW WHERE ID_PASMO = {0}", id).FirstOrDefaultAsync();
     }

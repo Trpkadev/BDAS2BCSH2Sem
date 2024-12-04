@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,12 +26,17 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.JizdniRady = new SelectList(await _context.GetJizdniRadyAsync());
+            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync());
+
             if (encryptedId == null)
                 return View(new ZaznamTrasy());
+
             int id = GetDecryptedId(encryptedId);
             var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
             if (zaznamTrasy != null)
                 return View(zaznamTrasy);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
         }

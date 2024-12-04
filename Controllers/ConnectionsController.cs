@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,12 +26,16 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Linky = new SelectList(await _context.GetLinkyAsync());
+
             if (encryptedId == null)
                 return View(new Spoj());
+
             int id = GetDecryptedId(encryptedId);
             var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj != null)
                 return View(spoj);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -94,8 +99,9 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
 
             int id = GetDecryptedId(encryptedId);
             var spoj = await _context.GetSpojByIdAsync(id);
-            if (spoj == null)
+            if (spoj != null)
                 return View(spoj);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -159,8 +165,9 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
 
             int id = GetDecryptedId(encryptedId);
             var spoj = await _context.GetSpojByIdAsync(id);
-            if (spoj == null)
+            if (spoj != null)
                 return View(spoj);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }

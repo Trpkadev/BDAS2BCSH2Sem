@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -24,6 +25,8 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync());
 
             if (encryptedId == null)
                 return View(new Udrzba());
@@ -161,6 +164,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba != null)
                 return View(udrzba);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }

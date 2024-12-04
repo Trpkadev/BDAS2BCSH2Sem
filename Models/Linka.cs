@@ -32,5 +32,5 @@ public class Linka
     [DisplayName("Typ vozidla")]
     public string NazevTypuVozidla { get; set; } = string.Empty;
 
-    public override string ToString() => Nazev;
+    public override string ToString() => $"{Cislo} {Nazev}";
 }

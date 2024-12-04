@@ -14,8 +14,8 @@
                 <input type="hidden" asp-for="IdSpoj" />
 
                 <div class="form-group mb-3">
-                    <label asp-for="IdLinka" class="control-label"></label>
-                    <input asp-for="IdLinka" class="form-control" />
+                    <label asp-for="CisloLinky" class="control-label"></label>
+                    @Html.DropDownList("IdLinka", (SelectList)ViewBag.Linky, new { @class = "form-control" })
                     <span asp-validation-for="IdLinka" class="text-danger"></span>
                 </div>
 

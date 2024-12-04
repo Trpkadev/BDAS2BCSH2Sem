@@ -27,10 +27,12 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
 
             if (encryptedId == null)
                 return View(new TarifniPasmo());
+
             int id = GetDecryptedId(encryptedId);
-            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
-            if (tarifniPasmo == null)
+            var tarifniPasmo = await _context.GetTarifniPasmoByIdAsync(id);
+            if (tarifniPasmo != null)
                 return View(tarifniPasmo);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -59,7 +61,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(CreateEdit), tarifniPasmo);
             }
 
-            if (tarifniPasmo.IdPasmo != 0 && await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
+            if (tarifniPasmo.IdPasmo != 0 && await _context.GetTarifniPasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
@@ -93,7 +95,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             }
 
             int id = GetDecryptedId(encryptedId);
-            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
+            var tarifniPasmo = await _context.GetTarifniPasmoByIdAsync(id);
             if (tarifniPasmo != null)
                 return View(tarifniPasmo);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
@@ -124,7 +126,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetTarifni_PasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
+            if (await _context.GetTarifniPasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
@@ -158,7 +160,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             }
 
             int id = GetDecryptedId(encryptedId);
-            var tarifniPasmo = await _context.GetTarifni_PasmoByIdAsync(id);
+            var tarifniPasmo = await _context.GetTarifniPasmoByIdAsync(id);
             if (tarifniPasmo != null)
                 return View(tarifniPasmo);
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);

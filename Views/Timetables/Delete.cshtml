@@ -1,4 +1,6 @@
-﻿@model BCSH2BDAS2.Models.JizdniRad
+﻿@using BCSH2BDAS2.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model BCSH2BDAS2.Models.JizdniRad
 @{
     ViewData["Title"] = "Odstranit";
 }
@@ -10,10 +12,10 @@
         <div class="card-body">
             <dl class="row m-0">
                 <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.IdZastavka)
+                    @Html.DisplayNameFor(model => model.NazevZastavky)
                 </dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.IdZastavka)
+                    @Html.DisplayFor(model => model.NazevZastavky)
                 </dd>
             </dl>
 
@@ -22,7 +24,7 @@
                     @Html.DisplayNameFor(model => model.IdSpoj)
                 </dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.IdSpoj)
+	                <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSpoj)">Spoj</a>
                 </dd>
             </dl>
 

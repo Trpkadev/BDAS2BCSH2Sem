@@ -38,7 +38,7 @@
                         @Html.DisplayFor(modelItem => item.SouradniceY)
                     </td>
                     <td>
-                        <a asp-controller="Tariff" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)">@Html.DisplayFor(modelItem => item.NazevPasma)</a>
+                        <a asp-controller="Tariff" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPasmo)">@Html.DisplayFor(modelItem => item.NazevPasma)</a>
                     </td>
                     @await Html.PartialAsync("IndexActionButtons", item.IdZastavka)
                 </tr>

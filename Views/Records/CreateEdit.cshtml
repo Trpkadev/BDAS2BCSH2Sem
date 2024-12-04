@@ -15,13 +15,13 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="IdJizniRad" class="control-label"></label>
-                    <input asp-for="IdJizniRad" class="form-control" />
+                    @Html.DropDownList("IdJizdniRad", (SelectList)ViewBag.JizdniRady, new { @class = "form-control" })
                     <span asp-validation-for="IdJizniRad" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="IdVozidlo" class="control-label"></label>
-                    <input asp-for="IdVozidlo" class="form-control" />
+                    <label asp-for="NazevVozidla" class="control-label"></label>
+                    @Html.DropDownList("IdVozidlo", (SelectList)ViewBag.Vozidla, new { @class = "form-control" })
                     <span asp-validation-for="IdVozidlo" class="text-danger"></span>
                 </div>
 

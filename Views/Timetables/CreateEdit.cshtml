@@ -14,14 +14,14 @@
                 <input type="hidden" asp-for="IdJizdniRad" />
 
                 <div class="form-group mb-3">
-                    <label asp-for="IdZastavka" class="control-label"></label>
-                    <input asp-for="IdZastavka" class="form-control" />
+                    <label asp-for="NazevZastavky" class="control-label"></label>
+                    @Html.DropDownList("IdZastavka", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
                     <span asp-validation-for="IdZastavka" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="IdSpoj" class="control-label"></label>
-                    <input asp-for="IdSpoj" class="form-control" />
+                    @Html.DropDownList("IdSpoj", (SelectList)ViewBag.Spoje, new { @class = "form-control" })
                     <span asp-validation-for="IdSpoj" class="text-danger"></span>
                 </div>
 

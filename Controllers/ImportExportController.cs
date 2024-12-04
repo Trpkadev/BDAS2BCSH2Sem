@@ -135,6 +135,7 @@ public class ImportExportController(TransportationContext context, IHttpContextA
 
             await _context.ImportRecordsAsync(csv, oddelovac);
 
+            SetSuccessMessage("Úspěšně naimportováno");
             return RedirectToAction(nameof(ImportRecords));
         }
         catch (Exception)

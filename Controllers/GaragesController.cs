@@ -97,6 +97,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz != null)
                 return View(garaz);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -162,6 +163,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             var garaz = await _context.GetGarazByIdAsync(id);
             if (garaz != null)
                 return View(garaz);
+
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }

@@ -88,6 +88,7 @@
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index">Tarifní pásma</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index">Záznamy tras</a>
                                         <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords">Importovat záznamy tras</a>
+                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting">Vytvořit JŘ</a>
                                     </li>
                                 </ul>
                             </li>
