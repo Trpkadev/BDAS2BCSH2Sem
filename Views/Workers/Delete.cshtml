@@ -1,4 +1,5 @@
-﻿@using BCSH2BDAS2.Models
+﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model BCSH2BDAS2.Models.Pracovnik
 @{
     ViewData["Title"] = "Odstranit";
@@ -52,7 +53,7 @@
             @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
         </dt>
         <dd class="col-auto p-1">
-            @Html.DisplayFor(model => model.JmenoNadrizeneho)
+            <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
         </dd>
     </dl>
     <dl class="row row-cols-2 m-1">

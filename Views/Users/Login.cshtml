@@ -4,33 +4,31 @@
 }
 
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="card-title text-center mb-4">Přihlášení</h3>
-                <form asp-action="LoginSubmit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group mb-3">
-                        <label asp-for="UzivatelskeJmeno" class="control-label">Uživatelské jméno</label>
-                        <input asp-for="UzivatelskeJmeno" class="form-control" required />
-                        <span asp-validation-for="UzivatelskeJmeno" class="text-danger"></span>
-                    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">Přihlášení</h3>
+            <form asp-action="LoginSubmit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group mb-3">
+                    <label asp-for="UzivatelskeJmeno" class="control-label">Uživatelské jméno</label>
+                    <input asp-for="UzivatelskeJmeno" class="form-control" required />
+                    <span asp-validation-for="UzivatelskeJmeno" class="text-danger"></span>
+                </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Heslo" class="control-label">Heslo</label>
-                        <input asp-for="Heslo" class="form-control" type="password" required />
-                        <span asp-validation-for="Heslo" class="text-danger"></span>
-                    </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Heslo" class="control-label">Heslo</label>
+                    <input asp-for="Heslo" class="form-control" type="password" required />
+                    <span asp-validation-for="Heslo" class="text-danger"></span>
+                </div>
 
-                    <div class="form-group mb-3">
-                        <input type="submit" value="Přihlásit se" class="btn btn-primary" />
-                    </div>
+                <div class="form-group mb-3">
+                    <input type="submit" value="Přihlásit se" class="btn btn-primary" />
+                </div>
 
-                    <div class="text-center mt-3">
-                        <a asp-controller="Users" asp-action="Register">Nemáte účet? Zaregistrujte se.</a>
-                    </div>
-                </form>
-            </div>
+                <div class="text-center mt-3">
+                    <a asp-controller="Users" asp-action="Register">Nemáte účet? Zaregistrujte se.</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

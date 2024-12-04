@@ -20,6 +20,9 @@
                                 @Html.DisplayNameFor(model => model.Datum)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.KonecUdrzby)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.PopisUkonu)
                             </th>
                             <th>
@@ -37,6 +40,13 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(_ => item.Datum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.KonecUdrzby)
+                                    @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                    {
+                                        <span class="badge bg-warning text-dark">>72h</span>
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(_ => item.PopisUkonu)
@@ -64,6 +74,9 @@
                                 @Html.DisplayNameFor(model => model.Datum)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.KonecUdrzby)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.CistenoOzonem)
                             </th>
                             <th>
@@ -81,6 +94,13 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(_ => item.Datum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(_ => item.KonecUdrzby)
+                                    @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                    {
+                                        <span class="badge bg-warning text-dark">>72h</span>
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(_ => item.CistenoOzonem)
@@ -110,6 +130,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Datum)
                                     </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -117,6 +140,19 @@
                                 @foreach (var item in Model.Where(item => item.TypUdrzby == 'x'))
                                 {
                                     <tr>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.IdVozidlo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.Datum)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(_ => item.KonecUdrzby)
+                                            @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                            {
+                                                <span class="badge bg-warning text-dark">>72h</span>
+                                            }
+                                        </td>
                                         @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
                                     </tr>
                                 }

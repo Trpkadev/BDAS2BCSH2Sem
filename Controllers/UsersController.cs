@@ -67,7 +67,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Uzivatel pracovnik)
+    public async Task<IActionResult> DeleteSubmit([FromForm] Uzivatel uzivatel)
     {
         try
         {
@@ -82,11 +82,11 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetUzivatelByIdAsync(pracovnik.IdUzivatel) == null)
+            if (await _context.GetUzivatelByIdAsync(uzivatel.IdUzivatel) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("UZIVATELE", "ID_UZIVATEL", pracovnik.IdUzivatel);
+                await _context.DeleteFromTableAsync("UZIVATELE", "ID_UZIVATEL", uzivatel.IdUzivatel);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
@@ -126,6 +126,31 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("EditSubmit")]
+    public async Task<IActionResult> EditSubmit([FromBody] EditSubmitModel editSubmitModel)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasManagerRights())
+                return StatusCode(403, new { message = Resource.INVALID_PERMISSIONS });
+            if (!ModelState.IsValid)
+                return StatusCode(400, new { message = Resource.INVALID_REQUEST_DATA });
+            int id = OurCryptography.Instance.DecryptId(editSubmitModel.EncryptedId);
+            var uzivatel = await _context.GetUzivatelByIdAsync(id);
+            if (uzivatel == null)
+                return StatusCode(404, Resource.DB_DATA_NOT_EXIST);
+            uzivatel.IdRole = editSubmitModel.IdRole;
+            await _context.DMLUzivateleAsync(uzivatel);
+            return StatusCode(200, new { message = Resource.GENERIC_SUCCESS });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = Resource.GENERIC_SERVER_ERROR });
         }
     }
 
@@ -277,5 +302,11 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToHome();
         }
+    }
+
+    public class EditSubmitModel
+    {
+        public string EncryptedId { get; set; }
+        public int IdRole { get; set; }
     }
 }

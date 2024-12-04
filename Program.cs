@@ -8,7 +8,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -33,10 +32,8 @@ public static class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
-
         app.UseResponseCompression();
         app.UseSession();
-
         app.UseAuthorization();
 
         app.MapControllerRoute(

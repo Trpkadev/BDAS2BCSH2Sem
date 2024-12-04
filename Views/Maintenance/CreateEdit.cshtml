@@ -24,6 +24,16 @@
             </div>
 
             <div class="form-group mb-3">
+                <label asp-for="KonecUdrzby" class="control-label"></label>
+                <input asp-for="KonecUdrzby" class="form-control" />
+                <span asp-validation-for="KonecUdrzby" class="text-danger"></span>
+                @if (Model.KonecUdrzby != null && ((DateTime)Model.KonecUdrzby - Model.Datum).TotalHours > 72)
+                {
+                    <span class="badge bg-warning text-dark">>72h</span>
+                }
+            </div>
+
+            <div class="form-group mb-3">
                 <label asp-for="TypUdrzby" class="control-label"></label>
                 <select asp-for="TypUdrzby" class="form-control" onchange="typUdrzbyChanged()">
                     <option value="x">Nespecifikováno</option>

@@ -192,7 +192,6 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         }
     }
 
-
     public async Task<IActionResult> MakeOfExisting()
     {
         try

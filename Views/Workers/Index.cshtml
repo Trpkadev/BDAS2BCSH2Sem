@@ -2,75 +2,78 @@
 @using BCSH2BDAS2.Models
 @model IEnumerable<BCSH2BDAS2.Models.Pracovnik>
 @{
-	ViewData["Title"] = "Seznam pracovníků";
+    ViewData["Title"] = "Seznam pracovníků";
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
 <div class="table-responsive overflow-auto p-3">
-	<table class="table text-nowrap w-auto m-auto">
-		<thead>
-			<tr>
-				<th>
-					@Html.DisplayNameFor(model => model.Jmeno)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Prijmeni)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.TelefonniCislo)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Email)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.RodneCislo)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.HodinovaMzda)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.JmenoNadrizeneho)
-				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-				</th>
-				@if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-				{
-					<th></th>
-				}
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-				<td>
-					@Html.DisplayFor(_ => item.Jmeno)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.Prijmeni)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.TelefonniCislo)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.Email)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.RodneCislo)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.HodinovaMzda)
-				</td>
-				<td>
-					@Html.DisplayFor(_ => item.JmenoNadrizeneho)
-				</td>
-				<td>
-					<a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">@Html.DisplayFor(_ => item.UzivatelskeJmeno)</a>
-				</td>
-				@await Html.PartialAsync("IndexActionButtons", item.IdPracovnik)
-				</tr>
-			}
-		</tbody>
-	</table>
+    <table class="table text-nowrap w-auto m-auto">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Jmeno)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Prijmeni)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TelefonniCislo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RodneCislo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HodinovaMzda)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
+                </th>
+                @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(_ => item.Jmeno)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.Prijmeni)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.TelefonniCislo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.RodneCislo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.HodinovaMzda)
+                    </td>
+                    <td>
+                        @if (item.IdNadrizeny != null)
+                        {
+                            <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdNadrizeny)">@Html.DisplayFor(_ => item.JmenoNadrizeneho)</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">@Html.DisplayFor(_ => item.UzivatelskeJmeno)</a>
+                    </td>
+                    @await Html.PartialAsync("IndexActionButtons", item.IdPracovnik)
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

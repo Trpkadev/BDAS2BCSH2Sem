@@ -23,22 +23,31 @@ public class Udrzba
     public int IdVozidlo { get; set; }
 
     [Column("POPIS_UKONU")]
+    [DisplayName("Popis úkonu")]
     public string? PopisUkonu { get; set; }
 
     [Column("CENA")]
     public double? Cena { get; set; }
 
     [Column("UMYTO_V_MYCCE")]
+    [DisplayName("Umyto v myčce")]
     public bool? UmytoVMycce { get; set; }
 
     [Column("CISTENO_OZONEM")]
+    [DisplayName("Čištěno ozonem")]
     public bool? CistenoOzonem { get; set; }
 
     [JsonRequired]
     [Column("TYP_UDRZBY")]
+    [DisplayName("Typ údržby")]
     public char TypUdrzby { get; set; }
 
     [Column("NAZEV_VOZIDLA")]
     [DisplayName("Vozidlo")]
     public string? NazevVozidla { get; set; }
+
+    [JsonRequired]
+    [Column("KONEC_UDRZBY")]
+    [DisplayName("Datum konce údržby")]
+    public DateTime? KonecUdrzby { get; set; }
 }
