@@ -29,19 +29,19 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Index") ? "active" : "")" asp-controller="Home" asp-action="Index">Domů</a>
+                            <a class="nav-link text-nowrap  @(RazorHelper.IsControllerAndAction(ViewContext, "Home", "Index") ? "active" : "")" asp-controller="Home" asp-action="Index">Domů</a>
                         </li>
                         @if ((ViewData[Resource.ACTING_USER]) != null)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Home","Plan"),new("Home","Timetable")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Home","Plan"),new("Home","Timetable")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Cestující
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Home","Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Home","Timetable") ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Schemes",null) ? "active" : "")" asp-controller="Schemes" asp-action="Index">Schémata terminálů</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Home","Plan") ? "active" : "")" asp-controller="Home" asp-action="Plan">Vyhledat spojení</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Home","Timetable") ? "active" : "")" asp-controller="Home" asp-action="Timetable">Jízdní řády</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Schemes",null) ? "active" : "")" asp-controller="Schemes" asp-action="Index">Schémata terminálů</a>
                                     </li>
                                 </ul>
                             </li>
@@ -50,7 +50,7 @@
                         {
                             <li class="nav-item dropdown" onmouseover="showPopup(this)" onmouseout="hidePopup(this)">
                                 <div class="popover bs-popover-auto fade show" role="tooltip" id="popover152996" style="visibility:hidden; position: absolute; transform: translate(-5rem, 2.5rem);min-width:14rem;width:14rem;max-width:14rem;padding:0.5rem;" data-popper-placement="bottom" inert>Pouze pro registrované uživatele</div>
-                                <a class="nav-link dropdown-toggle disabled" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle disabled" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Cestující
                                 </a>
                             </li>
@@ -58,18 +58,18 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasMaintainerRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Vehicles",null),new("Garages",null),new("Models",null),new("Brands",null),new("Types",null),new("Maintenance",null), new("VehiclesExpenses",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Vehicles",null),new("Garages",null),new("Models",null),new("Brands",null),new("Types",null),new("Maintenance",null), new("VehiclesExpenses",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Údržbář
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles",null) ? "active" : "")" asp-controller="Vehicles" asp-action="Index"><i class="bi bi-table"></i> Vozidla</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Garages",null) ? "active" : "")" asp-controller="Garages" asp-action="Index"><i class="bi bi-table"></i> Garáže</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Models",null) ? "active" : "")" asp-controller="Models" asp-action="Index"><i class="bi bi-table"></i> Modely</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Brands",null) ? "active" : "")" asp-controller="Brands" asp-action="Index"><i class="bi bi-table"></i> Značky vozidel</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Types",null) ? "active" : "")" asp-controller="Types" asp-action="Index"><i class="bi bi-table"></i> Typy vozidel</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Maintenance",null) ? "active" : "")" asp-controller="Maintenance" asp-action="Index"><i class="bi bi-table"></i> Údržby</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "VehiclesExpenses",null) ? "active" : "")" asp-controller="Statistics" asp-action="VehiclesExpenses"><i class="bi bi-clipboard-data"></i> Náklady na vozidla</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Vehicles",null) ? "active" : "")" asp-controller="Vehicles" asp-action="Index"><i class="bi bi-table"></i> Vozidla</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Garages",null) ? "active" : "")" asp-controller="Garages" asp-action="Index"><i class="bi bi-table"></i> Garáže</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Models",null) ? "active" : "")" asp-controller="Models" asp-action="Index"><i class="bi bi-table"></i> Modely</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Brands",null) ? "active" : "")" asp-controller="Brands" asp-action="Index"><i class="bi bi-table"></i> Značky vozidel</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Types",null) ? "active" : "")" asp-controller="Types" asp-action="Index"><i class="bi bi-table"></i> Typy vozidel</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Maintenance",null) ? "active" : "")" asp-controller="Maintenance" asp-action="Index"><i class="bi bi-table"></i> Údržby</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "VehiclesExpenses",null) ? "active" : "")" asp-controller="Statistics" asp-action="VehiclesExpenses"><i class="bi bi-clipboard-data"></i> Náklady na vozidla</a>
                                     </li>
                                 </ul>
                             </li>
@@ -77,19 +77,19 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasDispatchRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Stops",null),new("Connections",null),new("Routes",null),new("Timetables",null),new("Tariff",null),new("Records",null),new("ImportExport","ImportRecords")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Stops",null),new("Connections",null),new("Routes",null),new("Timetables",null),new("Tariff",null),new("Records",null),new("ImportExport","ImportRecords")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Dispečer
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Stops", null) ? "active" : "")" asp-controller="Stops" asp-action="Index"><i class="bi bi-table"></i> Zastávky</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Connections",null) ? "active" : "")" asp-controller="Connections" asp-action="Index"><i class="bi bi-table"></i> Spoje</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Routes",null) ? "active" : "")" asp-controller="Routes" asp-action="Index"><i class="bi bi-table"></i> Linky</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables",null) ? "active" : "")" asp-controller="Timetables" asp-action="Index"><i class="bi bi-table"></i> Jízdní řády</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index"><i class="bi bi-table"></i> Tarifní pásma</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index"><i class="bi bi-table"></i> Záznamy tras</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords"><i class="bi bi-code-slash"></i> Importovat záznamy tras</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting"><i class="bi bi-code-slash"></i> Vytvořit JŘ</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Stops", null) ? "active" : "")" asp-controller="Stops" asp-action="Index"><i class="bi bi-table"></i> Zastávky</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Connections",null) ? "active" : "")" asp-controller="Connections" asp-action="Index"><i class="bi bi-table"></i> Spoje</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Routes",null) ? "active" : "")" asp-controller="Routes" asp-action="Index"><i class="bi bi-table"></i> Linky</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables",null) ? "active" : "")" asp-controller="Timetables" asp-action="Index"><i class="bi bi-table"></i> Jízdní řády</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Tariff",null) ? "active" : "")" asp-controller="Tariff" asp-action="Index"><i class="bi bi-table"></i> Tarifní pásma</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index"><i class="bi bi-table"></i> Záznamy tras</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords"><i class="bi bi-code-slash"></i> Importovat záznamy tras</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting"><i class="bi bi-code-slash"></i> Vytvořit JŘ</a>
                                     </li>
                                 </ul>
                             </li>
@@ -97,14 +97,14 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasManagerRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Workers",null),new("Users",null),new("Roles",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Workers",null),new("Users",null),new("Roles",null)]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Manažer
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Workers",null) ? "active" : "")" asp-controller="Workers" asp-action="Index"><i class="bi bi-table"></i> Pracovníci</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users",null) ? "active" : "")" asp-controller="Users" asp-action="Index"><i class="bi bi-table"></i> Uživatelé</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Roles",null) ? "active" : "")" asp-controller="Roles" asp-action="Index"><i class="bi bi-table"></i> Uživatelské role</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Workers",null) ? "active" : "")" asp-controller="Workers" asp-action="Index"><i class="bi bi-table"></i> Pracovníci</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Users",null) ? "active" : "")" asp-controller="Users" asp-action="Index"><i class="bi bi-table"></i> Uživatelé</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Roles",null) ? "active" : "")" asp-controller="Roles" asp-action="Index"><i class="bi bi-table"></i> Uživatelské role</a>
                                     </li>
                                 </ul>
                             </li>
@@ -112,14 +112,14 @@
                         @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects"), new("ImportExport","ExportCSV")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link text-nowrap dropdown-toggle @(RazorHelper.IsControllerAndActionList(ViewContext, [new("Logs",null),new("Statistics","DBObjects"), new("ImportExport","ExportCSV")]) ? " active" : "" )" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administrátor
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index"><i class="bi bi-clipboard-data"></i> Logy</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects"><i class="bi bi-clipboard-data"></i> Databázové objekty</a>
-                                        <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export"><i class="bi bi-code-slash"></i> Export dat</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index"><i class="bi bi-clipboard-data"></i> Logy</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects"><i class="bi bi-clipboard-data"></i> Databázové objekty</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export"><i class="bi bi-code-slash"></i> Export dat</a>
                                     </li>
                                 </ul>
                             </li>
@@ -141,21 +141,28 @@
                                 <li class="nav-item">
                                     <span class="nav-link" style="display:flex">
                                         Jednáte za uživatele: @ViewData[Resource.ACTING_USER]
-                                        (<a class="nav-link" style="padding:0;color:orangered;" asp-controller="Users" asp-action="StopActingBehalf">Zrušit</a>)
+                                        (<a class="nav-link text-nowrap" style="padding:0;color:orangered;" asp-controller="Users" asp-action="StopActingBehalf">Zrušit</a>)
                                     </span>
                                 </li>
                             }
+                            @if (((Uzivatel?)ViewData[Resource.LOGGED_USER])?.Prava > 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap" asp-controller="Workers" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)">Upravit profil</a>
+                                </li>
+                            }
+
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Users" asp-action="Logout">Odhlásit se</a>
+                                <a class="nav-link text-nowrap" asp-controller="Users" asp-action="Logout">Odhlásit se</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Login") ? "active" : "")" asp-controller="Users" asp-action="Login">Přihlásit se</a>
+                                <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Login") ? "active" : "")" asp-controller="Users" asp-action="Login">Přihlásit se</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Register") ? "active" : "")" asp-controller="Users" asp-action="Register">Zaregistrovat se</a>
+                                <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Users","Register") ? "active" : "")" asp-controller="Users" asp-action="Register">Zaregistrovat se</a>
                             </li>
                         }
                     </ul>

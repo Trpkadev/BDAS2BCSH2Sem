@@ -14,8 +14,8 @@ public class Udrzba
     [Column("ID_UDRZBA")]
     public int IdUdrzba { get; set; }
 
-    [JsonRequired] 
-    [Column("DATUM")] 
+    [JsonRequired]
+    [Column("DATUM")]
     public DateTime Datum { get; set; } = DateTime.Now;
 
     [JsonRequired]

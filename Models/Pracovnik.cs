@@ -62,6 +62,10 @@ public class Pracovnik
     [DisplayName("Uživatel")]
     public string? UzivatelskeJmeno { get; set; } = string.Empty;
 
+    [Column("SKRYTE_UDAJE")]
+    [DisplayName("Skrýt údaje?")]
+    public bool SkryteUdaje { get; set; }
+
     public override bool Equals(object? obj)
     {
         return obj is Pracovnik pracovnik &&

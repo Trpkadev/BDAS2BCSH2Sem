@@ -58,16 +58,45 @@
                         @Html.DisplayFor(_ => item.Prijmeni)
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.TelefonniCislo)
+                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                        {
+                            @Html.DisplayFor(_ => item.TelefonniCislo)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(_ => "Skryté")
+                        }
+
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.Email)
+                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                        {
+                            @Html.DisplayFor(_ => item.Email)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(_ => "Skryté")
+                        }
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.RodneCislo)
+                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                        {
+                            @Html.DisplayFor(_ => item.RodneCislo)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(_ => "Skryté")
+                        }
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.HodinovaMzda)
+                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                        {
+                            @Html.DisplayFor(_ => item.HodinovaMzda)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(_ => "Skryté")
+                        }
                     </td>
                     <td>
                         @if (item.IdNadrizeny != null)
