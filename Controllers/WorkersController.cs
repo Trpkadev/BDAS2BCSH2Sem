@@ -11,15 +11,16 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
 {
     [HttpPost]
     [Route("AddPay")]
-    public async Task<IActionResult> AddPay(double multiplier)
+    public async Task<IActionResult> AddPay(double multiplier, int minPay)
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasManagerRights())
-                return RedirectToAction(nameof(Index), "Home");
-            //TODO
-            var pracovnici = await _context.GetPracovniciAsync() ?? [];
-            return View(pracovnici);
+                return RedirectToHome();
+
+            await _context.AddPayAsync(multiplier, minPay);
+            SetSuccessMessage();
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {

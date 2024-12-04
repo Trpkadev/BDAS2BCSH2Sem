@@ -33,12 +33,12 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             {
                 if (typ == "csv")
                 {
-                    var csv = await _context.GetTabulkaDoCsv(nazev, oddelovac);
+                    var csv = await _context.GetTabulkaDoCsvAsync(nazev, oddelovac);
                     ViewBag.Preview = csv;
                 }
                 else
                 {
-                    var json = await _context.GetTabulkaDoJson(nazev);
+                    var json = await _context.GetTabulkaDoJsonAsync(nazev);
                     ViewBag.Preview = json;
                 }
             }
@@ -67,11 +67,11 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             string? data;
             if (typ == "csv")
             {
-                data = await _context.GetTabulkaDoCsv(nazev, oddelovac);
+                data = await _context.GetTabulkaDoCsvAsync(nazev, oddelovac);
             }
             else
             {
-                data = await _context.GetTabulkaDoJson(nazev);
+                data = await _context.GetTabulkaDoJsonAsync(nazev);
             }
 
             using var ms = new MemoryStream();
@@ -133,7 +133,7 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             var csv = await sr.ReadToEndAsync();
             csv = csv.Replace("\r\n", "\n");
 
-            await _context.ImportRecords(csv, oddelovac);
+            await _context.ImportRecordsAsync(csv, oddelovac);
 
             return RedirectToAction(nameof(ImportRecords));
         }

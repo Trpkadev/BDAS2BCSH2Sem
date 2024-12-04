@@ -31,22 +31,29 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     #region Procedury
 
-    public async Task AddPayAsync(int multiplier, int minPay)
+    public async Task AddPayAsync(double multiplier, int? minPay)
     {
-        //TODO
+        const string sql = @"   BEGIN
+                                    NAVYSENI_PLATU(:p_multiplier, :p_min_pay);
+                                END;";
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        command.Parameters.Add(new OracleParameter("p_multiplier", multiplier));
+        command.Parameters.Add(new OracleParameter("p_min_pay", minPay));
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
     }
 
-    public async Task ImportRecords(string csv, char oddelovac)
+    public async Task ImportRecordsAsync(string csv, char oddelovac)
     {
-        const string sql = """
-
-                           DECLARE
-                               v_csv CLOB;
-                           BEGIN
-                               v_csv := :p_csv;
-                               CSV_DO_ZAZNAMU_TRASY(v_csv, :p_oddelovac);
-                           END;
-                           """;
+        const string sql = @"   DECLARE
+                                    v_csv CLOB;
+                                BEGIN
+                                    v_csv := :p_csv;
+                                    CSV_DO_ZAZNAMU_TRASY(v_csv, :p_oddelovac);
+                                END;";
         await using var command = Database.GetDbConnection().CreateCommand();
         command.CommandText = sql;
         command.CommandType = CommandType.Text;
@@ -57,13 +64,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await Database.CloseConnectionAsync();
     }
 
-    public async Task MakeOfExisting(int id_spoj, TimeOnly od, TimeOnly _do, int interval)
+    public async Task MakeOfExistingAsync(int id_spoj, TimeOnly od, TimeOnly _do, int interval)
     {
-        const string sql = """
-                           BEGIN
-                               PLANOVANI_JR(:p_id_spoj, POM_FCE.CAS_NA_DATE(:p_od), POM_FCE.CAS_NA_DATE(:p_do), :p_interval);
-                           END;
-                           """;
+        const string sql = @"   BEGIN
+                                    PLANOVANI_JR(:p_id_spoj, POM_FCE.CAS_NA_DATE(:p_od), POM_FCE.CAS_NA_DATE(:p_do), :p_interval);
+                                END;";
         await using var command = Database.GetDbConnection().CreateCommand();
         command.CommandText = sql;
         command.CommandType = CommandType.Text;
@@ -110,7 +115,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return resultJson ?? Resource.DB_RESPONSE_NO_DATA;
     }
 
-    public async Task<string?> GetTabulkaDoCsv(string nazev, char oddelovac)
+    public async Task<string?> GetTabulkaDoCsvAsync(string nazev, char oddelovac)
     {
         const string sql = @"   DECLARE
                                     v_csv CLOB;
@@ -135,7 +140,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return str;
     }
 
-    public async Task<string?> GetTabulkaDoJson(string nazev)
+    public async Task<string?> GetTabulkaDoJsonAsync(string nazev)
     {
         const string sql = """
                            DECLARE
@@ -171,7 +176,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         OracleParameter[] sqlParams = [ new("idGaraz", ConvertId(garaz.IdGaraz)),
                                         new("nazev", garaz.Nazev),
                                         new("kapacita", garaz.Kapacita)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLJizdni_RadyAsync(JizdniRad jizdniRad)
@@ -181,7 +186,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("idZastavka", jizdniRad.IdZastavka),
                                         new("casPrijezdu", jizdniRad.CasPrijezdu),
                                         new("casOdjezdu", jizdniRad.CasOdjezdu)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLLinkyAsync(Linka linka)
@@ -191,7 +196,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("nazev", linka.Nazev),
                                         new("typVozidla", linka.IdTypVozidla),
                                         new("cislo", linka.Cislo)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLModelyAsync(Model model)
@@ -202,7 +207,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("idZnacka", model.IdZnacka),
                                         new("nazev", model.Nazev),
                                         new("jeNizkopodlazni", model.JeNizkopodlazni)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLPracovniciAsync(Pracovnik pracovnik)
@@ -218,7 +223,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("email", pracovnik.Email),
                                         new("rodneCislo", pracovnik.RodneCislo),
                                         new("idUzivatel", pracovnik.IdUzivatel)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLRoleAsync(Role role)
@@ -227,7 +232,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         OracleParameter[] sqlParams = [ new("idRole", ConvertId(role.IdRole)),
                                         new("nazev", role.Nazev),
                                         new("prava", role.Prava)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLSchemataAsync(Schema schema)
@@ -240,7 +245,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("velikostSouboru", schema.VelikostSouboru),
                                         new("datumZmeny", schema.DatumZmeny),
                                         new("soubor", schema.Soubor)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLSpojeAsync(Spoj spoj)
@@ -252,7 +257,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("jedeVeVsedniDen", spoj.JedeVeVsedniDen),
                                         new("jedeVSobotu", spoj.JedeVSobotu ? 1 : 0),
                                         new("jedeVNedeli", spoj.JedeVNedeli)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLTarifni_PasmaAsync(TarifniPasmo tarifniPasmo)
@@ -260,7 +265,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         string sql = $"{ConvertDMLMethodName()}(:idPasmo, :nazev);";
         OracleParameter[] sqlParams = [ new("idPasmo", ConvertId(tarifniPasmo.IdPasmo)),
                                         new("nazev", tarifniPasmo.Nazev)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLTypy_VozidelAsync(TypVozidla typVozidla)
@@ -268,7 +273,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         string sql = $"{ConvertDMLMethodName()}(:idTypVozidla, :nazev);";
         OracleParameter[] sqlParams = [ new("idTypVozidla", ConvertId(typVozidla.IdTypVozidla)),
                                         new("nazev", typVozidla.Nazev)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLUdrzbyAsync(Udrzba udrzba)
@@ -282,7 +287,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("umytoVMycce", udrzba.UmytoVMycce),
                                         new("cistenoOzonem", udrzba.CistenoOzonem),
                                         new("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLUzivateleAsync(Uzivatel uzivatel)
@@ -292,7 +297,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("jmeno", uzivatel.UzivatelskeJmeno),
                                         new("heslo", uzivatel.Heslo),
                                         new("role", uzivatel.IdRole)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLVozidlaAsync(Vozidlo vozidlo)
@@ -305,7 +310,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
                                         new("idGaraz", vozidlo.IdGaraz),
                                         new("idModel", vozidlo.IdModel)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLZastavkyAsync(Zastavka zastavka)
@@ -316,7 +321,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("souradniceX", zastavka.SouradniceX),
                                         new("souradniceY", zastavka.SouradniceY),
                                         new("idPasmo", zastavka.IdPasmo)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLZaznamy_TrasyAsync(ZaznamTrasy zaznamTrasy)
@@ -327,7 +332,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("idVozidlo", zaznamTrasy.IdVozidlo),
                                         new("casPrijezdu", zaznamTrasy.CasPrijezdu),
                                         new("casOdjezdu", zaznamTrasy.CasOdjezdu)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLZnackyAsync(Znacka znacka)
@@ -335,7 +340,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         string sql = $"{ConvertDMLMethodName()}(:ídZnacka, :nazev);";
         OracleParameter[] sqlParams = [ new("ídZnacka", ConvertId(znacka.IdZnacka)),
                                         new("nazev", znacka.Nazev)];
-        await DMLPackageCall(sql, sqlParams);
+        await DMLPackageCallAsync(sql, sqlParams);
     }
 
     #endregion DML procedures
@@ -568,7 +573,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     //private static string ConvertMethodNameToView([CallerMemberName] string methodName = "") => methodName.ToLower().Replace("get", string.Empty).Replace("async", string.Empty).Replace("byid", string.Empty);
 
-    private async Task DMLPackageCall(string sql, OracleParameter[] sqlParams)
+    private async Task DMLPackageCallAsync(string sql, OracleParameter[] sqlParams)
     {
         using var command = Database.GetDbConnection().CreateCommand();
         command.CommandText = $@"   BEGIN
