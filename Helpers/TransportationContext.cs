@@ -84,7 +84,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         const string sql = @"   DECLARE
                                     v_csv CLOB;
                                 BEGIN
-                                    SELECT TABULKA_DO_CSV(:p_nazev, :p_oddelovac) INTO v_csv
+                                    SELECT FUNKCE.TABULKA_DO_CSV(:p_nazev, :p_oddelovac) INTO v_csv
                                     FROM DUAL;
                                     :p_result := v_csv;
                                 END;";
@@ -99,7 +99,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         const string sql = @"  DECLARE
                                    v_json CLOB;
                                BEGIN
-                                   SELECT TABULKA_DO_JSON(:p_nazev) INTO v_json
+                                   SELECT FUNKCE.TABULKA_DO_JSON(:p_nazev) INTO v_json
                                    FROM DUAL;
                                    :p_result := v_json;
                                END;";
