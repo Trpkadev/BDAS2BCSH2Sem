@@ -234,11 +234,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLUdrzbyAsync(Udrzba udrzba)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum,:konecUdrzby, :popisUkonu, :cena :umytoVMycce, :cistenoOzonem, :typUdrzby);";
+        string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum, :konecUdrzby, :popisUkonu, :cena, :umytoVMycce, :cistenoOzonem, :typUdrzby);";
         OracleParameter[] sqlParams = [ new ("idUdrzba", ConvertId(udrzba.IdUdrzba)),
                                         new ("idVozidlo", udrzba.IdVozidlo),
                                         new ("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
-                                        new ("konecUdrzby", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
+                                        new ("konecUdrzby", OracleDbType.Date, udrzba.KonecUdrzby, ParameterDirection.Input),
                                         new ("popisUkonu",null),
                                         new ("cena", null),
                                         new ("umytoVMycce",  null),
@@ -531,16 +531,20 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     #region Helper methods
 
-    public async Task DeleteFromTableAsync(string table, (string paramName, string param)[] values)
+    public async Task DeleteFromTableAsync(string table, (string paramName, object param)[] values)
     {
-        FormattableString formattableString = $"DELETE FROM {table} WHERE ";
+        using var command = Database.GetDbConnection().CreateCommand();
         for (int i = 0; i < values.Length; i++)
         {
-            formattableString = $"{formattableString}{values[i].paramName} = {values[i].param}";
-            if (i < values.Length - 1)
-                formattableString = $"{formattableString} AND ";
+            if (i == 0)
+                command.CommandText = $"DELETE FROM {table} WHERE {values[i].paramName} = :Param";
+            else
+                command.CommandText += $"AND {values[i].paramName} = :Param";
+            command.Parameters.Add(new OracleParameter($":Param", values[i].param));
         }
-        await Database.ExecuteSqlAsync(formattableString);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        await Database.CloseConnectionAsync();
     }
 
     private static string ConvertDMLMethodName([CallerMemberName] string methodName = "") => methodName.ToUpper().Replace("DML", "DML_").Replace("ASYNC", string.Empty);
@@ -599,9 +603,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                     END;";
         command.CommandType = CommandType.Text;
         command.Parameters.AddRange(sqlParams);
+        string a = command.CommandText;
         await Database.OpenConnectionAsync();
         await command.ExecuteNonQueryAsync();
         await Database.CloseConnectionAsync();
     }
+
     #endregion Helper methods
 }

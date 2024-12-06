@@ -1,5 +1,6 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models
+@using System.Web
 @model IEnumerable<BCSH2BDAS2.Models.Udrzba>
 @{
     ViewData["Title"] = "Seznam údržeb";
@@ -16,21 +17,11 @@
                     <table class="table text-nowrap w-auto m-auto">
                         <thead>
                             <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().NazevVozidla)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().Datum)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().KonecUdrzby)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => ((Oprava)model.First()).PopisUkonu)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => ((Oprava)model.First()).Cena)
-                                </th>
+                                <th>@Html.DisplayNameFor(model => model.First().NazevVozidla)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Datum)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().KonecUdrzby)</th>
+                                <th>@Html.DisplayNameFor(model => ((Oprava)model.First()).PopisUkonu)</th>
+                                <th>@Html.DisplayNameFor(model => ((Oprava)model.First()).Cena)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -41,22 +32,24 @@
                                     <td>
                                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
                                     </td>
+                                    <td>@Html.DisplayFor(_ => item.Datum)</td>
                                     <td>
-                                        @Html.DisplayFor(_ => item.Datum)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.KonecUdrzby)
-                                        @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                        @if (item.KonecUdrzby != null)
                                         {
-                                            <span class="badge bg-warning text-dark">>72h</span>
+                                            <span>@Html.DisplayFor(_ => item.KonecUdrzby)</span>
+                                            @if (((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                            {
+                                                <span class="badge bg-warning text-dark">>72h</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var encryptedUserId = OurCryptography.Instance.EncryptId(item.IdUdrzba);
+                                            <button onclick="submitMaintenanceEnd(this,'@HttpUtility.JavaScriptStringEncode(encryptedUserId)')" class="btn btn-secondary">Ukončit Údržbu</button>
                                         }
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.PopisUkonu)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.Cena)
-                                    </td>
+                                    <td>@Html.DisplayFor(_ => item.PopisUkonu)</td>
+                                    <td>@Html.DisplayFor(_ => item.Cena)</td>
                                     @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
                                 </tr>
                             }
@@ -73,21 +66,11 @@
                     <table class="table text-nowrap w-auto m-auto">
                         <thead>
                             <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().NazevVozidla)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().Datum)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.First().KonecUdrzby)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => ((Cisteni)model.First()).CistenoOzonem)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => ((Cisteni)model.First()).UmytoVMycce)
-                                </th>
+                                <th>@Html.DisplayNameFor(model => model.First().NazevVozidla)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().Datum)</th>
+                                <th>@Html.DisplayNameFor(model => model.First().KonecUdrzby)</th>
+                                <th>@Html.DisplayNameFor(model => ((Cisteni)model.First()).CistenoOzonem)</th>
+                                <th>@Html.DisplayNameFor(model => ((Cisteni)model.First()).UmytoVMycce)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -98,22 +81,24 @@
                                     <td>
                                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
                                     </td>
+                                    <td>@Html.DisplayFor(_ => item.Datum)</td>
                                     <td>
-                                        @Html.DisplayFor(_ => item.Datum)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.KonecUdrzby)
-                                        @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                        @if (item.KonecUdrzby != null)
                                         {
-                                            <span class="badge bg-warning text-dark">>72h</span>
+                                            <span>@Html.DisplayFor(_ => item.KonecUdrzby)</span>
+                                            @if (((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                            {
+                                                <span class="badge bg-warning text-dark">>72h</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var encryptedUserId = OurCryptography.Instance.EncryptId(item.IdUdrzba);
+                                            <button onclick="submitMaintenanceEnd(this,'@HttpUtility.JavaScriptStringEncode(encryptedUserId)')" class="btn btn-secondary">Ukončit Údržbu</button>
                                         }
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.CistenoOzonem)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.UmytoVMycce)
-                                    </td>
+                                    <td>@Html.DisplayFor(_ => item.CistenoOzonem)</td>
+                                    <td>@Html.DisplayFor(_ => item.UmytoVMycce)</td>
                                     @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
                                 </tr>
                             }
@@ -132,15 +117,9 @@
                         <table class="table text-nowrap w-auto m-auto">
                             <thead>
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.First().IdVozidlo)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.First().Datum)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.First().KonecUdrzby)
-                                    </th>
+                                    <th>@Html.DisplayNameFor(model => model.First().IdVozidlo)</th>
+                                    <th>@Html.DisplayNameFor(model => model.First().Datum)</th>
+                                    <th>@Html.DisplayNameFor(model => model.First().KonecUdrzby)</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -148,17 +127,21 @@
                                 @foreach (var item in Model.Where(item => !(item is Oprava || item is Cisteni)))
                                 {
                                     <tr>
+                                        <td>@Html.DisplayFor(_ => item.IdVozidlo)</td>
+                                        <td>@Html.DisplayFor(_ => item.Datum)</td>
                                         <td>
-                                            @Html.DisplayFor(_ => item.IdVozidlo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(_ => item.Datum)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(_ => item.KonecUdrzby)
-                                            @if (item.KonecUdrzby != null && ((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                            @if (item.KonecUdrzby != null)
                                             {
-                                                <span class="badge bg-warning text-dark">>72h</span>
+                                                <span>@Html.DisplayFor(_ => item.KonecUdrzby)</span>
+                                                @if (((DateTime)item.KonecUdrzby - item.Datum).TotalHours > 72)
+                                                {
+                                                    <span class="badge bg-warning text-dark">>72h</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var encryptedUserId = OurCryptography.Instance.EncryptId(item.IdUdrzba);
+                                                <button onclick="submitMaintenanceEnd(this,'@HttpUtility.JavaScriptStringEncode(encryptedUserId)')" class="btn btn-secondary">Ukončit Údržbu</button>
                                             }
                                         </td>
                                         @await Html.PartialAsync("IndexActionButtons", item.IdUdrzba)
@@ -171,4 +154,36 @@
             </div>
         }
     </div>
+    @Html.AntiForgeryToken()
 </div>
+
+<script>
+    function submitMaintenanceEnd(sender, encryptedId)
+    {
+        $.ajax({
+            url: "Maintenance/UpdateKonecUdrzby",
+            type: 'POST',
+            headers: {"RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()},
+            data: {encryptedId: encryptedId},
+            success: (response) => {
+                alert(response.message)
+                const parent = sender.parentElement
+                parent.replaceChildren()
+                let valueSpan = document.createElement('span');
+                valueSpan.innerText = response.value;
+                parent.appendChild(valueSpan);
+                if (!response.onTime) {
+                    let badgeSpan = document.createElement('span');
+                    badgeSpan.classList.add('badge', 'bg-warning', 'text-dark');
+                    badgeSpan.innerText = '>72h';
+                    parent.appendChild(badgeSpan)
+                }
+            },
+            error: (response) => {
+            if(response.responseJson != undefined)
+                response = response.responseJson
+            alert(response.message)
+            }
+        })
+    };
+</script>

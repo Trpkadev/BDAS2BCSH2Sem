@@ -41,6 +41,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                     case Cisteni cisteni:
                         ViewData["c"] = cisteni;
                         break;
+
                     case Oprava oprava:
                         ViewData["o"] = oprava;
                         break;
@@ -101,6 +102,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                     };
                     await _context.DMLUdrzbyAsync(cisteni);
                     break;
+
                 case 'o':
                     if (PopisUkonu == null || Cena == null)
                     {
@@ -120,6 +122,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                     };
                     await _context.DMLUdrzbyAsync(oprava);
                     break;
+
                 default:
                     await _context.DMLUdrzbyAsync(udrzba);
                     break;
@@ -133,7 +136,6 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             return RedirectToAction(nameof(Index));
         }
     }
-
 
     [HttpGet]
     [Route("Delete")]
@@ -251,6 +253,32 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToHome();
+        }
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    [Route("UpdateKonecUdrzby")]
+    public async Task<IActionResult> UpdateKonecUdrzby(string encryptedId)
+    {
+        Udrzba? udrzba = null;
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+                return StatusCode(403, new { message = Resource.INVALID_PERMISSIONS });
+            if (!ModelState.IsValid)
+                return StatusCode(400, new { message = Resource.INVALID_REQUEST_DATA });
+            int id = OurCryptography.Instance.DecryptId(encryptedId);
+            udrzba = await _context.GetUdrzbaByIdAsync(id);
+            if (udrzba == null)
+                return StatusCode(404, Resource.DB_DATA_NOT_EXIST);
+            udrzba.KonecUdrzby = DateTime.Now;
+            await _context.DMLUdrzbyAsync(udrzba);
+            return StatusCode(200, new { message = Resource.GENERIC_SUCCESS, value = ((DateTime)udrzba.KonecUdrzby).ToString("dd/MM/yyyy HH:mm:ss"), onTime = ((TimeSpan)(udrzba.KonecUdrzby - udrzba.Datum)).TotalHours <= 72 });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = Resource.GENERIC_SERVER_ERROR });
         }
     }
 }
