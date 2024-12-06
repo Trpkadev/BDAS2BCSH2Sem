@@ -198,4 +198,26 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             return RedirectToHome();
         }
     }
+
+    [HttpGet]
+    [Route("AverageDelays")]
+    public async Task<IActionResult> AverageDelays()
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                return RedirectToHome();
+            }
+
+            var zaznamyTras = await _context.GetZaznamy_TrasyAsync();
+            return View(zaznamyTras);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToHome();
+        }
+    }
 }

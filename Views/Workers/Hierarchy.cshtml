@@ -1,0 +1,14 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.PracovnikHiearchie>
+@{
+    ViewData["Title"] = "Hiearchická struktura pracovníků";
+}
+
+<h1 class="mb-5">@ViewData["Title"]</h1>
+
+@foreach (var pracovnik in Model)
+{
+	<div style="margin-left: @(pracovnik.Uroven * 1.5)rem" class="mb-3">
+		<a asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(pracovnik.IdPracovnik)">@pracovnik.Jmeno @pracovnik.Prijmeni</a>
+	</div>
+}

@@ -8,6 +8,16 @@
 
 @await Html.PartialAsync("IndexCreateTitle")
 <div class="container">
+	<hr />
+	<h3 class="mb-3">Denní údržba vozidel před nasazením</h3>
+    <form asp-action="MakeDailyMaintanence">
+        <input type="radio" value="1" id="vsechna" name="vsechna" class="form-check-input" />
+        <label for="vsechna" class="form-check-label">Všechna vozidla</label>
+        <input type="radio" value="0" id="vybrana" name="vsechna" class="form-check-input" />
+        <label for="vybrana" class="form-check-label">Vozidla nasazená včera</label>
+        <input type="submit" value="Provést denní údržbu" class="btn btn-secondary" />
+    </form>
+    <hr />
     <div class="row-cols-auto">
         @if (Model.OfType<Oprava>().Any())
         {

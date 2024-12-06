@@ -208,4 +208,24 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             return RedirectToHome();
         }
     }
+
+    [HttpGet]
+    [Route("Hierarchy")]
+    public async Task<IActionResult> Hierarchy()
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasManagerRights())
+                return RedirectToAction(nameof(Index), "Home");
+
+            var pracovnici = await _context.GetPracovniciHierarchieAsync();
+
+            return View(pracovnici);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToHome();
+        }
+    }
 }

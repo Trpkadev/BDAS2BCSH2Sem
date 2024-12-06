@@ -274,11 +274,42 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return StatusCode(404, Resource.DB_DATA_NOT_EXIST);
             udrzba.KonecUdrzby = DateTime.Now;
             await _context.DMLUdrzbyAsync(udrzba);
-            return StatusCode(200, new { message = Resource.GENERIC_SUCCESS, value = ((DateTime)udrzba.KonecUdrzby).ToString("dd/MM/yyyy HH:mm:ss"), onTime = ((TimeSpan)(udrzba.KonecUdrzby - udrzba.Datum)).TotalHours <= 72 });
+            return StatusCode(200,
+                new
+                {
+                    message = Resource.GENERIC_SUCCESS,
+                    value = ((DateTime)udrzba.KonecUdrzby).ToString("dd/MM/yyyy HH:mm:ss"),
+                    onTime = ((TimeSpan)(udrzba.KonecUdrzby - udrzba.Datum)).TotalHours <= 72
+                });
         }
         catch (Exception)
         {
             return StatusCode(500, new { message = Resource.GENERIC_SERVER_ERROR });
+
+        }
+    }
+
+    [HttpPost]
+    [Route("MakeDailyMaintanence")]
+    public async Task<IActionResult> MakeDailyMaintanence(bool kazde)
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _context.CisteniVozidelAsync(kazde);
+
+            SetSuccessMessage();
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

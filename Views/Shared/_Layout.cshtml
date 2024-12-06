@@ -105,6 +105,7 @@
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Workers",null) ? "active" : "")" asp-controller="Workers" asp-action="Index"><i class="bi bi-table"></i> Pracovníci</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Users",null) ? "active" : "")" asp-controller="Users" asp-action="Index"><i class="bi bi-table"></i> Uživatelé</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Roles",null) ? "active" : "")" asp-controller="Roles" asp-action="Index"><i class="bi bi-table"></i> Uživatelské role</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Workers","Hierarchy") ? "active" : "")" asp-controller="Workers" asp-action="Hierarchy"><i class="bi bi-clipboard-data"></i> Hierarchická struktura</a>
                                     </li>
                                 </ul>
                             </li>

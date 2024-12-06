@@ -29,6 +29,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<Zastavka> Zastavky { get; set; }
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
+    public DbSet<PracovnikHiearchie> PracovniciHierarchie { get; set; }
 
     #region Procedury
 
@@ -316,6 +317,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     #region views
 
+    public async Task<List<PracovnikHiearchie>> GetPracovniciHierarchieAsync()
+    {
+        return await PracovniciHierarchie.FromSqlRaw("SELECT * FROM PRACOVNICI_HIERARCHIE").ToListAsync();
+    }
+
     public async Task<List<DatabazovyObjekt>> GetDBObjektyAsync()
     {
         return await DatabazoveObjekty.FromSqlRaw("SELECT * FROM DB_OBJEKTY").ToListAsync();
@@ -520,6 +526,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
         modelBuilder.Entity<DatabazovyObjekt>().HasNoKey();
         modelBuilder.Entity<NakladyNaVozidlo>().HasNoKey();
+        modelBuilder.Entity<PracovnikHiearchie>().HasNoKey();
         modelBuilder.Entity<Udrzba>()
         .HasDiscriminator<char>("TYP_UDRZBY")
         .HasValue<Cisteni>('c')

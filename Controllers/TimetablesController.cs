@@ -228,7 +228,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToAction(nameof(Index), "Home");
 
-            //await _context.MakeOfExisting(idSpoj, od, _do, interval);
+            await _context.PlanovaniJrAsync(idSpoj, od, _do, interval);
 
             SetSuccessMessage("Úspěšně vytvořeno");
             return RedirectToAction(nameof(MakeOfExisting));
