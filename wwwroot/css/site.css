@@ -30,10 +30,10 @@ p {
     padding: 0.2rem;
 }
 
-th, td, select {
+th > span {
+    width: 100%;
     text-align: center;
-    align-content: center;
-    min-width: fit-content;
+    display: block;
 }
 
 table {
@@ -42,10 +42,6 @@ table {
 
 input {
     width: fit-content
-}
-
-form {
-    max-width: 500px
 }
 
 .bi {

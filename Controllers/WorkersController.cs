@@ -45,15 +45,22 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewBag.Uzivatele = new SelectList(await _context.GetUzivateleAsync());
-            ViewBag.Pracovnici = new SelectList(await _context.GetPracovniciAsync());
+            var uzivatele = await _context.GetUzivateleAsync();
+            var pracovnici = await _context.GetPracovniciAsync();
             if (encryptedId == null)
+            {
+                ViewBag.Uzivatele = new SelectList(uzivatele);
+                ViewBag.Pracovnici = new SelectList(pracovnici);
                 return View(new Pracovnik());
+            }
             int id = GetDecryptedId(encryptedId);
             var pracovnik = await _context.GetPracovnikByIdAsync(id);
             if (pracovnik != null)
+            {
+                ViewBag.Uzivatele = new SelectList(uzivatele, "IdUzivatel", "", pracovnik.IdUzivatel);
+                ViewBag.Pracovnici = new SelectList(pracovnici, "IdPracovnik", "", pracovnik.IdNadrizeny);
                 return View(pracovnik);
+            }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
         }

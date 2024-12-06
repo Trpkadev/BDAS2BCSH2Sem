@@ -18,7 +18,7 @@ public class JizdniRad
     [JsonRequired]
     [Column("CAS_PRIJEZDU")]
     [DisplayName("Čas příjezdu")]
-    public DateTime? CasPrijezdu { get; set; }
+    public DateTime CasPrijezdu { get; set; }
 
     [JsonRequired]
     [Column("CAS_ODJEZDU")]

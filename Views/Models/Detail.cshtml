@@ -10,39 +10,23 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Nazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Nazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Nazev)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.ZnackaNazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.ZnackaNazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.ZnackaNazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.ZnackaNazev)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.TypVozidlaNazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.TypVozidlaNazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.TypVozidlaNazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.TypVozidlaNazev)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.JeNizkopodlazni)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.JeNizkopodlazni)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.JeNizkopodlazni)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.JeNizkopodlazni)</dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdModel)
         </div>

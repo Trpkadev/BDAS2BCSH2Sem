@@ -13,34 +13,18 @@
     </div>
 </div>
 
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Jmeno)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Prijmeni)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TelefonniCislo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RodneCislo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HodinovaMzda)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.Jmeno)</th>
+                <th>@Html.DisplayNameFor(model => model.Prijmeni)</th>
+                <th>@Html.DisplayNameFor(model => model.TelefonniCislo)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.RodneCislo)</th>
+                <th>@Html.DisplayNameFor(model => model.HodinovaMzda)</th>
+                <th>@Html.DisplayNameFor(model => model.JmenoNadrizeneho)</th>
+                <th>@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</th>
                 @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                 {
                     <th></th>
@@ -51,59 +35,56 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(_ => item.Jmeno)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.Prijmeni)
-                    </td>
-                    <td>
-                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                        {
-                            @Html.DisplayFor(_ => item.TelefonniCislo)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(_ => "Skryté")
-                        }
+                    <td>@Html.DisplayFor(_ => item.Jmeno)</td>
+                    <td>@Html.DisplayFor(_ => item.Prijmeni)</td>
 
-                    </td>
-                    <td>
-                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                        {
-                            @Html.DisplayFor(_ => item.Email)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(_ => "Skryté")
-                        }
-                    </td>
-                    <td>
-                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                        {
-                            @Html.DisplayFor(_ => item.RodneCislo)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(_ => "Skryté")
-                        }
-                    </td>
-                    <td>
-                        @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                        {
-                            @Html.DisplayFor(_ => item.HodinovaMzda)
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(_ => "Skryté")
-                        }
-                    </td>
-                    <td>
-                        @if (item.IdNadrizeny != null)
-                        {
+                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                    {
+                        <td>@Html.DisplayFor(_ => item.TelefonniCislo)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(_ => "Skryté")</td>
+                    }
+
+                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                    {
+                        <td>@Html.DisplayFor(_ => item.Email)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(_ => "Skryté")</td>
+                    }
+
+                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                    {
+                        <td>@Html.DisplayFor(_ => item.RodneCislo)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(_ => "Skryté")</td>
+                    }
+
+                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                    {
+                        <td>@Html.DisplayFor(_ => item.HodinovaMzda)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(_ => "Skryté")</td>
+                    }
+
+                    @if (item.IdNadrizeny != null)
+                    {
+                        <td>
                             <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdNadrizeny)">@Html.DisplayFor(_ => item.JmenoNadrizeneho)</a>
-                        }
-                    </td>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
                     <td>
                         <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">@Html.DisplayFor(_ => item.UzivatelskeJmeno)</a>
                     </td>

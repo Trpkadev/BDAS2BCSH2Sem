@@ -10,21 +10,13 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Nazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Nazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Nazev)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Kapacita)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Kapacita)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Kapacita)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Kapacita)</dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdGaraz)
         </div>

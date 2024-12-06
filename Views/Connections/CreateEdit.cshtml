@@ -11,36 +11,38 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdSpoj" />
+                @Html.HiddenFor(model => model.IdSpoj)
 
                 <div class="form-group mb-3">
                     <label asp-for="CisloLinky" class="control-label"></label>
-                    @Html.DropDownList("IdLinka", (SelectList)ViewBag.Linky, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdLinka, ViewBag.Linky as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdLinka" class="text-danger"></span>
                 </div>
 
-                <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="JedeVSobotu" /> @Html.DisplayNameFor(model => model.JedeVSobotu)
-                    </label>
+                <div class="form-group mb-3">
+                    <label asp-for="Cislo" class="control-label"></label>
+                    <input asp-for="Cislo" class="form-control" />
+                    <span asp-validation-for="Cislo" class="text-danger"></span>
                 </div>
 
                 <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="JedeVNedeli" /> @Html.DisplayNameFor(model => model.JedeVNedeli)
-                    </label>
+                    <label asp-for="JedeVSobotu" class="form-check-label"></label>
+                    <input class="form-check-input" asp-for="JedeVSobotu" />
                 </div>
 
                 <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="JedeVeVsedniDen" /> @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
-                    </label>
+                    <label asp-for="JedeVNedeli" class="form-check-label"></label>
+                    <input class="form-check-input" asp-for="JedeVNedeli" />
                 </div>
 
                 <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="GarantovaneNizkopodlazni" /> @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
-                    </label>
+                    <label asp-for="JedeVeVsedniDen" class="form-check-label"></label>
+                    <input class="form-check-input" asp-for="JedeVeVsedniDen" />
+                </div>
+
+                <div class="form-group form-check mb-3">
+                    <label asp-for="GarantovaneNizkopodlazni" class="form-check-label"></label>
+                    <input class="form-check-input" asp-for="GarantovaneNizkopodlazni" />
                 </div>
 
                 <div class="form-group row m-1">

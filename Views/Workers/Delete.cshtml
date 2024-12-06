@@ -11,70 +11,46 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Jmeno)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Jmeno)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Jmeno)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Jmeno)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Prijmeni)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Prijmeni)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Prijmeni)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Prijmeni)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.TelefonniCislo)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.TelefonniCislo)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.TelefonniCislo)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.TelefonniCislo)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Email)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Email)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.RodneCislo)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.RodneCislo)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.RodneCislo)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.RodneCislo)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.JmenoNadrizeneho)
-                </dt>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.JmenoNadrizeneho)</dt>
                 <dd class="col-auto p-1">
                     <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
                 </dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-                </dt>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</dt>
                 <dd class="col-auto p-1">
                     <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)">@Html.DisplayFor(_ => Model.UzivatelskeJmeno)</a>
                 </dd>
             </dl>
 
             <form asp-action="DeleteSubmit" class="row m-1">
-                <input type="hidden" asp-for="IdPracovnik" />
+                @Html.HiddenFor(model => model.IdPracovnik)
                 <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
                 <div class="col w-100"></div>
                 <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>

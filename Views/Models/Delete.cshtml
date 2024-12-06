@@ -9,43 +9,27 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Nazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Nazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Nazev)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.ZnackaNazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.ZnackaNazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.ZnackaNazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.ZnackaNazev)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.TypVozidlaNazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.TypVozidlaNazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.TypVozidlaNazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.TypVozidlaNazev)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.JeNizkopodlazni)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.JeNizkopodlazni)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.JeNizkopodlazni)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.JeNizkopodlazni)</dd>
             </dl>
 
             <form asp-action="DeleteSubmit" class="row m-1">
-                <input type="hidden" asp-for="IdModel" />
+                @Html.HiddenFor(model => model.IdModel)
                 <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
                 <div class="col w-100"></div>
                 <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>

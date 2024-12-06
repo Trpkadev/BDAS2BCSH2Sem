@@ -26,16 +26,23 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Zastavky = new SelectList(await _context.GetZastavkyAsync());
-            ViewBag.Spoje = new SelectList(await _context.GetSpojeAsync());
-
+            var zastavky = await _context.GetZastavkyAsync();
+            var spoje = await _context.GetSpojeAsync();
             if (encryptedId == null)
+            {
+                ViewBag.Zastavky = new SelectList(zastavky);
+                ViewBag.Spoje = new SelectList(spoje);
                 return View(new JizdniRad());
+            }
 
             int id = GetDecryptedId(encryptedId);
             var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
+            {
+                ViewBag.Zastavky = new SelectList(zastavky, "IdZastavka", "Nazev", jizdniRad.IdZastavka);
+                ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "Cislo", jizdniRad.IdSpoj);
                 return View(jizdniRad);
+            }
 
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));

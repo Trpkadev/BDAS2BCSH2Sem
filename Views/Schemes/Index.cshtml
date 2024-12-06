@@ -56,28 +56,16 @@
         {
             var activeClass = Model.Count() == 0 ? "tab-pane fade show active" : "tab-pane fade";
             <div id="tabTable" class="@activeClass">
-                <div class="table-responsive overflow-auto p-3">
+                <div class="table-responsive overflow-auto p-3 text-center">
                     <table class="table text-nowrap w-auto m-auto">
                         <thead>
                             <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.NazevSchematu)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.NazevSouboru)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.TypSouboru)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.VelikostSouboru)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.DatumZmeny)
-                                </th>
-                                <th>
-                                    Stáhnout
-                                </th>
+                                <th>@Html.DisplayNameFor(model => model.NazevSchematu)</th>
+                                <th>@Html.DisplayNameFor(model => model.NazevSouboru)</th>
+                                <th>@Html.DisplayNameFor(model => model.TypSouboru)</th>
+                                <th>@Html.DisplayNameFor(model => model.VelikostSouboru)</th>
+                                <th>@Html.DisplayNameFor(model => model.DatumZmeny)</th>
+                                <th>Stáhnout</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -85,21 +73,11 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.NazevSchematu)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.NazevSouboru)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.TypSouboru)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.VelikostSouboru)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(_ => item.DatumZmeny)
-                                    </td>
+                                    <td>@Html.DisplayFor(_ => item.NazevSchematu)</td>
+                                    <td>@Html.DisplayFor(_ => item.NazevSouboru)</td>
+                                    <td>@Html.DisplayFor(_ => item.TypSouboru)</td>
+                                    <td>@Html.DisplayFor(_ => item.VelikostSouboru)</td>
+                                    <td>@Html.DisplayFor(_ => item.DatumZmeny)</td>
                                     <td>
                                         <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
                                     </td>

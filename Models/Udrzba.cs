@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using System.Text.Json.Serialization;
 
 namespace BCSH2BDAS2.Models;
@@ -20,7 +19,7 @@ public class Udrzba
 
     [JsonRequired]
     [Column("DATUM")]
-    public DateTime Datum { get; set; } = DateTime.Now;
+    public DateTime Datum { get; set; }
 
     [JsonRequired]
     [Column("TYP_UDRZBY")]
@@ -48,7 +47,6 @@ public class Cisteni : Udrzba
     [Column("CISTENO_OZONEM")]
     [DisplayName("Čištěno ozonem")]
     public bool CistenoOzonem { get; set; }
-
 }
 
 public class Oprava : Udrzba

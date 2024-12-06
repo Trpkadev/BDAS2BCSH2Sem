@@ -9,34 +9,22 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevTypuVozidla)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevTypuVozidla)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevTypuVozidla)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevTypuVozidla)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Cislo)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Cislo)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Cislo)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Cislo)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Nazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Nazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Nazev)</dd>
             </dl>
 
             <form asp-action="DeleteSubmit" class="row m-1">
-                <input type="hidden" asp-for="IdLinka" />
+                @Html.HiddenFor(model => model.IdLinka)
                 <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
                 <div class="col w-100"></div>
                 <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>

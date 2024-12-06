@@ -11,7 +11,7 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdRole" />
+                @Html.HiddenFor(model => model.IdRole)
 
                 <div class="form-group mb-3">
                     <label asp-for="Nazev" class="control-label"></label>

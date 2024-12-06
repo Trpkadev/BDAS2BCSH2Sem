@@ -15,6 +15,11 @@ public class Spoj
     public int IdSpoj { get; set; }
 
     [JsonRequired]
+    [Column("CISLO")]
+    [DisplayName("Číslo")]
+    public int Cislo { get; set; }
+
+    [JsonRequired]
     [Column("JEDE_VE_VSEDNI_DEN")]
     [DisplayName("Jede ve všední den")]
     public bool JedeVeVsedniDen { get; set; }
@@ -42,12 +47,5 @@ public class Spoj
     [DisplayName("Číslo linky")]
     public int? CisloLinky { get; set; }
 
-    [Column("NAZEV_LINKY")]
-    [DisplayName("Název linky")]
-    public string? NazevLinky { get; set; }
-
-    public override string ToString()
-    {
-        return $"Spoj linky {CisloLinky}";
-    }
+    public override string ToString() => $"Linka č.{CisloLinky} - Spoj č.{Cislo} ";
 }

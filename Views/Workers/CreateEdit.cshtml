@@ -12,7 +12,7 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdPracovnik" />
+                @Html.HiddenFor(model => model.IdPracovnik)
 
                 <div class="form-group mb-3">
                     <label asp-for="Jmeno" class="control-label"></label>
@@ -52,19 +52,19 @@
 
                 <div class="form-group form-check mb-3">
                     <label class="form-check-label">
-                        <input class="form-check-input" asp-for="SkryteUdaje" /> @Html.DisplayNameFor(model => model.SkryteUdaje)
+                        <input class="form-check-input" asp-for="SkryteUdaje" />
                     </label>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="JmenoNadrizeneho" class="control-label"></label>
-                    @Html.DropDownList("IdNadrizeny", (SelectList)ViewBag.Pracovnici, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdNadrizeny, ViewBag.Pracovnici as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdNadrizeny" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="UzivatelskeJmeno" class="control-label"></label>
-                    @Html.DropDownList("IdUzivatel", (SelectList)ViewBag.Uzivatele, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdUzivatel, ViewBag.Uzivatele as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdUzivatel" class="text-danger"></span>
                 </div>
 

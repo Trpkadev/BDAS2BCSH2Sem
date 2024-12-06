@@ -40,5 +40,5 @@ public class Model
     [DisplayName("Typ vozidla")]
     public string TypVozidlaNazev { get; set; } = string.Empty;
 
-    public override string ToString() => Nazev;
+    public override string ToString() => $"{ZnackaNazev} {Nazev}";
 }

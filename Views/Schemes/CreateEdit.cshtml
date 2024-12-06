@@ -11,11 +11,11 @@
         <div class="card-body">
             <form enctype="multipart/form-data" method="post" asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdSchema" />
-                <input type="hidden" asp-for="DatumZmeny" />
-                <input type="hidden" asp-for="NazevSouboru" />
-                <input type="hidden" asp-for="VelikostSouboru" />
-                <input type="hidden" asp-for="TypSouboru" />
+                @Html.HiddenFor(model => model.IdSchema)
+                @Html.HiddenFor(model => model.DatumZmeny)
+                @Html.HiddenFor(model => model.NazevSouboru)
+                @Html.HiddenFor(model => model.VelikostSouboru)
+                @Html.HiddenFor(model => model.TypSouboru)
 
                 <div class="form-group mb-3">
                     <label asp-for="NazevSchematu" class="control-label"></label>

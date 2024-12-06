@@ -8,20 +8,24 @@
 <form asp-action="MakeOfExistingSubmit" method="post">
     <div class="form-group mb-3">
         <label for="id_spoj" class="control-label">Referenční spoj</label>
-        @Html.DropDownList("IdSpoj", (SelectList)ViewBag.Spoje, new { @class = "form-control" })
+        @Html.DropDownList("IdSpoj", ViewBag.Spoje as SelectList, new { @class = "form-control" })
     </div>
+
     <div class="form-group mb-3">
-	    <label for="od" class="control-label">Od</label>
-	    <input type="time" id="od" name="od" class="form-control" />
+        <label for="od" class="control-label">Od</label>
+        <input type="time" id="od" name="od" class="form-control" />
     </div>
+
     <div class="form-group mb-3">
-	    <label for="do" class="control-label">Do</label>
+        <label for="do" class="control-label">Do</label>
         <input type="time" id="do" name="do" class="form-control" />
     </div>
+
     <div class="form-group mb-3">
-	    <label for="interval" class="control-label">Interval (min)</label>
+        <label for="interval" class="control-label">Interval (min)</label>
         <input type="number" id="interval" name="interval" min="1" class="form-control" value="20" />
     </div>
+
     <div class="form-group mb-3">
         <input type="submit" value="Vytvořit" class="btn btn-primary" />
     </div>

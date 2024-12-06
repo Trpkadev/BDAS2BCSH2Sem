@@ -26,19 +26,19 @@ public class Pracovnik
     [JsonRequired]
     [Column("TELEFONNI_CISLO")]
     [DisplayName("Telefonní číslo")]
-    [Phone(ErrorMessage = "Invalid phone number.")]
+    [Phone(ErrorMessage = "Neplatné telefonní číslo")]
     public string TelefonniCislo { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("EMAIL")]
     [DisplayName("Email")]
-    [EmailAddress(ErrorMessage = "Invalid email address.")]
+    [EmailAddress(ErrorMessage = "Neplatná emailová adresa")]
     public string Email { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("RODNE_CISLO")]
     [DisplayName("Rodné číslo")]
-    [RegularExpression(@"\d{6}/\d{4}", ErrorMessage = "Invalid birth number.")]
+    [RegularExpression(@"\d{6}/\d{4}", ErrorMessage = "Neplatné rodné číslo")]
     public string RodneCislo { get; set; } = string.Empty;
 
     [JsonRequired]

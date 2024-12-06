@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -25,14 +26,22 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Garaze"] = await _context.GetGarazeAsync() ?? [];
-            ViewData["Modely"] = await _context.GetModelyAsync() ?? [];
+            var garaze = await _context.GetGarazeAsync() ?? [];
+            var modely = await _context.GetModelyAsync() ?? [];
             if (encryptedId == null)
+            {
+                ViewBag.Garaze = new SelectList(garaze);
+                ViewBag.Modely = new SelectList(modely);
                 return View(new Vozidlo());
+            }
             int id = GetDecryptedId(encryptedId);
             var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo != null)
+            {
+                ViewBag.Garaze = new SelectList(garaze, "IdGaraz", "", vozidlo.IdGaraz);
+                ViewBag.Modely = new SelectList(modely, "IdModel", "", vozidlo.IdModel);
                 return View(vozidlo);
+            }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }

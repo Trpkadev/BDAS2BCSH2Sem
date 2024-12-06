@@ -12,16 +12,22 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdVozidlo" />
+                @Html.HiddenFor(model => model.IdVozidlo)
 
                 <div class="form-group mb-3">
-                    <label asp-for="RokVyroby" class="control-label">Rok výroby</label>
+                    <label asp-for="SPZ" class="control-label"></label>
+                    <input asp-for="SPZ" class="form-control" />
+                    <span asp-validation-for="SPZ" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="RokVyroby" class="control-label"></label>
                     <input asp-for="RokVyroby" class="form-control" />
                     <span asp-validation-for="RokVyroby" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="NajeteKilometry" class="control-label">Najeté kilometry</label>
+                    <label asp-for="NajeteKilometry" class="control-label"></label>
                     <input asp-for="NajeteKilometry" class="form-control" />
                     <span asp-validation-for="NajeteKilometry" class="text-danger"></span>
                 </div>
@@ -33,24 +39,19 @@
                 </div>
 
                 <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="MaKlimatizaci" /> @Html.DisplayNameFor(model => model.MaKlimatizaci)
-                    </label>
+                    <label asp-for="MaKlimatizaci" class="form-check-label"></label>
+                    <input asp-for="MaKlimatizaci" class="form-check-input" />
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="IdGaraz" class="control-label">Garáž</label>
-                    @Html.DropDownList("IdGaraz",
-                             new SelectList(((List<Garaz>?)ViewData["Garaze"])?.AsEnumerable(), "IdGaraz", "Nazev", Model.IdGaraz),
-                             new { @class = "form-control" })
+                    <label asp-for="IdGaraz" class="control-label"></label>
+                    @Html.DropDownListFor(model => model.IdGaraz, ViewBag.Garaze as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdGaraz" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="IdModel" class="control-label">Model vozidla</label>
-                    @Html.DropDownList("IdModel",
-                             new SelectList(((List<Model>?)ViewData["Modely"])?.AsEnumerable(), "IdModel", "Nazev", Model.IdModel),
-                             new { @class = "form-control" })
+                    <label asp-for="IdModel" class="control-label"></label>
+                    @Html.DropDownListFor(model => model.IdModel, ViewBag.Modely as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdModel" class="text-danger"></span>
                 </div>
 

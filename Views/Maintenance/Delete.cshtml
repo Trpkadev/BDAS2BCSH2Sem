@@ -11,29 +11,19 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevVozidla)
-                </dt>
-                <dd class="col-auto p-1">
-                    <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdVozidlo)">@Html.DisplayFor(_ => Model.NazevVozidla)</a>
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevVozidla)</dt>
+                <dd class="col-auto p-1"><a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdVozidlo)">@Html.DisplayFor(_ => Model.NazevVozidla)</a></dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Datum)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Datum)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Datum)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Datum)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.KonecUdrzby)
-                </dt>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.KonecUdrzby)</dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.KonecUdrzby)
+                    <span>@Html.DisplayFor(model => model.KonecUdrzby)</span>
                     @if (Model.KonecUdrzby != null && ((DateTime)Model.KonecUdrzby - Model.Datum).TotalHours > 72)
                     {
                         <span class="badge bg-warning text-dark">>72h</span>
@@ -42,62 +32,37 @@
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.TypUdrzby)
-                </dt>
-                <dd class="col-auto p-1">
-                    @(Model.TypUdrzby switch
-                    {
-                        'c' => "Čištění",
-                        'o' => "Oprava",
-                        _ => "Nespecifikováno"
-                    })
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.TypUdrzby)</dt>
+                <dd class="col-auto p-1">@(Model.TypUdrzby switch { 'c' => "Čištění", 'o' => "Oprava", _ => "Nespecifikováno" })</dd>
             </dl>
 
             @if (Model is Cisteni cisteni)
             {
                 <dl class="row m-0">
-                    <dt class="col-auto p-1">
-                        @Html.DisplayNameFor(_ => cisteni.UmytoVMycce)
-                    </dt>
-                    <dd class="col-auto p-1">
-                        @Html.DisplayFor(_ => cisteni.UmytoVMycce)
-                    </dd>
+                    <dt class="col-auto p-1">@Html.DisplayNameFor(_ => cisteni.UmytoVMycce)</dt>
+                    <dd class="col-auto p-1">@Html.DisplayFor(_ => cisteni.UmytoVMycce)</dd>
                 </dl>
 
                 <dl class="row m-0">
-                    <dt class="col-auto p-1">
-                        @Html.DisplayNameFor(_ => cisteni.CistenoOzonem)
-                    </dt>
-                    <dd class="col-auto p-1">
-                        @Html.DisplayFor(_ => cisteni.CistenoOzonem)
-                    </dd>
+                    <dt class="col-auto p-1">@Html.DisplayNameFor(_ => cisteni.CistenoOzonem)</dt>
+                    <dd class="col-auto p-1">@Html.DisplayFor(_ => cisteni.CistenoOzonem)</dd>
                 </dl>
             }
             else if (Model is Oprava oprava)
             {
                 <dl class="row m-0">
-                    <dt class="col-auto p-1">
-                        @Html.DisplayNameFor(_ => oprava.PopisUkonu)
-                    </dt>
-                    <dd class="col-auto p-1">
-                        @Html.DisplayFor(_ => oprava.PopisUkonu)
-                    </dd>
+                    <dt class="col-auto p-1">@Html.DisplayNameFor(_ => oprava.PopisUkonu)</dt>
+                    <dd class="col-auto p-1">@Html.DisplayFor(_ => oprava.PopisUkonu)</dd>
                 </dl>
 
                 <dl class="row m-0">
-                    <dt class="col-auto p-1">
-                        @Html.DisplayNameFor(_ => oprava.Cena)
-                    </dt>
-                    <dd class="col-auto p-1">
-                        @Html.DisplayFor(_ => oprava.Cena)
-                    </dd>
+                    <dt class="col-auto p-1">@Html.DisplayNameFor(_ => oprava.Cena)</dt>
+                    <dd class="col-auto p-1">@Html.DisplayFor(_ => oprava.Cena)</dd>
                 </dl>
             }
 
             <form asp-action="DeleteSubmit" class="row m-1">
-                <input type="hidden" asp-for="IdUdrzba" />
+                @Html.HiddenFor(model => model.IdUdrzba)
                 <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
                 <div class="col w-100"></div>
                 <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>

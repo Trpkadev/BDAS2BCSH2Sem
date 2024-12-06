@@ -11,17 +11,17 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdZaznam" />
+                @Html.HiddenFor(model => model.IdZaznam)
 
                 <div class="form-group mb-3">
                     <label asp-for="IdJizniRad" class="control-label"></label>
-                    @Html.DropDownList("IdJizdniRad", (SelectList)ViewBag.JizdniRady, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdJizniRad, ViewBag.JizdniRady as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdJizniRad" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="NazevVozidla" class="control-label"></label>
-                    @Html.DropDownList("IdVozidlo", (SelectList)ViewBag.Vozidla, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdVozidlo, ViewBag.Vozidla as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdVozidlo" class="text-danger"></span>
                 </div>
 

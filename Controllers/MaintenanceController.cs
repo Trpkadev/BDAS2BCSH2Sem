@@ -31,7 +31,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             ViewData["c"] = new Cisteni();
 
             if (encryptedId == null)
-                return View(new Udrzba());
+                return View(new Udrzba() { Datum = DateTime.Now });
             int id = GetDecryptedId(encryptedId);
             var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba != null)
@@ -130,7 +130,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             SetSuccessMessage();
             return RedirectToAction(nameof(Index));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToAction(nameof(Index));
@@ -261,7 +261,6 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
     [Route("UpdateKonecUdrzby")]
     public async Task<IActionResult> UpdateKonecUdrzby(string encryptedId)
     {
-        Udrzba? udrzba = null;
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
@@ -269,7 +268,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
                 return StatusCode(400, new { message = Resource.INVALID_REQUEST_DATA });
             int id = OurCryptography.Instance.DecryptId(encryptedId);
-            udrzba = await _context.GetUdrzbaByIdAsync(id);
+            var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba == null)
                 return StatusCode(404, Resource.DB_DATA_NOT_EXIST);
             udrzba.KonecUdrzby = DateTime.Now;
@@ -285,7 +284,6 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
         catch (Exception)
         {
             return StatusCode(500, new { message = Resource.GENERIC_SERVER_ERROR });
-
         }
     }
 

@@ -7,16 +7,12 @@
 }
 
 <h2>@ViewData["Title"]</h2>
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th class="p-2">
-                    @Html.DisplayNameFor(model => model.UzivatelskeJmeno)
-                </th>
-                <th class="p-2">
-                    @Html.DisplayNameFor(model => model.NazevRole)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</th>
+                <th>@Html.DisplayNameFor(model => model.NazevRole)</th>
                 <th></th>
             </tr>
         </thead>
@@ -25,25 +21,16 @@
             {
                 var encryptedUserId = OurCryptography.Instance.EncryptId(uzivatel.IdUzivatel);
                 <tr>
-                    <td class="p-2">
-                        @Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)
-                    </td>
-                    <td class="p-2">
-                        @if (uzivatel.IdUzivatel == ((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)
-                        {
-                            @Html.DisplayFor(modelItem => uzivatel.NazevRole)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(modelItem => uzivatel.IdRole,
-                                     new SelectList(((IEnumerable<Role>?)ViewData["Role"])?.Where(role => role.Prava > 0).Select(role => new
-                                     {
-                                         Value = role.IdRole,
-                                         Text = role.ToString()
-                                     }), "Value", "Text", uzivatel.IdRole),
-                                     new { @class = "form-control", @style = "width:fit-content", @onchange = $"submitRoleChange(this, '{HttpUtility.JavaScriptStringEncode(encryptedUserId)}')" })
-                        }
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => uzivatel.UzivatelskeJmeno)</td>
+
+                    @if (uzivatel.IdUzivatel == ((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)
+                    {
+                        <td>@Html.DisplayFor(modelItem => uzivatel.NazevRole)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DropDownListFor(modelItem => uzivatel.IdRole, ViewBag.Role as SelectList, new { @class = "form-control", @onchange = $"submitRoleChange(this, '{HttpUtility.JavaScriptStringEncode(encryptedUserId)}')" })</td>
+                    }
 
                     <td class="d-inline-flex gap-3 p-2 w-100">
                         <a asp-action="Detail" asp-route-encryptedId="@encryptedUserId" class="btn btn-primary">Detail</a>

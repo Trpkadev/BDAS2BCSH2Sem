@@ -5,22 +5,14 @@
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ZnackaNazev)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TypVozidlaNazev)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.JeNizkopodlazni)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.Nazev)</th>
+                <th>@Html.DisplayNameFor(model => model.ZnackaNazev)</th>
+                <th>@Html.DisplayNameFor(model => model.TypVozidlaNazev)</th>
+                <th>@Html.DisplayNameFor(model => model.JeNizkopodlazni)</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,18 +20,14 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(_ => item.Nazev)
-                    </td>
+                    <td>@Html.DisplayFor(_ => item.Nazev)</td>
                     <td>
                         <a asp-controller="Brands" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdZnacka)">@Html.DisplayFor(_ => item.ZnackaNazev)</a>
                     </td>
                     <td>
                         <a asp-controller="Types" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdTypVozidla)">@Html.DisplayFor(_ => item.TypVozidlaNazev)</a>
                     </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.JeNizkopodlazni)
-                    </td>
+                    <td>@Html.DisplayFor(_ => item.JeNizkopodlazni)</td>
                     @await Html.PartialAsync("IndexActionButtons", item.IdModel)
                 </tr>
             }

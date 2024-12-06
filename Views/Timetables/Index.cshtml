@@ -5,22 +5,14 @@
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdSpoj)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NazevZastavky)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CasPrijezdu)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CasOdjezdu)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.IdSpoj)</th>
+                <th>@Html.DisplayNameFor(model => model.NazevZastavky)</th>
+                <th>@Html.DisplayNameFor(model => model.CasPrijezdu)</th>
+                <th>@Html.DisplayNameFor(model => model.CasOdjezdu)</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,18 +20,10 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.NazevZastavky)
-                    </td>
-                    <td>
-                        @((item.CasPrijezdu ?? item.CasOdjezdu).ToShortTimeString())
-                    </td>
-                    <td>
-                        @item.CasOdjezdu.ToShortTimeString()
-                    </td>
+                    <td><a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSpoj)">Spoj</a></td>
+                    <td>@Html.DisplayFor(_ => item.NazevZastavky)</td>
+                    <td>@item.CasPrijezdu.ToShortTimeString()</td>
+                    <td>@item.CasOdjezdu.ToShortTimeString()</td>
                     @await Html.PartialAsync("IndexActionButtons", item.IdJizdniRad)
                 </tr>
             }

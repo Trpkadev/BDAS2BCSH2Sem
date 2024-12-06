@@ -5,25 +5,16 @@
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
-	                @Html.DisplayNameFor(model => model.CisloLinky)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.JedeVSobotu)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.JedeVNedeli)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.JedeVeVsedniDen)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.CisloLinky)</th>
+                <th>@Html.DisplayNameFor(model => model.Cislo)</th>
+                <th>@Html.DisplayNameFor(model => model.JedeVSobotu)</th>
+                <th>@Html.DisplayNameFor(model => model.JedeVNedeli)</th>
+                <th>@Html.DisplayNameFor(model => model.JedeVeVsedniDen)</th>
+                <th>@Html.DisplayNameFor(model => model.GarantovaneNizkopodlazni)</th>
                 <th></th>
             </tr>
         </thead>
@@ -32,22 +23,13 @@
             {
                 <tr>
                     <td>
-	                    <a asp-controller="Routes" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">
-		                    Linka @Html.DisplayFor(_ => item.CisloLinky)
-	                    </a>
+                        <a asp-controller="Routes" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdLinka)">Linka @Html.DisplayFor(_ => item.CisloLinky)</a>
                     </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.JedeVSobotu)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.JedeVNedeli)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.JedeVeVsedniDen)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)
-                    </td>
+                    <td>@Html.DisplayFor(_ => item.Cislo)</td>
+                    <td>@Html.DisplayFor(_ => item.JedeVSobotu)</td>
+                    <td>@Html.DisplayFor(_ => item.JedeVNedeli)</td>
+                    <td>@Html.DisplayFor(_ => item.JedeVeVsedniDen)</td>
+                    <td>@Html.DisplayFor(_ => item.GarantovaneNizkopodlazni)</td>
                     @await Html.PartialAsync("IndexActionButtons", item.IdSpoj)
                 </tr>
             }

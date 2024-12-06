@@ -11,28 +11,28 @@
         <div class="card-body">
             <form asp-action="CreateEditSubmit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdJizdniRad" />
+                @Html.HiddenFor(model => model.IdJizdniRad)
 
                 <div class="form-group mb-3">
                     <label asp-for="NazevZastavky" class="control-label"></label>
-                    @Html.DropDownList("IdZastavka", (SelectList)ViewBag.Zastavky, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdZastavka, ViewBag.Zastavky as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdZastavka" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="IdSpoj" class="control-label"></label>
-                    @Html.DropDownList("IdSpoj", (SelectList)ViewBag.Spoje, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdSpoj, ViewBag.Spoje as SelectList, new { @class = "form-control" })
                     <span asp-validation-for="IdSpoj" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="CasPrijezdu" class="control-label"></label>
-                    <input asp-for="CasPrijezdu" class="form-control" />
+                    <input type="time" asp-for="CasPrijezdu" class="form-control" />
                     <span asp-validation-for="CasPrijezdu" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-3">
                     <label asp-for="CasOdjezdu" class="control-label"></label>
-                    <input asp-for="CasOdjezdu" class="form-control" />
+                    <input type="time" asp-for="CasOdjezdu" class="form-control" />
                     <span asp-validation-for="CasOdjezdu" class="text-danger"></span>
                 </div>
 

@@ -15,6 +15,11 @@ public class Vozidlo
     public int IdVozidlo { get; set; }
 
     [JsonRequired]
+    [Column("SPZ")]
+    [Length(7, 7)]
+    public string SPZ { get; set; }
+
+    [JsonRequired]
     [Column("ROK_VYROBY")]
     [DisplayName("Rok výroby")]
     public short RokVyroby { get; set; }
@@ -35,23 +40,21 @@ public class Vozidlo
 
     [JsonRequired]
     [Column("ID_GARAZ")]
+    [DisplayName("Garáž")]
     public int IdGaraz { get; set; }
 
     [JsonRequired]
-    [DisplayName("Model")]
     [Column("ID_MODEL")]
+    [DisplayName("Model")]
     public int IdModel { get; set; }
 
     [Column("NAZEV_GARAZE")]
     [DisplayName("Garáž")]
     public string? NazevGaraze { get; set; }
 
-    [Column("NAZEV_VOZIDLA")]
-    [DisplayName("Vozidlo")]
-    public string? NazevVozidla { get; set; }
+    [Column("NAZEV_MODELU")]
+    [DisplayName("Model")]
+    public string? NazevModelu { get; set; }
 
-    public override string ToString()
-    {
-        return NazevVozidla ?? "Vozidlo";
-    }
+    public override string ToString() => SPZ;
 }

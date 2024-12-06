@@ -30,7 +30,7 @@ public class Linka
 
     [Column("NAZEV_TYPU_VOZIDLA")]
     [DisplayName("Typ vozidla")]
-    public string NazevTypuVozidla { get; set; } = string.Empty;
+    public string? NazevTypuVozidla { get; set; }
 
     public override string ToString() => $"{Cislo} {Nazev}";
 }

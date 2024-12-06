@@ -11,43 +11,29 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevZastavky)
-                </dt>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevZastavky)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevZastavky)</dd>
+            </dl>
+
+            <dl class="row m-0">
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.IdSpoj)</dt>
                 <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevZastavky)
+                    <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSpoj)">Spoj</a>
                 </dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.IdSpoj)
-                </dt>
-                <dd class="col-auto p-1">
-	                <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSpoj)">Spoj</a>
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasPrijezdu)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasPrijezdu)</dd>
             </dl>
 
             <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.CasPrijezdu)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.CasPrijezdu)
-                </dd>
-            </dl>
-
-            <dl class="row m-0">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.CasOdjezdu)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.CasOdjezdu)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasOdjezdu)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasOdjezdu)</dd>
             </dl>
 
             <form asp-action="DeleteSubmit" class="row m-1">
-                <input type="hidden" asp-for="IdJizdniRad" />
+                @Html.HiddenFor(model => model.IdJizdniRad)
                 <input type="submit" value="Odstranit" class="btn btn-danger col-auto" />
                 <div class="col w-100"></div>
                 <a asp-action="Index" class="btn btn-secondary col align-content-end">Zpět na seznam</a>

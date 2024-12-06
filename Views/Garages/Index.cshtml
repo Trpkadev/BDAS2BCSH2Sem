@@ -5,16 +5,12 @@
 }
 
 @await Html.PartialAsync("IndexCreateTitle")
-<div class="table-responsive overflow-auto p-3">
+<div class="table-responsive overflow-auto p-3 text-center">
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Kapacita)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.Nazev)</th>
+                <th>@Html.DisplayNameFor(model => model.Kapacita)</th>
                 <th></th>
             </tr>
         </thead>
@@ -22,12 +18,8 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(_ => item.Nazev)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(_ => item.Kapacita)
-                    </td>
+                    <td>@Html.DisplayFor(_ => item.Nazev)</td>
+                    <td>@Html.DisplayFor(_ => item.Kapacita)</td>
                     @await Html.PartialAsync("IndexActionButtons", item.IdGaraz)
                 </tr>
             }

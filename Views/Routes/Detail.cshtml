@@ -10,30 +10,18 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevTypuVozidla)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevTypuVozidla)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevTypuVozidla)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevTypuVozidla)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Cislo)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Cislo)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Cislo)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Cislo)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Nazev)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Nazev)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Nazev)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Nazev)</dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdLinka)
         </div>

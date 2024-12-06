@@ -10,39 +10,25 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevZastavky)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevZastavky)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevZastavky)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevZastavky)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.IdSpoj)
-                </dt>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.IdSpoj)</dt>
                 <dd class="col-auto p-1">
                     <a asp-controller="Connections" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdSpoj)">Spoj</a>
                 </dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.CasPrijezdu)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.CasPrijezdu)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasPrijezdu)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasPrijezdu)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.CasOdjezdu)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.CasOdjezdu)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasOdjezdu)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasOdjezdu)</dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdJizdniRad)
         </div>

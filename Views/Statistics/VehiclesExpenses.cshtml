@@ -11,36 +11,20 @@
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Znacka)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Model)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Naklady)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Pocet)
-                </th>
+                <th>@Html.DisplayNameFor(model => model.Znacka)</th>
+                <th>@Html.DisplayNameFor(model => model.Model)</th>
+                <th>@Html.DisplayNameFor(model => model.Naklady)</th>
+                <th>@Html.DisplayNameFor(model => model.Pocet)</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Znacka)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Model)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Naklady)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Pocet)
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Znacka)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Model)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Naklady)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Pocet)</td>
                 </tr>
             }
         </tbody>

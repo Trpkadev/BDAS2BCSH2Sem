@@ -10,57 +10,33 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.RokVyroby)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.RokVyroby)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.RokVyroby)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.RokVyroby)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NajeteKilometry)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NajeteKilometry)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NajeteKilometry)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NajeteKilometry)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.Kapacita)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.Kapacita)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Kapacita)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.Kapacita)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.MaKlimatizaci)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.MaKlimatizaci)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.MaKlimatizaci)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.MaKlimatizaci)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevGaraze)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevGaraze)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevGaraze)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevGaraze)</dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">
-                    @Html.DisplayNameFor(model => model.NazevVozidla)
-                </dt>
-                <dd class="col-auto p-1">
-                    @Html.DisplayFor(model => model.NazevVozidla)
-                </dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.SPZ)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.SPZ)</dd>
             </dl>
             @await Html.PartialAsync("DetailActionButtons", Model.IdVozidlo)
         </div>
