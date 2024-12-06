@@ -1,4 +1,5 @@
 ﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model IEnumerable<BCSH2BDAS2.Models.Udrzba>
 @{
     ViewData["Title"] = "Seznam údržeb";
@@ -7,7 +8,7 @@
 @await Html.PartialAsync("IndexCreateTitle")
 <div class="container">
     <div class="row-cols-auto">
-        @if (Model.Where(item => item.TypUdrzby == 'o').Any())
+        @if (Model.OfType<Oprava>().Any())
         {
             <div class="col-sm">
                 <h2 class="text-center">Opravy</h2>
@@ -16,25 +17,25 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.NazevVozidla)
+                                    @Html.DisplayNameFor(model => model.First().NazevVozidla)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Datum)
+                                    @Html.DisplayNameFor(model => model.First().Datum)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                    @Html.DisplayNameFor(model => model.First().KonecUdrzby)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.PopisUkonu)
+                                    @Html.DisplayNameFor(model => ((Oprava)model.First()).PopisUkonu)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Cena)
+                                    @Html.DisplayNameFor(model => ((Oprava)model.First()).Cena)
                                 </th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Where(item => item.TypUdrzby == 'o'))
+                            @foreach (Oprava item in Model.Where(item => item is Oprava))
                             {
                                 <tr>
                                     <td>
@@ -64,7 +65,7 @@
                 </div>
             </div>
         }
-        @if (Model.Where(item => item.TypUdrzby == 'c').Any())
+        @if (Model.OfType<Cisteni>().Any())
         {
             <div class="col-sm">
                 <h2 class="text-center">Čístění</h2>
@@ -73,29 +74,29 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.NazevVozidla)
+                                    @Html.DisplayNameFor(model => model.First().NazevVozidla)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Datum)
+                                    @Html.DisplayNameFor(model => model.First().Datum)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                    @Html.DisplayNameFor(model => model.First().KonecUdrzby)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.CistenoOzonem)
+                                    @Html.DisplayNameFor(model => ((Cisteni)model.First()).CistenoOzonem)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.UmytoVMycce)
+                                    @Html.DisplayNameFor(model => ((Cisteni)model.First()).UmytoVMycce)
                                 </th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Where(item => item.TypUdrzby == 'c'))
+                            @foreach (Cisteni item in Model.Where(item => item is Cisteni))
                             {
                                 <tr>
                                     <td>
-	                                    <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
+                                        <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
                                     </td>
                                     <td>
                                         @Html.DisplayFor(_ => item.Datum)
@@ -122,7 +123,7 @@
             </div>
         }
 
-        @if (Model.Where(item => item.TypUdrzby == 'x').Any())
+        @if (Model.Any(item => !(item is Oprava || item is Cisteni)))
         {
             <div class="row">
                 <div class="col-sm">
@@ -132,19 +133,19 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.IdVozidlo)
+                                        @Html.DisplayNameFor(model => model.First().IdVozidlo)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Datum)
+                                        @Html.DisplayNameFor(model => model.First().Datum)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.KonecUdrzby)
+                                        @Html.DisplayNameFor(model => model.First().KonecUdrzby)
                                     </th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.Where(item => item.TypUdrzby == 'x'))
+                                @foreach (var item in Model.Where(item => !(item is Oprava || item is Cisteni)))
                                 {
                                     <tr>
                                         <td>

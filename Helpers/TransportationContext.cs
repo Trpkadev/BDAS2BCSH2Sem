@@ -234,15 +234,28 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLUdrzbyAsync(Udrzba udrzba)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum,:typUdrzby, :umytoVMycce, :cistenoOzonem, :typUdrzby, :popisUkonu, :cena);";
-        OracleParameter[] sqlParams = [ new("idUdrzba", ConvertId(udrzba.IdUdrzba)),
-                                        new("idVozidlo", udrzba.IdVozidlo),
-                                        new("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
-                                        new("popisUkonu", udrzba.PopisUkonu),
-                                        new("cena", udrzba.Cena),
-                                        new("umytoVMycce", udrzba.UmytoVMycce),
-                                        new("cistenoOzonem", udrzba.CistenoOzonem),
-                                        new("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
+        string sql = $"{ConvertDMLMethodName()}(:idUdrzba, :idVozidlo, :datum,:konecUdrzby, :popisUkonu, :cena :umytoVMycce, :cistenoOzonem, :typUdrzby);";
+        OracleParameter[] sqlParams = [ new ("idUdrzba", ConvertId(udrzba.IdUdrzba)),
+                                        new ("idVozidlo", udrzba.IdVozidlo),
+                                        new ("datum", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
+                                        new ("konecUdrzby", OracleDbType.Date, udrzba.Datum, ParameterDirection.Input),
+                                        new ("popisUkonu",null),
+                                        new ("cena", null),
+                                        new ("umytoVMycce",  null),
+                                        new ("cistenoOzonem", null),
+                                        new ("typUdrzby", OracleDbType.Char, udrzba.TypUdrzby, ParameterDirection.Input)];
+        switch (udrzba)
+        {
+            case Oprava oprava:
+                sqlParams.First(p => p.ParameterName == "popisUkonu").Value = oprava.PopisUkonu;
+                sqlParams.First(p => p.ParameterName == "cena").Value = oprava.Cena;
+                break;
+
+            case Cisteni cisteni:
+                sqlParams.First(p => p.ParameterName == "umytoVMycce").Value = cisteni.UmytoVMycce;
+                sqlParams.First(p => p.ParameterName == "cistenoOzonem").Value = cisteni.CistenoOzonem;
+                break;
+        }
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
@@ -507,6 +520,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
         modelBuilder.Entity<DatabazovyObjekt>().HasNoKey();
         modelBuilder.Entity<NakladyNaVozidlo>().HasNoKey();
+        modelBuilder.Entity<Udrzba>()
+        .HasDiscriminator<char>("TYP_UDRZBY")
+        .HasValue<Cisteni>('c')
+        .HasValue<Oprava>('o')
+        .HasValue<Udrzba>('x');
     }
 
     #endregion EF Core config
@@ -585,6 +603,5 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await command.ExecuteNonQueryAsync();
         await Database.CloseConnectionAsync();
     }
-
     #endregion Helper methods
 }

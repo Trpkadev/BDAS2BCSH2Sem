@@ -1,4 +1,6 @@
-﻿@model BCSH2BDAS2.Models.Udrzba
+﻿@using BCSH2BDAS2.Models
+@model Udrzba
+
 @{
     ViewData["Title"] = "Vytvořit/Upravit údržbu";
 }
@@ -12,6 +14,7 @@
             <form asp-action="CreateEditSubmit" onsubmit="nullifyHiddenInputs()">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdUdrzba" />
+                <input type="hidden" asp-for="IdVozidlo" />
 
                 <div class="form-group mb-3">
                     <label asp-for="NazevVozidla" class="control-label"></label>
@@ -29,10 +32,6 @@
                     <label asp-for="KonecUdrzby" class="control-label"></label>
                     <input asp-for="KonecUdrzby" class="form-control" />
                     <span asp-validation-for="KonecUdrzby" class="text-danger"></span>
-                    @if (Model.KonecUdrzby != null && ((DateTime)Model.KonecUdrzby - Model.Datum).TotalHours > 72)
-                    {
-                        <span class="badge bg-warning text-dark">>72h</span>
-                    }
                 </div>
 
                 <div class="form-group mb-3">
@@ -47,34 +46,33 @@
 
                 <div id="typUdrzbyO" style="display:none;">
                     <div class="form-group mb-3">
-                        <label asp-for="PopisUkonu" class="control-label"></label>
-                        <input asp-for="PopisUkonu" class="form-control" />
-                        <span asp-validation-for="PopisUkonu" class="text-danger"></span>
+                        <label asp-for=@((Oprava?)ViewData["o"]).PopisUkonu class="control-label"></label>
+                        <input asp-for=@((Oprava?)ViewData["o"]).PopisUkonu class="form-control" />
+                        <span asp-validation-for=@((Oprava?)ViewData["o"]).PopisUkonu class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label asp-for="Cena" class="control-label"></label>
-                        <input asp-for="Cena" class="form-control" />
-                        <span asp-validation-for="Cena" class="text-danger"></span>
+                        <label asp-for=@((Oprava?)ViewData["o"]).Cena class="control-label"></label>
+                        <input asp-for=@((Oprava?)ViewData["o"]).Cena class="form-control" />
+                        <span asp-validation-for=@((Oprava?)ViewData["o"]).Cena class="text-danger"></span>
                     </div>
                 </div>
 
                 <div id="typUdrzbyC" style="display:none;">
                     <div class="form-group mb-3">
-                        <label asp-for="CistenoOzonem" class="control-label"></label>
-                        <input asp-for="CistenoOzonem.Value" class="form-check-input" type="checkbox" />
-                        <span asp-validation-for="CistenoOzonem" class="text-danger"></span>
+                        <label asp-for=@((Cisteni?)ViewData["c"]).UmytoVMycce class="control-label"></label>
+                        <input asp-for=@((Cisteni?)ViewData["c"]).UmytoVMycce class="form-check-input" type="checkbox" />
+                        <span asp-validation-for=@((Cisteni?)ViewData["c"]).UmytoVMycce class="text-danger"></span>
                     </div>
                     <div class="form-group mb-3">
-                        <label asp-for="UmytoVMycce" class="control-label"></label>
-                        <input asp-for="UmytoVMycce.Value" class="form-check-input" type="checkbox" />
-                        <span asp-validation-for="UmytoVMycce" class="text-danger"></span>
+                        <label asp-for=@((Cisteni?)ViewData["c"]).CistenoOzonem class="control-label"></label>
+                        <input asp-for=@((Cisteni?)ViewData["c"]).CistenoOzonem class="form-check-input" type="checkbox" />
+                        <span asp-validation-for=@((Cisteni?)ViewData["c"]).CistenoOzonem class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="form-group row m-1">
                     <input type="submit" value="Uložit změny" class="btn btn-primary col" />
-                    <div class="col w-100"></div>
-                    <a asp-action="Index" class="btn btn-secondary col align-content-end" style="margin-left:1rem">Zpět na seznam</a>
+                    <a asp-action="Index" class="btn btn-secondary col" style="margin-left:1rem">Zpět na seznam</a>
                 </div>
             </form>
         </div>
@@ -95,8 +93,8 @@
             document.querySelector('[name="Cena"]').value = null;
         }
         if (typUdrzby !== 'c') {
-            document.querySelector('[name="CistenoOzonem"]').value = null;
-            document.querySelector('[name="UmytoVMycce"]').value = null;
+            document.querySelector('[name="CistenoOzonem"]').checked = false;
+            document.querySelector('[name="UmytoVMycce"]').checked = false;
         }
     }
 

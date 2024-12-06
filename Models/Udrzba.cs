@@ -15,27 +15,12 @@ public class Udrzba
     public int IdUdrzba { get; set; }
 
     [JsonRequired]
-    [Column("DATUM")]
-    public DateTime Datum { get; set; } = DateTime.Now;
-
-    [JsonRequired]
     [Column("ID_VOZIDLO")]
     public int IdVozidlo { get; set; }
 
-    [Column("POPIS_UKONU")]
-    [DisplayName("Popis úkonu")]
-    public string? PopisUkonu { get; set; }
-
-    [Column("CENA")]
-    public double? Cena { get; set; }
-
-    [Column("UMYTO_V_MYCCE")]
-    [DisplayName("Umyto v myčce")]
-    public bool? UmytoVMycce { get; set; }
-
-    [Column("CISTENO_OZONEM")]
-    [DisplayName("Čištěno ozonem")]
-    public bool? CistenoOzonem { get; set; }
+    [JsonRequired]
+    [Column("DATUM")]
+    public DateTime Datum { get; set; } = DateTime.Now;
 
     [JsonRequired]
     [Column("TYP_UDRZBY")]
@@ -50,4 +35,30 @@ public class Udrzba
     [Column("KONEC_UDRZBY")]
     [DisplayName("Datum konce údržby")]
     public DateTime? KonecUdrzby { get; set; }
+}
+
+public class Cisteni : Udrzba
+{
+    [JsonRequired]
+    [Column("UMYTO_V_MYCCE")]
+    [DisplayName("Umyto v myčce")]
+    public bool UmytoVMycce { get; set; }
+
+    [JsonRequired]
+    [Column("CISTENO_OZONEM")]
+    [DisplayName("Čištěno ozonem")]
+    public bool CistenoOzonem { get; set; }
+
+}
+
+public class Oprava : Udrzba
+{
+    [JsonRequired]
+    [Column("POPIS_UKONU")]
+    [DisplayName("Popis úkonu")]
+    public string PopisUkonu { get; set; }
+
+    [JsonRequired]
+    [Column("CENA")]
+    public double Cena { get; set; }
 }
