@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Výpočet průměrného zpoždění";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+<div class="justify-content-center m-auto" style="width:fit-content">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form>
+                <label for="cislo">Linka</label>
+                @Html.DropDownList("Cislo", (SelectList)ViewBag.Linky, new { @class = "form-control mb-3" })
+
+                <label for="pocetDni">Počet dní zpětně</label>
+                <input type="number" id="pocetDni" name="pocetDni" class="form-control mb-3" value="7" required />
+
+                <label for="hodina">Hodina</label>
+                <input type="number" id="hodina" name="hodina" class="form-control mb-3" min="0" max="23"/>
+
+                <button type="submit" class="btn btn-primary">Vypočítat</button>
+            </form>
+            @if (ViewBag.Vysledek != null)
+            {
+                <hr/>
+                <h3>Výsledek</h3>
+                <p>Průměrné zpoždění na lince @ViewBag.CisloLinky za posledních @ViewBag.PocetDni je @ViewBag.Vysledek minut</p>
+            }
+        </div>
+    </div>
+</div>

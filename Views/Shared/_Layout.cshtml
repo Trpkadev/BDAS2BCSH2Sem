@@ -80,6 +80,8 @@
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Records",null) ? "active" : "")" asp-controller="Records" asp-action="Index"><i class="bi bi-table"></i>Záznamy tras</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","ImportRecords") ? "active" : "")" asp-controller="ImportExport" asp-action="ImportRecords"><i class="bi bi-code-slash"></i>Importovat záznamy tras</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Timetables","MakeOfExisting") ? "active" : "")" asp-controller="Timetables" asp-action="MakeOfExisting"><i class="bi bi-code-slash"></i>Vytvořit JŘ</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Records","AverageDelay") ? "active" : "")" asp-controller="Records" asp-action="AverageDelay"><i class="bi bi-code-slash"></i>Výpočet zpoždění</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","RouteStatistics") ? "active" : "")" asp-controller="Statistics" asp-action="RouteStatistics"><i class="bi bi-clipboard-data"></i>Statistika linek</a>
                                     </li>
                                 </ul>
                             </li>
@@ -109,6 +111,7 @@
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Logs",null) ? "active" : "")" asp-controller="Logs" asp-action="Index"><i class="bi bi-clipboard-data"></i>Logy</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","DBObjects") ? "active" : "")" asp-controller="Statistics" asp-action="DBObjects"><i class="bi bi-clipboard-data"></i>Databázové objekty</a>
                                         <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "ImportExport","Export") ? "active" : "")" asp-controller="ImportExport" asp-action="Export"><i class="bi bi-code-slash"></i>Export dat</a>
+                                        <a class="nav-link text-nowrap @(RazorHelper.IsControllerAndAction(ViewContext, "Statistics","LogStatistics") ? "active" : "")" asp-controller="Statistics" asp-action="LogStatistics"><i class="bi bi-clipboard-data"></i>Statistika logů</a>
                                     </li>
                                 </ul>
                             </li>

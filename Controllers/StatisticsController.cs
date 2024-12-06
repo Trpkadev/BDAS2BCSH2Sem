@@ -50,4 +50,48 @@ public class StatisticsController(TransportationContext context, IHttpContextAcc
             return RedirectToHome();
         }
     }
+
+    [HttpGet]
+    [Route("RouteStatistics")]
+    public async Task<IActionResult> RouteStatistics()
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasDispatchRights())
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                return RedirectToHome();
+            }
+
+            var stats = await _context.GetLinkyStatistikaAsync();
+            return View(stats);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToHome();
+        }
+    }
+
+    [HttpGet]
+    [Route("LogStatistics")]
+    public async Task<IActionResult> LogStatistics()
+    {
+        try
+        {
+            if (ActingUser == null || !ActingUser.HasAdminRights())
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
+                return RedirectToHome();
+            }
+
+            var stats = await _context.GetLogyStatistikaAsync();
+            return View(stats);
+        }
+        catch (Exception)
+        {
+            SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
+            return RedirectToHome();
+        }
+    }
 }

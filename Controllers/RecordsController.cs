@@ -200,9 +200,10 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
     }
 
     [HttpGet]
-    [Route("AverageDelays")]
-    public async Task<IActionResult> AverageDelays()
+    [Route("AverageDelay")]
+    public async Task<IActionResult> AverageDelay(int? cislo, int? pocetDni, int? hodina)
     {
+        // todo nefunguje
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
@@ -211,8 +212,20 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToHome();
             }
 
-            var zaznamyTras = await _context.GetZaznamy_TrasyAsync();
-            return View(zaznamyTras);
+            var linky = await _context.GetLinkyAsync();
+            ViewBag.Linky = new SelectList(linky);
+
+            if (cislo != null && pocetDni != null)
+            {
+                var idLinka = linky.Where(l => l.Cislo == (int)cislo).Select(l => l.IdLinka).First();
+                ViewBag.Vysledek = await _context.GetPrumerneZpozdeni(idLinka, (int)pocetDni, hodina);
+
+                ViewBag.CisloLinky = cislo;
+                ViewBag.PocetDni = pocetDni;
+                ViewBag.Hodina = hodina;
+            }
+
+            return View();
         }
         catch (Exception)
         {

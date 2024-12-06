@@ -1,0 +1,32 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.StatistikaLogu>
+@{
+	ViewData["Title"] = "Statistika logů";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="table-responsive">
+	<table class="table table-striped table-bordered">
+		<thead>
+		<tr>
+			<th>@Html.DisplayNameFor(model => model.Tabulka)</th>
+			<th>@Html.DisplayNameFor(model => model.Pocet)</th>
+			<th>@Html.DisplayNameFor(model => model.NejcastejsiZmena)</th>
+			<th>@Html.DisplayNameFor(model => model.PosledniZmena)</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.Tabulka)</td>
+				<td>@Html.DisplayFor(modelItem => item.Pocet)</td>
+				<td>@Html.DisplayFor(modelItem => item.NejcastejsiZmena)</td>
+				<td>@Html.DisplayFor(modelItem => item.PosledniZmena)</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+</div>

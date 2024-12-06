@@ -36,6 +36,20 @@ public class Schema
     [Column("SOUBOR", TypeName = "BLOB")]
     public byte[]? Soubor { get; set; }
 
+    [Column("ID_UZIVATEL")]
+    public int? IdUzivatel { get; set; }
+
+    [Column("UZIVATELSKE_JMENO")]
+    [DisplayName("Uživatelské jméno")]
+    public string? UzivatelskeJmeno { get; set; }
+
+    [Column("ID_PRACOVNIK")]
+    public int? IdPracovnik { get; set; }
+
+    [Column("JMENO_PRACOVNIKA")]
+    [DisplayName("Jméno pracovníka")]
+    public string JmenoPracovnika { get; set; }
+
     [NotMapped]
     public IFormFile? UploadedFile { get; set; }
 

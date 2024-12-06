@@ -1,0 +1,34 @@
+﻿@using BCSH2BDAS2.Helpers
+@model IEnumerable<BCSH2BDAS2.Models.StatistikaLinky>
+@{
+    ViewData["Title"] = "Statistika linek";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Cislo)</th>
+            <th>@Html.DisplayNameFor(model => model.PocetSpoju)</th>
+            <th>@Html.DisplayNameFor(model => model.PrvniOdjezd)</th>
+            <th>@Html.DisplayNameFor(model => model.PosledniOdjezd)</th>
+            <th>@Html.DisplayNameFor(model => model.PrumernyInterval)</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Cislo)</td>
+                <td>@Html.DisplayFor(modelItem => item.PocetSpoju)</td>
+                <td>@item.PrvniOdjezd.ToString("t")</td>
+                <td>@item.PosledniOdjezd.ToString("t")</td>
+                <td>@Html.DisplayFor(modelItem => item.PrumernyInterval)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

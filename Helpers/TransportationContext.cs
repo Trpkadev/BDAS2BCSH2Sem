@@ -30,6 +30,8 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<ZaznamTrasy> ZaznamyTras { get; set; }
     public DbSet<Znacka> Znacky { get; set; }
     public DbSet<PracovnikHiearchie> PracovniciHierarchie { get; set; }
+    public DbSet<StatistikaLogu> StatistikaLogu { get; set; }
+    public DbSet<StatistikaLinky> StatistikaLinek { get; set; }
 
     #region Procedury
 
@@ -108,9 +110,35 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return result;
     }
 
+    public async Task<double?> GetPrumerneZpozdeni(int idLinka, int pocetDni, int? hodina)
+    {
+        const string sql = @"  DECLARE
+                                    v_result NUMBER;
+                                BEGIN
+                                    v_result := FUNKCE.PRUM_ZPOZDENI(:id_linka, :pocet_dni, :hodina);
+                                    :p_result := v_result_json;
+                                END;";
+        OracleParameter[] sqlParams = [ 
+            new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
+            new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
+            new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)
+        ];
+        // todo udělat lépe
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = sql;
+        command.CommandType = CommandType.Text;
+        var resultParam = new OracleParameter("p_result", OracleDbType.Double, ParameterDirection.Output);
+        command.Parameters.AddRange(sqlParams);
+        await Database.OpenConnectionAsync();
+        await command.ExecuteNonQueryAsync();
+        var result = resultParam.Value;
+        await Database.CloseConnectionAsync();
+        return (double?)result;
+    }
+
     public async Task<string> VyhledaniSpojeAsync(int idZastavkaBegin, int idZastavkaEnd, DateTime timeStart)
     {
-        const string sql = @$"  DECLARE
+        const string sql = @"  DECLARE
                                     v_result_json CLOB;
                                 BEGIN
                                     v_result_json := VYHLEDANI_SPOJE.VS_CORE(:id_zastavka_start, :id_zastavka_end, :time_start);
@@ -194,14 +222,15 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSchemataAsync(Schema schema)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idSchema, :nazevSchematu, :nazevSouboru, :typSouboru, :velikostSouboru, :datumZmeny, :soubor);";
+        string sql = $"{ConvertDMLMethodName()}(:idSchema, :nazevSchematu, :nazevSouboru, :typSouboru, :velikostSouboru, :datumZmeny, :soubor, :idUzivatel);";
         OracleParameter[] sqlParams = [ new("idSchema", ConvertId(schema.IdSchema)),
                                         new("nazevSchematu", schema.NazevSchematu),
                                         new("nazevSouboru", schema.NazevSouboru),
                                         new("typSouboru", schema.TypSouboru),
                                         new("velikostSouboru", schema.VelikostSouboru),
                                         new("datumZmeny", schema.DatumZmeny),
-                                        new("soubor", schema.Soubor)];
+                                        new("soubor", schema.Soubor),
+                                        new("idUzivatel", schema.IdUzivatel)];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
@@ -316,6 +345,16 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     #endregion DML procedures
 
     #region views
+
+    public async Task<List<StatistikaLinky>> GetLinkyStatistikaAsync()
+    {
+        return await StatistikaLinek.FromSqlRaw("SELECT * FROM LINKY_STAT").ToListAsync();
+    }
+
+    public async Task<List<StatistikaLogu>> GetLogyStatistikaAsync()
+    {
+        return await StatistikaLogu.FromSqlRaw("SELECT * FROM LOGY_STAT").ToListAsync();
+    }
 
     public async Task<List<PracovnikHiearchie>> GetPracovniciHierarchieAsync()
     {
@@ -527,6 +566,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         modelBuilder.Entity<DatabazovyObjekt>().HasNoKey();
         modelBuilder.Entity<NakladyNaVozidlo>().HasNoKey();
         modelBuilder.Entity<PracovnikHiearchie>().HasNoKey();
+        modelBuilder.Entity<StatistikaLogu>().HasNoKey();
         modelBuilder.Entity<Udrzba>()
         .HasDiscriminator<char>("TYP_UDRZBY")
         .HasValue<Cisteni>('c')

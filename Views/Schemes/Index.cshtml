@@ -47,7 +47,8 @@
                         <img src="Schemes/Download?encryptedId=@Html.UrlEncoder.Encode(OurCryptography.Instance.EncryptId(schema.IdSchema))" class="img-fluid" />
                     }
                     <p><a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a></p>
-                    <p><i>Poslední změna @schema.DatumZmeny</i></p>
+                    <p><i>Poslední změna: @schema.DatumZmeny</i></p>
+                    <p><i>Naposledy změnil: @schema.JmenoPracovnika</i></p>
                 </div>
             }
         }
@@ -65,6 +66,8 @@
                                 <th>@Html.DisplayNameFor(model => model.TypSouboru)</th>
                                 <th>@Html.DisplayNameFor(model => model.VelikostSouboru)</th>
                                 <th>@Html.DisplayNameFor(model => model.DatumZmeny)</th>
+                                <th>@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</th>
+                                <th>@Html.DisplayNameFor(model => model.JmenoPracovnika)</th>
                                 <th>Stáhnout</th>
                                 <th></th>
                             </tr>
@@ -78,6 +81,16 @@
                                     <td>@Html.DisplayFor(_ => item.TypSouboru)</td>
                                     <td>@Html.DisplayFor(_ => item.VelikostSouboru)</td>
                                     <td>@Html.DisplayFor(_ => item.DatumZmeny)</td>
+                                    <td>
+                                        <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">
+                                            @Html.DisplayFor(_ => item.UzivatelskeJmeno)
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdPracovnik)">
+                                            @Html.DisplayFor(_ => item.JmenoPracovnika)
+                                        </a>
+                                    </td>
                                     <td>
                                         <a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a>
                                     </td>
