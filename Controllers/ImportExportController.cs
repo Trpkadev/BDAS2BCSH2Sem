@@ -133,7 +133,7 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             var csv = await sr.ReadToEndAsync();
             csv = csv.Replace("\r\n", "\n");
 
-            await _context.ImportRecordsAsync(csv, oddelovac);
+            await _context.CSVDoZaznamuTrasyAsync(csv, oddelovac);
 
             SetSuccessMessage("Úspěšně naimportováno");
             return RedirectToAction(nameof(ImportRecords));

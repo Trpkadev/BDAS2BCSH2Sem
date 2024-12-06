@@ -126,7 +126,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("MODELY", "ID_MODEL", model.IdModel);
+                await _context.DeleteFromTableAsync("MODELY", [("ID_MODEL", model.IdModel.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

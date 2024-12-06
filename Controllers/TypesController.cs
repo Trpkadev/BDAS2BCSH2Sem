@@ -128,7 +128,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("TYPY_VOZIDEL", "ID_TYP_VOZIDLA", typVozidla.IdTypVozidla);
+                await _context.DeleteFromTableAsync("TYPY_VOZIDEL", [("ID_TYP_VOZIDLA", typVozidla.IdTypVozidla.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

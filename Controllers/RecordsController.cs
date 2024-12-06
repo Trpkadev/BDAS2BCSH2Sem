@@ -134,7 +134,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ZAZNAMY_TRASY", "ID_LINKA", zaznamTrasy.IdZaznam);
+                await _context.DeleteFromTableAsync("ZAZNAMY_TRASY", [("ID_LINKA", zaznamTrasy.IdZaznam.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

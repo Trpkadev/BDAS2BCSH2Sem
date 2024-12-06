@@ -62,7 +62,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
                 return RedirectToAction(nameof(Plan));
             }
 
-            string a = await _context.DijkstraAsync(idZastavkaFrom, idZastavkaTo, DateTime.Parse(time, CultureInfo.CurrentCulture));
+            string a = await _context.VyhledaniSpojeAsync(idZastavkaFrom, idZastavkaTo, DateTime.Parse(time, CultureInfo.CurrentCulture));
             ViewData["zastavky"] = await _context.GetZastavkyAsync() ?? [];
             return View(model: a);
         }

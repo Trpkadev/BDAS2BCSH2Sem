@@ -133,7 +133,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("LINKY", "ID_LINKA", linka.IdLinka);
+                await _context.DeleteFromTableAsync("LINKY", [("ID_LINKA", linka.IdLinka.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

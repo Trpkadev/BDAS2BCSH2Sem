@@ -130,7 +130,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("GARAZE", "ID_GARAZ", garaz.IdGaraz);
+                await _context.DeleteFromTableAsync("GARAZE", [("ID_GARAZ", garaz.IdGaraz.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

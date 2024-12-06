@@ -134,7 +134,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("SPOJE", "ID_SPOJ", spoj.IdSpoj);
+                await _context.DeleteFromTableAsync("SPOJE", [("ID_SPOJ", spoj.IdSpoj.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

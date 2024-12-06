@@ -130,7 +130,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ZASTAVKY", "ID_ZASTAVKA", zastavka.IdZastavka);
+                await _context.DeleteFromTableAsync("ZASTAVKY", [("ID_ZASTAVKA", zastavka.IdZastavka.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

@@ -130,7 +130,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("TARIFNI_PASMA", "ID_PASMO", tarifniPasmo.IdPasmo);
+                await _context.DeleteFromTableAsync("TARIFNI_PASMA", [("ID_PASMO", tarifniPasmo.IdPasmo.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

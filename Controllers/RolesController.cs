@@ -128,7 +128,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ROLE", "ID_ROLE", role.IdRole);
+                await _context.DeleteFromTableAsync("ROLE", [("ID_ROLE", role.IdRole.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

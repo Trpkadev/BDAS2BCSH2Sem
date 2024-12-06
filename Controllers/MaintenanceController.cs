@@ -131,7 +131,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("UDRZBY", "ID_UDRZBA", udrzba.IdUdrzba);
+                await _context.DeleteFromTableAsync("UDRZBY", [("ID_UDRZBA", udrzba.IdUdrzba.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

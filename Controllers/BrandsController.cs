@@ -128,7 +128,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ZNACKY", "ID_ZNACKA", znacka.IdZnacka);
+                await _context.DeleteFromTableAsync("ZNACKY", [("ID_ZNACKA", znacka.IdZnacka.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

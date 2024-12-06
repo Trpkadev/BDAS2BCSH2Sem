@@ -134,7 +134,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("SCHEMATA", "ID_SCHEMA", schema.IdSchema);
+                await _context.DeleteFromTableAsync("SCHEMATA", [("ID_SCHEMA", schema.IdSchema.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

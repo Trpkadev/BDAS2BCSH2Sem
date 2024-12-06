@@ -134,7 +134,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("JIZDNI_RADY", "ID_JIZDNI_RAD", jizdniRad.IdJizdniRad);
+                await _context.DeleteFromTableAsync("JIZDNI_RADY", [("ID_JIZDNI_RAD", jizdniRad.IdJizdniRad.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

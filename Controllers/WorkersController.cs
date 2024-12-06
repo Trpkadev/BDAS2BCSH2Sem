@@ -18,7 +18,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null || !ActingUser.HasManagerRights())
                 return RedirectToHome();
 
-            await _context.AddPayAsync(multiplier, minPay);
+            await _context.NavyseniPlatuAsync(multiplier, minPay);
             SetSuccessMessage();
             return RedirectToAction(nameof(Index));
         }
@@ -147,7 +147,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("PRACOVNICI", "ID_UZIVATEL", pracovnik.IdPracovnik);
+                await _context.DeleteFromTableAsync("PRACOVNICI", [("ID_UZIVATEL", pracovnik.IdPracovnik.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));
