@@ -134,10 +134,10 @@
                                     <span class="nav-link" style="display:flex">Jednáte za uživatele: @ViewData[Resource.ACTING_USER] (<a class="nav-link text-nowrap" style="padding:0;color:orangered;" asp-controller="Users" asp-action="StopActingBehalf">Zrušit</a>)</span>
                                 </li>
                             }
-                            @if (((Uzivatel?)ViewData[Resource.LOGGED_USER])?.Prava > 1)
+                            @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.Prava > 1)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-nowrap" asp-controller="Workers" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(((Uzivatel?)ViewData[Resource.LOGGED_USER])?.IdUzivatel)">Upravit profil</a>
+                                    <a class="nav-link text-nowrap" asp-controller="Workers" asp-action="CreateEdit" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(((Uzivatel?)ViewData[Resource.ACTING_USER])?.IdUzivatel)">Upravit profil</a>
                                 </li>
                             }
 

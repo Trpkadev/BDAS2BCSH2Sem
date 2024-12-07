@@ -1,4 +1,5 @@
-﻿@using BCSH2BDAS2.Models
+﻿@using BCSH2BDAS2.Helpers
+@using BCSH2BDAS2.Models
 @model Pracovnik
 @{
     ViewData["Title"] = "Vytvořit/Upravit pracovníka";
@@ -45,26 +46,49 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label asp-for="HodinovaMzda" class="control-label"></label>
-                    <input asp-for="HodinovaMzda" class="form-control" />
-                    <span asp-validation-for="HodinovaMzda" class="text-danger"></span>
+                    @if (((Uzivatel?)(ViewData[Resource.ACTING_USER]))?.HasManagerRights() == true || ((Uzivatel?)(ViewData[Resource.LOGGED_USER]))?.IdUzivatel == Model.IdUzivatel)
+                    {
+                        <label asp-for="HodinovaMzda" class="control-label"></label>
+                        <input asp-for="HodinovaMzda" class="form-control" />
+                        <span asp-validation-for="HodinovaMzda" class="text-danger"></span>
+                    }
+                    else
+                    {
+                        <label asp-for="HodinovaMzda" class="control-label"></label>
+                        @Html.TextBoxFor(model => model.HodinovaMzda, new { @class = "form-control", @readonly = "readonly" })
+                        <span asp-validation-for="HodinovaMzda" class="text-danger"></span>
+                    }
                 </div>
 
                 <div class="form-group form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="SkryteUdaje" />
-                    </label>
+                    <label asp-for="SkryteUdaje" class="form-check-label"></label>
+                    <input asp-for="SkryteUdaje" class="form-check-input" />
+                    <span asp-validation-for="SkryteUdaje" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="JmenoNadrizeneho" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdNadrizeny, ViewBag.Pracovnici as SelectList, new { @class = "form-control" })
+                    @if (((Uzivatel?)(ViewData[Resource.ACTING_USER]))?.HasManagerRights() == true)
+                    {
+                        @Html.DropDownListFor(model => model.IdNadrizeny, ViewBag.Pracovnici as SelectList, new { @class = "form-control" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.JmenoNadrizeneho, new { @class = "form-control", @readonly = "readonly" })
+                    }
                     <span asp-validation-for="IdNadrizeny" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="UzivatelskeJmeno" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdUzivatel, ViewBag.Uzivatele as SelectList, new { @class = "form-control" })
+                    @if (((Uzivatel?)(ViewData[Resource.ACTING_USER]))?.HasManagerRights() == true)
+                    {
+                        @Html.DropDownListFor(model => model.IdUzivatel, ViewBag.Uzivatele as SelectList, new { @class = "form-control" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => model.UzivatelskeJmeno, new { @class = "form-control", @readonly = "readonly" })
+                    }
                     <span asp-validation-for="IdUzivatel" class="text-danger"></span>
                 </div>
 

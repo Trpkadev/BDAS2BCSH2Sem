@@ -1,6 +1,7 @@
 ﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BCSH2BDAS2.Controllers;
 
@@ -166,8 +167,8 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToHome();
             }
 
+            ViewBag.Role = new SelectList(await _context.GetRoleAsync() ?? [], "IdRole", "");
             var uzivatele = await _context.GetUzivateleAsync();
-            ViewData["Role"] = await _context.GetRoleAsync();
             return View(uzivatele);
         }
         catch (Exception)
@@ -257,11 +258,14 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
         try
         {
             if (!ModelState.IsValid)
-                return View(uzivatel);
+            {
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
+                return RedirectToAction(nameof(Register));
+            }
             if (await _context.GetUzivatelUsernameExistsAsync(uzivatel.UzivatelskeJmeno))
             {
                 SetErrorMessage(Resource.REGISTER_NAME_EXISTS);
-                return View(uzivatel);
+                return RedirectToAction(nameof(Register));
             }
 
             uzivatel.Heslo = OurCryptography.EncryptHash(uzivatel.Heslo);

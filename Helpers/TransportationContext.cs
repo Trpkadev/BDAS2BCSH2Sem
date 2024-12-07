@@ -118,7 +118,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                     v_result := FUNKCE.PRUM_ZPOZDENI(:id_linka, :pocet_dni, :hodina);
                                     :p_result := v_result_json;
                                 END;";
-        OracleParameter[] sqlParams = [ 
+        OracleParameter[] sqlParams = [
             new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
             new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
             new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)
@@ -424,6 +424,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public async Task<Pracovnik?> GetPracovnikByIdAsync(int idPracovnik)
     {
         return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_PRACOVNIK = {0}", idPracovnik).FirstOrDefaultAsync();
+    }
+
+    public async Task<Pracovnik?> GetPracovnikByUserIdAsync(int idUzivatel)
+    {
+        return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_UZIVATEL = {0}", idUzivatel).FirstOrDefaultAsync();
     }
 
     public async Task<List<Role>> GetRoleAsync()

@@ -35,7 +35,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasManagerRights())
+            if (ActingUser == null || !ActingUser.HasWorkerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
@@ -54,15 +54,15 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return View(new Pracovnik());
             }
             int id = GetDecryptedId(encryptedId);
-            var pracovnik = await _context.GetPracovnikByIdAsync(id);
+            var pracovnik = await _context.GetPracovnikByUserIdAsync(id);
             if (pracovnik != null)
             {
                 ViewBag.Uzivatele = new SelectList(uzivatele, "IdUzivatel", "", pracovnik.IdUzivatel);
                 ViewBag.Pracovnici = new SelectList(pracovnici, "IdPracovnik", "", pracovnik.IdNadrizeny);
                 return View(pracovnik);
             }
-            SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
-            return View(nameof(Index));
+            SetErrorMessage(Resource.DB_DATA_NOT_EXIST + ", nebyl vytvořen účet pracovníka - kontaktujte manažera nebo administrátora");
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception)
         {
@@ -73,14 +73,14 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
 
     [HttpPost]
     [Route("CreateEditSubmit")]
-    public async Task<IActionResult> CreateEditSubmit([FromBody] Pracovnik pracovnik)
+    public async Task<IActionResult> CreateEditSubmit([FromForm] Pracovnik pracovnik)
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {
@@ -204,7 +204,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasManagerRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
 
             var pracovnici = await _context.GetPracovniciAsync() ?? [];
             return View(pracovnici);
@@ -223,7 +223,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasManagerRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
 
             var pracovnici = await _context.GetPracovniciHierarchieAsync();
 
