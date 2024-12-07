@@ -48,7 +48,7 @@ public class Schema
 
     [Column("JMENO_PRACOVNIKA")]
     [DisplayName("Jméno pracovníka")]
-    public string JmenoPracovnika { get; set; }
+    public string? JmenoPracovnika { get; set; }
 
     [NotMapped]
     public IFormFile? UploadedFile { get; set; }

@@ -44,7 +44,7 @@
                 <div id="@("tab" + i.ToString())" class="@activeClass">
                     @if (schema.TypSouboru!.Contains("image"))
                     {
-                        <img src="Schemes/Download?encryptedId=@Html.UrlEncoder.Encode(OurCryptography.Instance.EncryptId(schema.IdSchema))" class="img-fluid" />
+                        <img src="/Schemes/Download?encryptedId=@Html.UrlEncoder.Encode(OurCryptography.Instance.EncryptId(schema.IdSchema))" class="img-fluid" />
                     }
                     <p><a asp-action="Download" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(schema.IdSchema)" class="btn btn-secondary" download="1">Stáhnout</a></p>
                     <p><i>Poslední změna: @schema.DatumZmeny</i></p>
@@ -79,7 +79,7 @@
                                     <td>@Html.DisplayFor(_ => item.NazevSchematu)</td>
                                     <td>@Html.DisplayFor(_ => item.NazevSouboru)</td>
                                     <td>@Html.DisplayFor(_ => item.TypSouboru)</td>
-                                    <td>@Html.DisplayFor(_ => item.VelikostSouboru)</td>
+                                    <td>@Html.DisplayFor(_ => item.VelikostSouboru) kB</td>
                                     <td>@Html.DisplayFor(_ => item.DatumZmeny)</td>
                                     <td>
                                         <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">

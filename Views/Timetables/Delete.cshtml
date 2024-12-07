@@ -24,12 +24,12 @@
 
             <dl class="row m-0">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasPrijezdu)</dt>
-                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasPrijezdu)</dd>
+                <dd class="col-auto p-1">@Model.CasPrijezdu?.ToString("t")</dd>
             </dl>
 
             <dl class="row m-0">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.CasOdjezdu)</dt>
-                <dd class="col-auto p-1">@Html.DisplayFor(model => model.CasOdjezdu)</dd>
+                <dd class="col-auto p-1">@Model.CasOdjezdu.ToString("t")</dd>
             </dl>
 
             <form asp-action="DeleteSubmit" class="row m-1">

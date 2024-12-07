@@ -48,7 +48,9 @@
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Soubor)</dt>
                 @if (Model.TypSouboru!.Contains("image"))
                 {
-                    <dd class="col-auto p-1"><img src="Schemes/Download?encryptedId=@OurCryptography.Instance.EncryptId(Model.IdSchema)" class="img-fluid" /></dd>
+	                <dd class="col-auto p-1">
+		                <img src="/Schemes/Download?encryptedId=@Html.UrlEncoder.Encode(OurCryptography.Instance.EncryptId(Model.IdSchema))" class="img-fluid"/>
+	                </dd>
                 }
                 else
                 {
