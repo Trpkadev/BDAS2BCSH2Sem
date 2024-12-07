@@ -1,6 +1,7 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models;
-@model string?;
+@using static BCSH2BDAS2.Controllers.HomeController
+@model IEnumerable<VyhledaniSpojeResponseModel>?;
 @{
     ViewData["Title"] = "Vyhledat spojení";
 }
@@ -14,13 +15,13 @@
             <form method="post" action="Plan">
                 <div class="form-group mb-3">
                     <label for="from" class="control-label">Ze zastávky</label>
-                    <input list="zastavkyList" class="form-control" oninput="setHiddenInput(this, 'from')" />
+                    <input id="fromSelect" list="zastavkyList" class="form-control" oninput="setHiddenInput(this, 'from')" placeholder="Od" />
                     <input type="hidden" id="from" name="from" required />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="to" class="control-label">Do zastávky</label>
-                    <input list="zastavkyList" class="form-control" onchange="setHiddenInput(this, 'to')" />
+                    <input id="toSelect" list="zastavkyList" class="form-control" onchange="setHiddenInput(this, 'to')" placeholder="Do" />
                     <input type="hidden" id="to" name="to" required />
                 </div>
 
@@ -32,16 +33,32 @@
                 <div>
                     <input type="submit" value="Vyhledat" class="btn btn-primary" />
                 </div>
-                @if (Model == Resource.DB_RESPONSE_NO_DATA)
+                @if (Model == null)
                 {
-                    <div>@Model</div>
+                    <div>@Resource.DB_RESPONSE_NO_DATA</div>
                 }
                 else if (Model != null)
                 {
-                    @foreach (string str in Model.Split("},"))
-                    {
-                        <div>@str},</div>
-                    }
+                    <table class="table-bordered">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.ID_ZASTAVKA)</th>
+                                <th>@Html.DisplayNameFor(model => model.ID_ZASTAVKA_FROM)</th>
+                                <th>@Html.DisplayNameFor(model => model.TRIP_LENGTH)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ID_ZASTAVKA</td>
+                                    <td>@item.ID_ZASTAVKA_FROM</td>
+                                    <td>@item.TRIP_LENGTH</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
                 }
                 <datalist id="zastavkyList">
                     @if (ViewData["zastavky"] is IEnumerable<Zastavka> zastavky)
@@ -60,6 +77,29 @@
 
 
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('fromSelect');
+      const input2 = document.getElementById('toSelect');
+      const datalist = document.getElementById('zastavkyList');
+      const options = datalist.querySelectorAll('option');
+
+      const span = document.createElement('span');
+      span.style.visibility = 'hidden';
+      span.style.position = 'absolute';
+      span.style.font = window.getComputedStyle(input).font;
+      document.body.appendChild(span);
+
+      let maxWidth = input.offsetWidth;
+      options.forEach(option => {
+        span.textContent = option.value;
+        maxWidth = Math.max(maxWidth, span.offsetWidth+16);
+      });
+      input.style.width = `${maxWidth}px`;
+      input2.style.width = `${maxWidth}px`;
+
+      document.body.removeChild(span);
+    });
+
     function setHiddenInput(inputElement, hiddenInputId) {
         const selectedOption = [...document.getElementById('zastavkyList').options].find(option => option.value === inputElement.value);
         if (selectedOption)

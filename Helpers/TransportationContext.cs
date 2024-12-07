@@ -5,6 +5,7 @@ using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System.Data;
 using System.Runtime.CompilerServices;
+using static BCSH2BDAS2.Controllers.HomeController;
 
 namespace BCSH2BDAS2.Helpers;
 
@@ -136,19 +137,19 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         return (double?)result;
     }
 
-    public async Task<string> VyhledaniSpojeAsync(int idZastavkaBegin, int idZastavkaEnd, DateTime timeStart)
+    public async Task<VyhledaniSpojeResponseModel[]?> VyhledaniSpojeAsync(int idZastavkaBegin, int idZastavkaEnd, DateTime timeStart)
     {
         const string sql = @"  DECLARE
                                     v_result_json CLOB;
                                 BEGIN
-                                    v_result_json := VYHLEDANI_SPOJE.VS_CORE(:id_zastavka_start, :id_zastavka_end, :time_start);
+                                    v_result_json := DIJKSTRA.CORE(:p_id_zastavka_from, :p_id_zastavka_to, :p_datetime_start);
                                     :p_result := v_result_json;
                                 END;";
-        OracleParameter[] sqlParams = [ new("id_zastavka_start", OracleDbType.Int32, idZastavkaBegin, ParameterDirection.Input),
-                                        new("id_zastavka_end", OracleDbType.Int32, idZastavkaEnd, ParameterDirection.Input),
-                                        new("time_start", OracleDbType.Date, timeStart, ParameterDirection.Input)];
-        var result = await DBPLSQLCallWithResponseAsync<string>(sql, sqlParams);
-        return result ?? Resource.DB_RESPONSE_NO_DATA;
+        OracleParameter[] sqlParams = [ new("p_id_zastavka_from", OracleDbType.Int32, idZastavkaBegin, ParameterDirection.Input),
+                                        new("p_id_zastavka_to", OracleDbType.Int32, idZastavkaEnd, ParameterDirection.Input),
+                                        new("p_datetime_start", OracleDbType.Date, timeStart, ParameterDirection.Input)];
+        var result = await DBPLSQLCallWithResponseAsync<VyhledaniSpojeResponseModel[]>(sql, sqlParams);
+        return result;
     }
 
     #endregion Funkce
@@ -655,11 +656,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                     END;";
         command.CommandType = CommandType.Text;
         command.Parameters.AddRange(sqlParams);
-        string a = command.CommandText;
         await Database.OpenConnectionAsync();
         await command.ExecuteNonQueryAsync();
         await Database.CloseConnectionAsync();
     }
-
     #endregion Helper methods
 }
