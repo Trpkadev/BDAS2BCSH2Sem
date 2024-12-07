@@ -21,37 +21,49 @@
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.TelefonniCislo)</dt>
-                @if (Model.SkryteUdaje)
+                @if (!Model.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                 {
-                    <dd class="col-auto p-1">Skryté</dd>
+                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.TelefonniCislo)</dd>
                 }
                 else
                 {
-                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.TelefonniCislo)</dd>
+                    <dd class="col-auto p-1">Skryté</dd>
                 }
             </dl>
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.Email)</dt>
-                @if (Model.SkryteUdaje)
+                @if (!Model.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                 {
-                    <dd class="col-auto p-1">Skryté</dd>
+                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.Email)</dd>
                 }
                 else
                 {
-                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.Email)</dd>
+                    <dd class="col-auto p-1">Skryté</dd>
                 }
             </dl>
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.RodneCislo)</dt>
-                @if (Model.SkryteUdaje)
+                @if (!Model.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                 {
-                    <dd class="col-auto p-1">Skryté</dd>
+                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.RodneCislo)</dd>
                 }
                 else
                 {
-                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.RodneCislo)</dd>
+                    <dd class="col-auto p-1">Skryté</dd>
+                }
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.HodinovaMzda)</dt>
+                @if (!Model.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
+                {
+                    <dd class="col-auto p-1">@Html.DisplayFor(model => model.HodinovaMzda)</dd>
+                }
+                else
+                {
+                    <dd class="col-auto p-1">Skryté</dd>
                 }
             </dl>
 
