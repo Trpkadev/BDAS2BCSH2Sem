@@ -423,7 +423,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task<Pracovnik?> GetPracovnikByIdAsync(int idPracovnik)
     {
-        return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_UZIVATEL = {0}", idPracovnik).FirstOrDefaultAsync();
+        return await Pracovnici.FromSqlRaw("SELECT * FROM PRACOVNICI_VIEW WHERE ID_PRACOVNIK = {0}", idPracovnik).FirstOrDefaultAsync();
     }
 
     public async Task<List<Role>> GetRoleAsync()

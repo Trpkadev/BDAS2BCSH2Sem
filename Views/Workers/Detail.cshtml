@@ -37,16 +37,31 @@
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.JmenoNadrizeneho)</dt>
                 <dd class="col-auto p-1">
-                    <a asp-controller="Workers" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
+                    @if (Model.IdNadrizeny == null)
+                    {
+                        <p>Není žádný nařízený pracovník</p>
+                    }
+                    else
+                    {
+                        <a asp-controller="Workers" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdNadrizeny)">@Html.DisplayFor(_ => Model.JmenoNadrizeneho)</a>
+                    }
                 </dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</dt>
                 <dd class="col-auto p-1">
-                    <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)">@Html.DisplayFor(_ => Model.UzivatelskeJmeno)</a>
+                    @if (Model.IdUzivatel == null)
+                    {
+                        <p>Pracovník nemá uživatelský účet</p>
+                    }
+                    else
+                    {
+                        <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdUzivatel)">@Html.DisplayFor(_ => Model.UzivatelskeJmeno)</a>
+                    }
                 </dd>
             </dl>
+
             @await Html.PartialAsync("DetailActionButtons", Model.IdPracovnik)
         </div>
     </div>
