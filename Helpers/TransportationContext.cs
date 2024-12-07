@@ -660,5 +660,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await command.ExecuteNonQueryAsync();
         await Database.CloseConnectionAsync();
     }
+
     #endregion Helper methods
 }

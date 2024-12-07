@@ -2,6 +2,7 @@ using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Globalization;
 
 namespace BCSH2BDAS2.Controllers;
@@ -73,11 +74,18 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         }
     }
 
-    public class VyhledaniSpojeResponseModel()
+    public class VyhledaniSpojeResponseModel
     {
-        public int ID_ZASTAVKA { get; set; }
-        public int ID_ZASTAVKA_FROM { get; set; }
-        public double TRIP_LENGTH { get; set; }
+        [JsonProperty("ID_ZASTAVKA")]
+        public int IdZastavka { get; set; }
+        [JsonProperty("ID_ZASTAVKA_FROM")]
+        public int IdZastavkaFrom { get; set; }
+        [JsonProperty("TRIP_LENGTH")]
+        public double TripLength { get; set; }
+        [JsonProperty("ID_SPOJ")]
+        public int IdSpoj { get; set; }
+        [JsonProperty("ID_SPOJ_FROM")]
+        public int IdSpojFrom { get; set; }
     }
 
     [HttpGet]
