@@ -56,7 +56,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {

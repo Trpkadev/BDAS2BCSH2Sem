@@ -191,7 +191,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
 
             var vozidla = await _context.GetVozidlaAsync() ?? [];

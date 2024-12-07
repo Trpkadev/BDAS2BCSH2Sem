@@ -25,10 +25,7 @@
                 <th>@Html.DisplayNameFor(model => model.HodinovaMzda)</th>
                 <th>@Html.DisplayNameFor(model => model.JmenoNadrizeneho)</th>
                 <th>@Html.DisplayNameFor(model => model.UzivatelskeJmeno)</th>
-                @if (((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                {
-                    <th></th>
-                }
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -41,43 +38,22 @@
                     @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
                     {
                         <td>@Html.DisplayFor(_ => item.TelefonniCislo)</td>
-                    }
-                    else
-                    {
-                        <td>@Html.DisplayFor(_ => "Skryté")</td>
-                    }
-
-                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                    {
                         <td>@Html.DisplayFor(_ => item.Email)</td>
-                    }
-                    else
-                    {
-                        <td>@Html.DisplayFor(_ => "Skryté")</td>
-                    }
-
-                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                    {
                         <td>@Html.DisplayFor(_ => item.RodneCislo)</td>
-                    }
-                    else
-                    {
-                        <td>@Html.DisplayFor(_ => "Skryté")</td>
-                    }
-
-                    @if (!item.SkryteUdaje || ((Uzivatel?)ViewData[Resource.ACTING_USER])?.HasAdminRights() == true)
-                    {
                         <td>@Html.DisplayFor(_ => item.HodinovaMzda)</td>
                     }
                     else
                     {
-                        <td>@Html.DisplayFor(_ => "Skryté")</td>
+                        <td>Skryté</td>
+                        <td>Skryté</td>
+                        <td>Skryté</td>
+                        <td>Skryté</td>
                     }
 
                     @if (item.IdNadrizeny != null)
                     {
                         <td>
-                            <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdNadrizeny)">@Html.DisplayFor(_ => item.JmenoNadrizeneho)</a>
+                            <a asp-controller="Workers" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdNadrizeny)">@Html.DisplayFor(_ => item.JmenoNadrizeneho)</a>
                         </td>
                     }
                     else

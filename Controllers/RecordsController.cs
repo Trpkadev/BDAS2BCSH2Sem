@@ -57,7 +57,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {

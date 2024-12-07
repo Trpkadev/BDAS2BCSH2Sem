@@ -51,7 +51,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
             if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {

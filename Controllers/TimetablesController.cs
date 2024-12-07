@@ -64,7 +64,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasDispatchRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {
@@ -212,7 +212,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
 
             var spoje = await _context.GetSpojeAsync();
             ViewBag.Spoje = new SelectList(spoje);
@@ -233,7 +233,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
 
             await _context.PlanovaniJrAsync(idSpoj, od, _do, interval);
 

@@ -40,7 +40,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
@@ -72,7 +72,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
@@ -105,7 +105,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));
@@ -161,7 +161,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasAdminRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToHome();

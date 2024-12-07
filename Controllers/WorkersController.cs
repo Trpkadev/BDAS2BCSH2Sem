@@ -113,7 +113,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {
@@ -143,7 +143,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
         try
         {
             if (ActingUser == null || !ActingUser.HasAdminRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
@@ -172,7 +172,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     {
         try
         {
-            if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            if (ActingUser == null || !ActingUser.HasManagerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToAction(nameof(Index));

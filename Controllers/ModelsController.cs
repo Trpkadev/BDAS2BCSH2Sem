@@ -53,7 +53,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(CreateEdit), model);
 

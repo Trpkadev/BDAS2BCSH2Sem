@@ -51,7 +51,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
             {
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToHome();
             }
             if (!ModelState.IsValid)
             {

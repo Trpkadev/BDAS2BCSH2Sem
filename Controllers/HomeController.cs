@@ -40,13 +40,13 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToHome();
         }
     }
 
     [HttpPost]
     [Route("Plan")]
-    public async Task<ActionResult> Plan(string from, string to, string time)
+    public async Task<IActionResult> Plan(string from, string to, string time)
     {
         try
         {
@@ -70,7 +70,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToHome();
         }
     }
 
@@ -78,19 +78,23 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
     {
         [JsonProperty("ID_ZASTAVKA")]
         public int IdZastavka { get; set; }
+
         [JsonProperty("ID_ZASTAVKA_FROM")]
         public int IdZastavkaFrom { get; set; }
+
         [JsonProperty("TRIP_LENGTH")]
         public double TripLength { get; set; }
+
         [JsonProperty("ID_SPOJ")]
         public int IdSpoj { get; set; }
+
         [JsonProperty("ID_SPOJ_FROM")]
         public int IdSpojFrom { get; set; }
     }
 
     [HttpGet]
     [Route("Timetable")]
-    public async Task<ActionResult> Timetable(string? encryptedId)
+    public async Task<IActionResult> Timetable(string? encryptedId)
     {
         try
         {
@@ -134,7 +138,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
         catch (Exception)
         {
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToHome();
         }
     }
 }
