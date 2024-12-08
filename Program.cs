@@ -50,7 +50,7 @@ public static class Program
 
         builder.Services.AddDbContext<TransportationContext>(options =>
 #if DEBUG
-            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false););
+            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
 #elif RELEASE
             options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
 #endif
