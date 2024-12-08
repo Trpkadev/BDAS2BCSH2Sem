@@ -13,6 +13,10 @@
                 <th>@Html.DisplayNameFor(model => model.NazevVozidla)</th>
                 <th>@Html.DisplayNameFor(model => model.CasPrijezdu)</th>
                 <th>@Html.DisplayNameFor(model => model.CasOdjezdu)</th>
+                @if (Model.Any(item => item.UdrzbaInvalid == true))
+                {
+                    <th></th>
+                }
                 <th></th>
             </tr>
         </thead>
@@ -28,6 +32,16 @@
                     </td>
                     <td>@item.CasPrijezdu.ToShortTimeString()</td>
                     <td>@item.CasOdjezdu.ToShortTimeString()</td>
+
+                    @if (Model.Select(item => item.UdrzbaInvalid).Any(item => item == true))
+                    {
+                        <td>
+                            @if (item.UdrzbaInvalid)
+                            {
+                                <span class="badge bg-danger text-dark">Vozidlo neprošlo údržbou</span>
+                            }
+                        </td>
+                    }
                     @await Html.PartialAsync("IndexActionButtons", item.IdZaznam)
                 </tr>
             }

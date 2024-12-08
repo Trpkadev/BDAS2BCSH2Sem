@@ -188,8 +188,12 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToHome();
             }
-
+            var udrzby = await _context.GetUdrzbyAsync();
             var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
+            foreach (var zaznamTrasy in zaznamyTras)
+            {
+                zaznamTrasy.UdrzbaInvalid = !udrzby.Select(item => item.IdVozidlo).Contains(zaznamTrasy.IdVozidlo);
+            }
             return View(zaznamyTras);
         }
         catch (Exception)

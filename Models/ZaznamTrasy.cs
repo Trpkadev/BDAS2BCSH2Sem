@@ -36,4 +36,6 @@ public class ZaznamTrasy
     [Column("NAZEV_VOZIDLA")]
     [DisplayName("Vozidlo")]
     public string? NazevVozidla { get; set; }
+
+    public bool UdrzbaInvalid { get; set; } = false;
 }
