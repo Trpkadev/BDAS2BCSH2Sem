@@ -1,6 +1,7 @@
 using BCSH2BDAS2.Helpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BCSH2BDAS2;
 
@@ -49,11 +50,37 @@ public static class Program
         });
 
         builder.Services.AddDbContext<TransportationContext>(options =>
+        {
 #if DEBUG
-            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
+            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false);
 #elif RELEASE
             options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
 #endif
+            // appsettings log setting for oracle not working, workaround...
+            options.ConfigureWarnings(warnings =>
+            {
+                warnings.Ignore(CoreEventId.ContextInitialized);
+                warnings.Ignore(CoreEventId.QueryCompilationStarting);
+                warnings.Ignore(CoreEventId.FirstWithoutOrderByAndFilterWarning);
+                warnings.Ignore(CoreEventId.QueryExecutionPlanned);
+                warnings.Ignore(CoreEventId.StartedTracking);
+                warnings.Ignore(CoreEventId.ContextDisposed);
+                warnings.Ignore(RelationalEventId.ConnectionCreating);
+                warnings.Ignore(RelationalEventId.ConnectionCreated);
+                warnings.Ignore(RelationalEventId.ConnectionOpening);
+                warnings.Ignore(RelationalEventId.ConnectionOpened);
+                warnings.Ignore(RelationalEventId.ConnectionClosing);
+                warnings.Ignore(RelationalEventId.ConnectionClosed);
+                warnings.Ignore(RelationalEventId.ConnectionDisposing);
+                warnings.Ignore(RelationalEventId.ConnectionDisposed);
+                warnings.Ignore(RelationalEventId.CommandCreating);
+                warnings.Ignore(RelationalEventId.CommandCreated);
+                warnings.Ignore(RelationalEventId.CommandExecuting);
+                warnings.Ignore(RelationalEventId.CommandExecuted);
+                warnings.Ignore(RelationalEventId.DataReaderClosing);
+                warnings.Ignore(RelationalEventId.DataReaderDisposing);
+            });
+        });
         builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
