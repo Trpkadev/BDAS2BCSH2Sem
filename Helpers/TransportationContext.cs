@@ -578,6 +578,8 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         .HasValue<Cisteni>('c')
         .HasValue<Oprava>('o')
         .HasValue<Udrzba>('x');
+        modelBuilder.Entity<ZaznamTrasy>()
+        .Ignore(u => u.UdrzbaInvalid);
     }
 
     #endregion EF Core config

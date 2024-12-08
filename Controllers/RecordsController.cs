@@ -190,10 +190,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             }
             var udrzby = await _context.GetUdrzbyAsync();
             var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
-            foreach (var zaznamTrasy in zaznamyTras)
-            {
-                zaznamTrasy.UdrzbaInvalid = !udrzby.Select(item => item.IdVozidlo).Contains(zaznamTrasy.IdVozidlo);
-            }
+            foreach (var zaznamTrasy in zaznamyTras)            
+                zaznamTrasy.UdrzbaInvalid = !udrzby.Select(item => item.IdVozidlo).Contains(zaznamTrasy.IdVozidlo);            
             return View(zaznamyTras);
         }
         catch (Exception)

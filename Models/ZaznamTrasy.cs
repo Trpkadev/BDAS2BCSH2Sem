@@ -37,5 +37,6 @@ public class ZaznamTrasy
     [DisplayName("Vozidlo")]
     public string? NazevVozidla { get; set; }
 
+    [JsonIgnore]
     public bool UdrzbaInvalid { get; set; } = false;
 }
