@@ -93,7 +93,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                 END;";
         OracleParameter[] sqlParams = [ new("p_nazev", name),
                                         new("p_oddelovac", separator)];
-        var result = await DBPLSQLCallWithResponseAsync<string>(sql, sqlParams);
+        var result = await DBPLSQLCallWithClobResponseAsync(sql, sqlParams);
         return result;
     }
 
@@ -107,34 +107,42 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                    :p_result := v_json;
                                END;";
         OracleParameter[] sqlParams = [new("p_nazev", name)];
-        var result = await DBPLSQLCallWithResponseAsync<string>(sql, sqlParams);
+        var result = await DBPLSQLCallWithClobResponseAsync(sql, sqlParams);
         return result;
     }
 
     public async Task<double?> GetPrumerneZpozdeni(int idLinka, int pocetDni, int? hodina)
     {
-        const string sql = @"  DECLARE
+        try
+        {
+            const string sql = @"  DECLARE
                                     v_result NUMBER;
                                 BEGIN
                                     v_result := FUNKCE.PRUM_ZPOZDENI(:id_linka, :pocet_dni, :hodina);
                                     :p_result := v_result_json;
                                 END;";
-        OracleParameter[] sqlParams = [
-            new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
-            new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
-            new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)
-        ];
-        // todo udělat lépe
-        await using var command = Database.GetDbConnection().CreateCommand();
-        command.CommandText = sql;
-        command.CommandType = CommandType.Text;
-        var resultParam = new OracleParameter("p_result", OracleDbType.Double, ParameterDirection.Output);
-        command.Parameters.AddRange(sqlParams);
-        await Database.OpenConnectionAsync();
-        await command.ExecuteNonQueryAsync();
-        var result = resultParam.Value;
-        await Database.CloseConnectionAsync();
-        return (double?)result;
+            OracleParameter[] sqlParams =
+            [
+                new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
+                new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
+                new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)
+            ];
+            // todo udělat lépe
+            await using var command = Database.GetDbConnection().CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.Text;
+            var resultParam = new OracleParameter("p_result", OracleDbType.Double, ParameterDirection.Output);
+            command.Parameters.AddRange(sqlParams);
+            await Database.OpenConnectionAsync();
+            await command.ExecuteNonQueryAsync();
+            var result = resultParam.Value;
+            await Database.CloseConnectionAsync();
+            return (double?)result;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
     public async Task<VyhledaniSpojeResponseModel[]?> VyhledaniSpojeAsync(int idZastavkaBegin, int idZastavkaEnd, DateTime timeStart)
@@ -148,7 +156,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         OracleParameter[] sqlParams = [ new("p_id_zastavka_from", OracleDbType.Int32, idZastavkaBegin, ParameterDirection.Input),
                                         new("p_id_zastavka_to", OracleDbType.Int32, idZastavkaEnd, ParameterDirection.Input),
                                         new("p_datetime_start", OracleDbType.Date, timeStart, ParameterDirection.Input)];
-        var result = await DBPLSQLCallWithResponseAsync<VyhledaniSpojeResponseModel[]>(sql, sqlParams);
+        var result = await DBPLSQLCallWithJsonResponseAsync<VyhledaniSpojeResponseModel[]>(sql, sqlParams);
         return result;
     }
 
@@ -623,7 +631,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await connection.CloseAsync();
     }
 
-    private async Task<T?> DBPLSQLCallWithResponseAsync<T>(string sql, OracleParameter[]? sqlParams = null) where T : class
+    private async Task<T?> DBPLSQLCallWithJsonResponseAsync<T>(string sql, OracleParameter[]? sqlParams = null) where T : class
     {
         try
         {
@@ -645,6 +653,36 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                 await connection.CloseAsync();
             }
             return resultJson == null ? null : JsonConvert.DeserializeObject<T>(resultJson);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    private async Task<string?> DBPLSQLCallWithClobResponseAsync(string sql, OracleParameter[]? sqlParams = null)
+    {
+        try
+        {
+            var connection = Database.GetDbConnection();
+            var resultParam = new OracleParameter("p_result", OracleDbType.Clob, ParameterDirection.Output);
+            string? resultJson = null;
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = sql;
+                if (sqlParams != null)
+                    command.Parameters.AddRange(sqlParams);
+                command.Parameters.Add(resultParam);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+                if (resultParam.Value != DBNull.Value && !((OracleClob)resultParam.Value).IsNull)
+                    resultJson = ((OracleClob)resultParam.Value).Value;
+                await connection.CloseAsync();
+            }
+
+            return resultJson;
         }
         catch (Exception)
         {
