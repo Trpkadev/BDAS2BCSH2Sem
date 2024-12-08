@@ -201,7 +201,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("nazev", model.Nazev),
                                         new("idTypVozidla", model.IdTypVozidla),
                                         new("idZnacka", model.IdZnacka),
-                                        new("jeNizkopodlazni", model.JeNizkopodlazni)];
+                                        new("jeNizkopodlazni", ConvertBool(model.JeNizkopodlazni))];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
@@ -248,10 +248,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
         OracleParameter[] sqlParams = [ new("idSpoj", ConvertId(spoj.IdSpoj)),
                                         new("idLinka", spoj.IdLinka),
-                                        new("garantovaneNizkopodlazni", spoj.GarantovaneNizkopodlazni),
-                                        new("jedeVeVsedniDen", spoj.JedeVeVsedniDen),
-                                        new("jedeVSobotu", spoj.JedeVSobotu ? 1 : 0),
-                                        new("jedeVNedeli", spoj.JedeVNedeli)];
+                                        new("garantovaneNizkopodlazni", ConvertBool(spoj.GarantovaneNizkopodlazni)),
+                                        new("jedeVeVsedniDen", ConvertBool(spoj.JedeVeVsedniDen)),
+                                        new("jedeVSobotu", ConvertBool(spoj.JedeVSobotu)),
+                                        new("jedeVNedeli", ConvertBool(spoj.JedeVNedeli))];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
@@ -291,8 +291,8 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                 break;
 
             case Cisteni cisteni:
-                sqlParams.First(p => p.ParameterName == "umytoVMycce").Value = cisteni.UmytoVMycce;
-                sqlParams.First(p => p.ParameterName == "cistenoOzonem").Value = cisteni.CistenoOzonem;
+                sqlParams.First(p => p.ParameterName == "umytoVMycce").Value = ConvertBool(cisteni.UmytoVMycce);
+                sqlParams.First(p => p.ParameterName == "cistenoOzonem").Value = ConvertBool(cisteni.CistenoOzonem);
                 break;
         }
         await DMLPackageCallAsync(sql, sqlParams);
@@ -315,7 +315,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("rokVyroby", vozidlo.RokVyroby),
                                         new("najeteKilometry", vozidlo.NajeteKilometry),
                                         new("kapacita", vozidlo.Kapacita),
-                                        new("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
+                                        new("maKlimatizaci", ConvertBool(vozidlo.MaKlimatizaci)),
                                         new("idGaraz", vozidlo.IdGaraz),
                                         new("idModel", vozidlo.IdModel),
                                         new("spz", vozidlo.SPZ)];
@@ -614,6 +614,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     private static string ConvertDMLMethodName([CallerMemberName] string methodName = "") => methodName.ToUpper().Replace("DML", "DML_").Replace("ASYNC", string.Empty);
 
     private static int? ConvertId(int id) => id == 0 ? null : id;
+    private static int ConvertBool(bool @bool) => @bool ? 1 : 0;
 
     private async Task DBPLSQLCallAsync(string sql, OracleParameter[]? sqlParams = null)
     {
