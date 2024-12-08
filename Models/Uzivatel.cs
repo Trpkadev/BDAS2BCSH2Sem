@@ -40,7 +40,7 @@ public class Uzivatel
 
     public bool HasAdminRights() => Prava == 6;
 
-    public bool HasWorkerRights() => Prava is 2 or 6;
+    public bool HasWorkerRights() => Prava >= 2;
 
     public override bool Equals(object? obj) => obj is Uzivatel uzivatel && IdUzivatel == uzivatel.IdUzivatel && UzivatelskeJmeno == uzivatel.UzivatelskeJmeno && Heslo == uzivatel.Heslo;
 

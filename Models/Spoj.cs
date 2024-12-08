@@ -47,5 +47,5 @@ public class Spoj
     [DisplayName("Číslo linky")]
     public int? CisloLinky { get; set; }
 
-    public override string ToString() => $"Linka č.{CisloLinky} - Spoj č.{Cislo} ";
+    public override string ToString() => $"Linka č.{CisloLinky} - Spoj č.{Cislo}";
 }

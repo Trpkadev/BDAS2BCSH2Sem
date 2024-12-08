@@ -7,7 +7,7 @@ namespace BCSH2BDAS2.Controllers;
 
 [GetLoggedInUser]
 [Route("Users")]
-public class UsersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
+public partial class UsersController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
     [Route("ActBehalf")]
@@ -306,11 +306,5 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
             SetErrorMessage(Resource.GENERIC_SERVER_ERROR);
             return RedirectToHome();
         }
-    }
-
-    public class EditSubmitModel
-    {
-        public string EncryptedId { get; set; }
-        public int IdRole { get; set; }
     }
 }

@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
-using System;
 using System.Data;
 using System.Runtime.CompilerServices;
-using static BCSH2BDAS2.Controllers.HomeController;
 
 namespace BCSH2BDAS2.Helpers;
 
@@ -34,9 +32,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<PracovnikHiearchie> PracovniciHierarchie { get; set; }
     public DbSet<StatistikaLogu> StatistikaLogu { get; set; }
     public DbSet<StatistikaLinky> StatistikaLinek { get; set; }
-
-
-   
 
     #region Procedury
 
@@ -125,23 +120,19 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                     v_result := FUNKCE.PRUM_ZPOZDENI(:id_linka, :pocet_dni, :hodina);
                                     :p_result := v_result;
                                 END;";
-            OracleParameter[] sqlParams =
-            [
-                new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
-                new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
-                new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)
-            ];
-            // todo udělat lépe
+            OracleParameter[] sqlParams = [  new("id_linka", OracleDbType.Int32, idLinka, ParameterDirection.Input),
+                                            new("pocet_dni", OracleDbType.Int32, pocetDni, ParameterDirection.Input),
+                                            new("hodina", OracleDbType.Int32, hodina, ParameterDirection.Input)];
             await using var command = Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
             command.CommandType = CommandType.Text;
             var resultParam = new OracleParameter("p_result", OracleDbType.Double, ParameterDirection.Output);
             command.Parameters.AddRange(sqlParams);
+            command.Parameters.Add(resultParam);
             await Database.OpenConnectionAsync();
             await command.ExecuteNonQueryAsync();
-            var result = resultParam.Value;
             await Database.CloseConnectionAsync();
-            return (double?)result;
+            return (resultParam.Value != DBNull.Value && !((OracleDecimal)resultParam.Value).IsNull) ? (double)((OracleDecimal)resultParam.Value).Value : null;
         }
         catch (Exception)
         {
@@ -211,7 +202,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLPracovniciAsync(Pracovnik pracovnik)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :idNadrizeny, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email, :rodneCislo, :idUzivatel);";
+        string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :idNadrizeny, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email, :rodneCislo, :idUzivatel, :skryteUdaje);";
         OracleParameter[] sqlParams = [ new("idPracovnik", ConvertId(pracovnik.IdPracovnik)),
                                         new("idNadrizeny", pracovnik.IdNadrizeny),
                                         new("hodinovaMzda", pracovnik.HodinovaMzda),
@@ -220,7 +211,8 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                         new("telefonniCislo", pracovnik.TelefonniCislo),
                                         new("email", pracovnik.Email),
                                         new("rodneCislo", pracovnik.RodneCislo),
-                                        new("idUzivatel", pracovnik.IdUzivatel)];
+                                        new("idUzivatel", pracovnik.IdUzivatel),
+                                        new("skryteUdaje", ConvertBool(pracovnik.SkryteUdaje))];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 

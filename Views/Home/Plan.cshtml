@@ -1,7 +1,7 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models;
 @using static BCSH2BDAS2.Controllers.HomeController
-@model IEnumerable<VyhledaniSpojeViewModel>?;
+@model IEnumerable<VyhledaniSpojeResponseModel>?;
 @{
     ViewData["Title"] = "Vyhledat spojení";
 }
@@ -40,11 +40,12 @@
                 }
                 else if (Model != null)
                 {
+                    <h1 class="display-6">Datum hledání: @(((DateTime)ViewBag.Date).ToShortDateString())</h1>
                     <table class="table-bordered text-center">
                         <thead>
                             <tr>
-                                <th class="p-2">@Html.DisplayNameFor(model => model.NazevSpoje)</th>
                                 <th class="p-2">@Html.DisplayNameFor(model => model.NazevZastavky)</th>
+                                <th class="p-2">@Html.DisplayNameFor(model => model.CisloLinkyASpoje)</th>
                                 <th class="p-2">@Html.DisplayNameFor(model => model.CasPrijezdu)</th>
                                 <th class="p-2">@Html.DisplayNameFor(model => model.CasOdjezdu)</th>
                             </tr>
@@ -53,8 +54,8 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="p-1">@Html.DisplayFor(_ => item.NazevSpoje)</td>
                                     <td class="p-1">@Html.DisplayFor(_ => item.NazevZastavky)</td>
+                                    <td class="p-1">@Html.DisplayFor(_ => item.CisloLinkyASpoje)</td>
                                     <td class="p-1">@Html.DisplayFor(_ => item.CasPrijezdu)</td>
                                     <td class="p-1">@Html.DisplayFor(_ => item.CasOdjezdu)</td>
                                 </tr>
