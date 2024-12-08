@@ -188,21 +188,20 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLModelyAsync(Model model)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idModel, :idTypVozidla, :idZnacka, :nazev, :jeNizkopodlazni);";
+        string sql = $"{ConvertDMLMethodName()}(:idModel, :nazev, :jeNizkopodlazni, :idZnacka, :idTypVozidla);";
         OracleParameter[] sqlParams = [ new("idModel", ConvertId(model.IdModel)),
+                                        new("nazev", model.Nazev),
                                         new("idTypVozidla", model.IdTypVozidla),
                                         new("idZnacka", model.IdZnacka),
-                                        new("nazev", model.Nazev),
                                         new("jeNizkopodlazni", model.JeNizkopodlazni)];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
     public async Task DMLPracovniciAsync(Pracovnik pracovnik)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :uzivatelskeJmeno, :heslo, :idNadrizeny, :idRole, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email, :rodneCislo, :idUzivatel);";
+        string sql = $"{ConvertDMLMethodName()}(:idPracovnik, :idNadrizeny, :hodinovaMzda, :jmeno, :prijmeni, :telefonniCislo, :email, :rodneCislo, :idUzivatel);";
         OracleParameter[] sqlParams = [ new("idPracovnik", ConvertId(pracovnik.IdPracovnik)),
                                         new("idNadrizeny", pracovnik.IdNadrizeny),
-                                        new("idRole", pracovnik.IdNadrizeny),
                                         new("hodinovaMzda", pracovnik.HodinovaMzda),
                                         new("jmeno", pracovnik.Jmeno),
                                         new("prijmeni", pracovnik.Prijmeni),
@@ -238,7 +237,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSpojeAsync(Spoj spoj)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :garantovaneNizkopodlazni, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli);";
+        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
         OracleParameter[] sqlParams = [ new("idSpoj", ConvertId(spoj.IdSpoj)),
                                         new("idLinka", spoj.IdLinka),
                                         new("garantovaneNizkopodlazni", spoj.GarantovaneNizkopodlazni),
@@ -328,7 +327,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLZaznamy_TrasyAsync(ZaznamTrasy zaznamTrasy)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idSpoj, :idZastavka, :idVozidlo, :casPrijezdu, :casOdjezdu);";
+        string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idJizdniRad, :idVozidlo, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
                                         new("idJizdniRad", zaznamTrasy.IdJizniRad),
                                         new("idVozidlo", zaznamTrasy.IdVozidlo),

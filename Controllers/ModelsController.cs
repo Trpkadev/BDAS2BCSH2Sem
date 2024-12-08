@@ -61,9 +61,15 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
         try
         {
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
+            {
+                SetErrorMessage(Resource.INVALID_PERMISSIONS);
                 return RedirectToHome();
+            }
             if (!ModelState.IsValid)
+            {
+                SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return View(nameof(CreateEdit), model);
+            }
 
             if (model.IdModel != 0 && await _context.GetModelByIdAsync(model.IdModel) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
