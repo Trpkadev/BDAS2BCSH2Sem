@@ -30,8 +30,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             var spoje = await _context.GetSpojeAsync();
             if (encryptedId == null)
             {
-                ViewBag.Zastavky = new SelectList(zastavky);
-                ViewBag.Spoje = new SelectList(spoje);
+                ViewBag.Zastavky = new SelectList(zastavky, "IdZastavka", "");
+                ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "");
                 return View(new JizdniRad());
             }
 
@@ -215,7 +215,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToHome();
 
             var spoje = await _context.GetSpojeAsync();
-            ViewBag.Spoje = new SelectList(spoje);
+            ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "");
 
             return View();
         }

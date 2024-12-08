@@ -49,8 +49,8 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             var pracovnici = await _context.GetPracovniciAsync();
             if (encryptedId == null)
             {
-                ViewBag.Uzivatele = new SelectList(uzivatele);
-                ViewBag.Pracovnici = new SelectList(pracovnici);
+                ViewBag.Uzivatele = new SelectList(uzivatele, "IdUzivatel", "");
+                ViewBag.Pracovnici = new SelectList(pracovnici, "IdPracovnik", "");
                 return View(new Pracovnik());
             }
             int id = GetDecryptedId(encryptedId);

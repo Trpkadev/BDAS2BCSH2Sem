@@ -26,8 +26,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.JizdniRady = new SelectList(await _context.GetJizdniRadyAsync());
-            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync());
+            ViewBag.JizdniRady = new SelectList(await _context.GetJizdniRadyAsync(), "IdJizniRad", "");
+            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync(), "IdVozidlo", "");
 
             if (encryptedId == null)
                 return View(new ZaznamTrasy());
@@ -213,7 +213,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             }
 
             var linky = await _context.GetLinkyAsync();
-            ViewBag.Linky = new SelectList(linky);
+            ViewBag.Linky = new SelectList(linky, "IdLinka", "");
 
             if (cislo != null && pocetDni != null)
             {

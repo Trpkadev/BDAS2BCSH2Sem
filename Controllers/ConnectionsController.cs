@@ -26,7 +26,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Linky = new SelectList(await _context.GetLinkyAsync());
+            ViewBag.Linky = new SelectList(await _context.GetLinkyAsync(), "IdLinka", "");
 
             if (encryptedId == null)
                 return View(new Spoj());

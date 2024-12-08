@@ -26,7 +26,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync());
+            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync(), "IdTypVozidla", "");
 
             if (encryptedId == null)
                 return View(new Linka());

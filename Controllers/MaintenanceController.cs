@@ -26,7 +26,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync());
+            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync(), "IdVozidlo", "");
             ViewData["o"] = new Oprava();
             ViewData["c"] = new Cisteni();
 

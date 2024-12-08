@@ -30,8 +30,8 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             var modely = await _context.GetModelyAsync() ?? [];
             if (encryptedId == null)
             {
-                ViewBag.Garaze = new SelectList(garaze);
-                ViewBag.Modely = new SelectList(modely);
+                ViewBag.Garaze = new SelectList(garaze, "IdGaraz", "");
+                ViewBag.Modely = new SelectList(modely, "IdGaraz", "");
                 return View(new Vozidlo());
             }
             int id = GetDecryptedId(encryptedId);
