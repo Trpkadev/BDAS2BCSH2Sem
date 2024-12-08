@@ -6,8 +6,7 @@ namespace BCSH2BDAS2.Controllers;
 
 [GetLoggedInUser]
 [Route("ImportExport")]
-public class ImportExportController(TransportationContext context, IHttpContextAccessor accessor)
-    : BaseController(context, accessor)
+public class ImportExportController(TransportationContext context, IHttpContextAccessor accessor) : BaseController(context, accessor)
 {
     [HttpGet]
     [Route("Export")]
