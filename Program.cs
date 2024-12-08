@@ -54,7 +54,7 @@ public static class Program
 #if DEBUG
             options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false);
 #elif RELEASE
-            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
+            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false);
 #endif
             // appsettings log setting for oracle not working, workaround...
             options.ConfigureWarnings(warnings =>
