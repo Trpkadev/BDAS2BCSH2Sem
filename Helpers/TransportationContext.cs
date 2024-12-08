@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
+using System;
 using System.Data;
 using System.Runtime.CompilerServices;
 using static BCSH2BDAS2.Controllers.HomeController;
@@ -33,6 +34,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     public DbSet<PracovnikHiearchie> PracovniciHierarchie { get; set; }
     public DbSet<StatistikaLogu> StatistikaLogu { get; set; }
     public DbSet<StatistikaLinky> StatistikaLinek { get; set; }
+
+
+   
 
     #region Procedury
 
@@ -245,7 +249,6 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSpojeAsync(Spoj spoj)
     {
-
         string sql =
             $"{ConvertDMLMethodName()}(:idSpoj, :cislo, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
         OracleParameter[] sqlParams =
@@ -620,6 +623,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     private static string ConvertDMLMethodName([CallerMemberName] string methodName = "") => methodName.ToUpper().Replace("DML", "DML_").Replace("ASYNC", string.Empty);
 
     private static int? ConvertId(int id) => id == 0 ? null : id;
+
     private static int ConvertBool(bool @bool) => @bool ? 1 : 0;
 
     private async Task DBPLSQLCallAsync(string sql, OracleParameter[]? sqlParams = null)

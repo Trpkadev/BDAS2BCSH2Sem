@@ -30,8 +30,8 @@
                     <td>
                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>
                     </td>
-                    <td>@item.CasPrijezdu.ToShortTimeString()</td>
-                    <td>@item.CasOdjezdu.ToShortTimeString()</td>
+                    <td>@Html.DisplayFor(_ => item.CasPrijezdu)</td>
+                    <td>@Html.DisplayFor(_ => item.CasOdjezdu)</td>
 
                     @if (Model.Select(item => item.UdrzbaInvalid).Any(item => item == true))
                     {

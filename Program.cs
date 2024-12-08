@@ -35,7 +35,7 @@ public static class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}");
-        app.UseRequestLocalization("en-UK");
+        app.UseRequestLocalization("en-GB");
     }
 
     private static void ConfigureServices(WebApplicationBuilder builder)

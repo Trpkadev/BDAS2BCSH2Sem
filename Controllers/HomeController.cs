@@ -1,8 +1,9 @@
-using BCSH2BDAS2.Helpers;
+﻿using BCSH2BDAS2.Helpers;
 using BCSH2BDAS2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.Globalization;
 
 namespace BCSH2BDAS2.Controllers;
@@ -63,9 +64,42 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
                 return RedirectToAction(nameof(Plan));
             }
 
-            var a = (await _context.VyhledaniSpojeAsync(idZastavkaFrom, idZastavkaTo, DateTime.Parse(time, CultureInfo.CurrentCulture)))?.AsEnumerable().Reverse();
-            ViewBag.Zastavky = await _context.GetZastavkyAsync() ?? [];
-            return View(model: a);
+            var spoje = await _context.GetSpojeAsync() ?? [];
+            var jizdniRady = await _context.GetJizdniRadyAsync() ?? [];
+
+            DateTime dateTime = DateTime.Parse(time, CultureInfo.CurrentCulture);
+
+            var a = (await _context.VyhledaniSpojeAsync(idZastavkaFrom, idZastavkaTo, dateTime))?.Reverse() ?? [];
+
+            List<int> zastavkyInts = [];
+            List<int> spojeInts = [];
+
+            foreach (var asdasd in a)
+            {
+                if (!zastavkyInts.Contains(asdasd.IdZastavkaFrom))
+                {
+                    zastavkyInts.Add(asdasd.IdZastavkaFrom);
+                    spojeInts.Add(asdasd.IdSpojFrom);
+                }
+                zastavkyInts.Add(asdasd.IdZastavka);
+                spojeInts.Add(asdasd.IdSpoj);
+            }
+
+            var b = new List<VyhledaniSpojeViewModel>();
+            for (int i = 0; i < zastavkyInts.Count; i++)
+            {
+                int zastavkaId = zastavkyInts[i];
+                var jizdniRad = jizdniRady.FirstOrDefault(a => a.IdZastavka == zastavkaId && a.IdSpoj == spojeInts[i]) ?? throw new Exception();
+                var spoj = spoje.FirstOrDefault(spoj => spoj.IdSpoj == spojeInts[i]) ?? throw new Exception();
+                b.Add(new VyhledaniSpojeViewModel
+                {
+                    NazevZastavky = jizdniRad.NazevZastavky ?? "",
+                    NazevSpoje = spoj.ToString(),
+                    CasPrijezdu = dateTime.Date + (jizdniRad.CasPrijezdu ?? jizdniRad.CasOdjezdu).TimeOfDay,
+                    CasOdjezdu = dateTime.Date + jizdniRad.CasOdjezdu.TimeOfDay
+                });
+            }
+            return View(b);
         }
         catch (Exception)
         {
@@ -90,6 +124,21 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
 
         [JsonProperty("ID_SPOJ_FROM")]
         public int IdSpojFrom { get; set; }
+    }
+
+    public class VyhledaniSpojeViewModel
+    {
+        [DisplayName("Zastávka")]
+        public string NazevZastavky { get; set; }
+
+        [DisplayName("Spoj")]
+        public string NazevSpoje { get; set; }
+
+        [DisplayName("Čas příjezdu")]
+        public DateTime CasPrijezdu { get; set; }
+
+        [DisplayName("Čas odjezdu")]
+        public DateTime CasOdjezdu { get; set; }
     }
 
     [HttpGet]

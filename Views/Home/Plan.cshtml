@@ -1,7 +1,7 @@
 ﻿@using BCSH2BDAS2.Helpers
 @using BCSH2BDAS2.Models;
 @using static BCSH2BDAS2.Controllers.HomeController
-@model IEnumerable<VyhledaniSpojeResponseModel>?;
+@model IEnumerable<VyhledaniSpojeViewModel>?;
 @{
     ViewData["Title"] = "Vyhledat spojení";
 }
@@ -40,25 +40,23 @@
                 }
                 else if (Model != null)
                 {
-                    <table class="table-bordered">
+                    <table class="table-bordered text-center">
                         <thead>
                             <tr>
-                                <th>@Html.DisplayNameFor(model => model.IdSpojFrom)</th>
-                                <th>@Html.DisplayNameFor(model => model.IdSpoj)</th>
-                                <th>@Html.DisplayNameFor(model => model.IdZastavkaFrom)</th>
-                                <th>@Html.DisplayNameFor(model => model.IdZastavka)</th>
-                                <th>@Html.DisplayNameFor(model => model.TripLength)</th>
+                                <th class="p-2">@Html.DisplayNameFor(model => model.NazevSpoje)</th>
+                                <th class="p-2">@Html.DisplayNameFor(model => model.NazevZastavky)</th>
+                                <th class="p-2">@Html.DisplayNameFor(model => model.CasPrijezdu)</th>
+                                <th class="p-2">@Html.DisplayNameFor(model => model.CasOdjezdu)</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.IdSpojFrom</td>
-                                    <td>@item.IdSpoj</td>
-                                    <td>@item.IdZastavkaFrom</td>
-                                    <td>@item.IdZastavka</td>
-                                    <td>@item.TripLength</td>
+                                    <td class="p-1">@Html.DisplayFor(_ => item.NazevSpoje)</td>
+                                    <td class="p-1">@Html.DisplayFor(_ => item.NazevZastavky)</td>
+                                    <td class="p-1">@Html.DisplayFor(_ => item.CasPrijezdu)</td>
+                                    <td class="p-1">@Html.DisplayFor(_ => item.CasOdjezdu)</td>
                                 </tr>
                             }
                         </tbody>

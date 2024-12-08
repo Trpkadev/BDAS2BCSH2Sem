@@ -16,12 +16,12 @@ public class ZaznamTrasy
 
     [JsonRequired]
     [Column("CAS_PRIJEZDU")]
-    [DisplayName("Čas příjezdu")]
+    [DisplayName("Příjezd")]
     public DateTime CasPrijezdu { get; set; }
 
     [JsonRequired]
     [Column("CAS_ODJEZDU")]
-    [DisplayName("Čas odjezdu")]
+    [DisplayName("Odjezd")]
     public DateTime CasOdjezdu { get; set; }
 
     [JsonRequired]
