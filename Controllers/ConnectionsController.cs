@@ -115,7 +115,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Spoj spoj)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idSpoj)
     {
         try
         {
@@ -130,11 +130,11 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)
+            if (await _context.GetSpojByIdAsync(idSpoj) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("SPOJE", [("ID_SPOJ", spoj.IdSpoj.ToString())]);
+                await _context.DeleteFromTableAsync("SPOJE", [("ID_SPOJ", idSpoj.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

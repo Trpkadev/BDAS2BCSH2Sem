@@ -111,7 +111,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] TarifniPasmo tarifniPasmo)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idPasmo)
     {
         try
         {
@@ -126,11 +126,11 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetTarifniPasmoByIdAsync(tarifniPasmo.IdPasmo) == null)
+            if (await _context.GetTarifniPasmoByIdAsync(idPasmo) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("TARIFNI_PASMA", [("ID_PASMO", tarifniPasmo.IdPasmo.ToString())]);
+                await _context.DeleteFromTableAsync("TARIFNI_PASMA", [("ID_PASMO", idPasmo.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

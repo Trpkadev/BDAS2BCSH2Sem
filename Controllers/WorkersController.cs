@@ -138,7 +138,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Pracovnik pracovnik)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idPracovnik)
     {
         try
         {
@@ -150,11 +150,11 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)
+            if (await _context.GetPracovnikByIdAsync(idPracovnik) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("PRACOVNICI", [("ID_UZIVATEL", pracovnik.IdPracovnik.ToString())]);
+                await _context.DeleteFromTableAsync("PRACOVNICI", [("ID_UZIVATEL", idPracovnik.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

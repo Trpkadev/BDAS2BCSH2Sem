@@ -107,7 +107,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Model model)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idModel)
     {
         try
         {
@@ -122,11 +122,11 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetModelByIdAsync(model.IdModel) == null)
+            if (await _context.GetModelByIdAsync(idModel) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("MODELY", [("ID_MODEL", model.IdModel.ToString())]);
+                await _context.DeleteFromTableAsync("MODELY", [("ID_MODEL", idModel.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

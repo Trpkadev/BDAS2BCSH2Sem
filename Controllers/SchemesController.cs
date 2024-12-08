@@ -116,7 +116,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Schema schema)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idSchema)
     {
         try
         {
@@ -131,11 +131,11 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetSchemaByIdAsync(schema.IdSchema) == null)
+            if (await _context.GetSchemaByIdAsync(idSchema) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("SCHEMATA", [("ID_SCHEMA", schema.IdSchema.ToString())]);
+                await _context.DeleteFromTableAsync("SCHEMATA", [("ID_SCHEMA", idSchema.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

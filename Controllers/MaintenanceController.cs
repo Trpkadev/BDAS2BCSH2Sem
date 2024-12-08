@@ -171,7 +171,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Udrzba udrzba)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idUdrzba)
     {
         try
         {
@@ -186,11 +186,11 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetUdrzbaByIdAsync(udrzba.IdUdrzba) == null)
+            if (await _context.GetUdrzbaByIdAsync(idUdrzba) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("UDRZBY", [("ID_UDRZBA", udrzba.IdUdrzba.ToString())]);
+                await _context.DeleteFromTableAsync("UDRZBY", [("ID_UDRZBA", idUdrzba.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

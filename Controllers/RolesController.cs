@@ -109,7 +109,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Role role)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idRole)
     {
         try
         {
@@ -124,11 +124,11 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetRoleByIdAsync(role.IdRole) == null)
+            if (await _context.GetRoleByIdAsync(idRole) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ROLE", [("ID_ROLE", role.IdRole.ToString())]);
+                await _context.DeleteFromTableAsync("ROLE", [("ID_ROLE", idRole.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

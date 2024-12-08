@@ -109,7 +109,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Znacka znacka)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idZnacka)
     {
         try
         {
@@ -124,11 +124,11 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetZnackaByIdAsync(znacka.IdZnacka) == null)
+            if (await _context.GetZnackaByIdAsync(idZnacka) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ZNACKY", [("ID_ZNACKA", znacka.IdZnacka.ToString())]);
+                await _context.DeleteFromTableAsync("ZNACKY", [("ID_ZNACKA", idZnacka.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

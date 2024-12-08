@@ -39,8 +39,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             var jizdniRad = await _context.GetJizdniRadByIdAsync(id);
             if (jizdniRad != null)
             {
-                ViewBag.Zastavky = new SelectList(zastavky, "IdZastavka", "Nazev", jizdniRad.IdZastavka);
-                ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "Cislo", jizdniRad.IdSpoj);
+                ViewBag.Zastavky = new SelectList(zastavky, "IdZastavka", "", jizdniRad.IdZastavka);
+                ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "", jizdniRad.IdSpoj);
                 return View(jizdniRad);
             }
 
@@ -122,7 +122,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] JizdniRad jizdniRad)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idJizdniRad)
     {
         try
         {
@@ -137,11 +137,11 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetJizdniRadByIdAsync(jizdniRad.IdJizdniRad) == null)
+            if (await _context.GetJizdniRadByIdAsync(idJizdniRad) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("JIZDNI_RADY", [("ID_JIZDNI_RAD", jizdniRad.IdJizdniRad.ToString())]);
+                await _context.DeleteFromTableAsync("JIZDNI_RADY", [("ID_JIZDNI_RAD", idJizdniRad.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

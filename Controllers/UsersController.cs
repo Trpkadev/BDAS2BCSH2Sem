@@ -68,7 +68,7 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] Uzivatel uzivatel)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idUzivatel)
     {
         try
         {
@@ -83,11 +83,11 @@ public class UsersController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetUzivatelByIdAsync(uzivatel.IdUzivatel) == null)
+            if (await _context.GetUzivatelByIdAsync(idUzivatel) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("UZIVATELE", [("ID_UZIVATEL", uzivatel.IdUzivatel.ToString())]);
+                await _context.DeleteFromTableAsync("UZIVATELE", [("ID_UZIVATEL", idUzivatel.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

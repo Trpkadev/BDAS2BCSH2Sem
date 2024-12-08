@@ -16,7 +16,6 @@ public class Vozidlo
 
     [JsonRequired]
     [Column("SPZ")]
-    [Length(7, 7)]
     public string SPZ { get; set; }
 
     [JsonRequired]

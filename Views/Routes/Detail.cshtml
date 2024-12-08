@@ -11,7 +11,9 @@
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevTypuVozidla)</dt>
-                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevTypuVozidla)</dd>
+                <dd class="col-auto p-1">
+                    <a asp-controller="Types" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdTypVozidla)">@Html.DisplayFor(_ => Model.NazevTypuVozidla)</a>
+                </dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">

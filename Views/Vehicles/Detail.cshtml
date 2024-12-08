@@ -10,6 +10,11 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row row-cols-2 m-1">
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.SPZ)</dt>
+                <dd class="col-auto p-1">@Html.DisplayFor(model => model.SPZ)</dd>
+            </dl>
+
+            <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.RokVyroby)</dt>
                 <dd class="col-auto p-1">@Html.DisplayFor(model => model.RokVyroby)</dd>
             </dl>
@@ -31,13 +36,18 @@
 
             <dl class="row row-cols-2 m-1">
                 <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevGaraze)</dt>
-                <dd class="col-auto p-1">@Html.DisplayFor(model => model.NazevGaraze)</dd>
+                <dd class="col-auto p-1">
+                    <a asp-controller="Garages" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdGaraz)">@Html.DisplayFor(model => model.NazevGaraze)</a>
+                </dd>
             </dl>
 
             <dl class="row row-cols-2 m-1">
-                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.SPZ)</dt>
-                <dd class="col-auto p-1">@Html.DisplayFor(model => model.SPZ)</dd>
+                <dt class="col-auto p-1">@Html.DisplayNameFor(model => model.NazevModelu)</dt>
+                <dd class="col-auto p-1">
+                    <a asp-controller="Models" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(Model.IdModel)">@Html.DisplayFor(model => model.NazevModelu)</a>
+                </dd>
             </dl>
+
             @await Html.PartialAsync("DetailActionButtons", Model.IdVozidlo)
         </div>
     </div>

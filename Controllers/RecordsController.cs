@@ -115,7 +115,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
     [ValidateAntiForgeryToken]
     [HttpPost]
     [Route("DeleteSubmit")]
-    public async Task<IActionResult> DeleteSubmit([FromForm] ZaznamTrasy zaznamTrasy)
+    public async Task<IActionResult> DeleteSubmit([FromForm] int idZaznam)
     {
         try
         {
@@ -130,11 +130,11 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
-            if (await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) == null)
+            if (await _context.GetZaznam_TrasyByIdAsync(idZaznam) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("ZAZNAMY_TRASY", [("ID_LINKA", zaznamTrasy.IdZaznam.ToString())]);
+                await _context.DeleteFromTableAsync("ZAZNAMY_TRASY", [("ID_ZAZNAM", idZaznam.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

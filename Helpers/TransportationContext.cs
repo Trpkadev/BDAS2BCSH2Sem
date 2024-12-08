@@ -167,8 +167,9 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLJizdni_RadyAsync(JizdniRad jizdniRad)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
-        OracleParameter[] sqlParams = [ new("idSpoj", jizdniRad.IdSpoj),
+        string sql = $"{ConvertDMLMethodName()}(:idJizdniRad, :idSpoj, :idZastavka, :casPrijezdu, :casOdjezdu);";
+        OracleParameter[] sqlParams = [ new("idJizdniRad", ConvertId(jizdniRad.IdJizdniRad)),
+                                        new("idSpoj", jizdniRad.IdSpoj),
                                         new("idZastavka", jizdniRad.IdZastavka),
                                         new("casPrijezdu", jizdniRad.CasPrijezdu),
                                         new("casOdjezdu", jizdniRad.CasOdjezdu)];
@@ -177,11 +178,11 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLLinkyAsync(Linka linka)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idLinka, :nazev, :typVozidla, :cislo);";
+        string sql = $"{ConvertDMLMethodName()}(:idLinka, :cislo, :nazev, :idTypVozidla);";
         OracleParameter[] sqlParams = [ new("idLinka", ConvertId(linka.IdLinka)),
+                                        new("cislo", linka.Cislo),
                                         new("nazev", linka.Nazev),
-                                        new("typVozidla", linka.IdTypVozidla),
-                                        new("cislo", linka.Cislo)];
+                                        new("idTypVozidla", linka.IdTypVozidla)];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
