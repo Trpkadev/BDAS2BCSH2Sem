@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>G:\git\BDAS2BCSH2Sem\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2024-12-08T18:31:00.4906381Z||;True|2024-12-08T19:28:23.1719297+01:00||;True|2024-12-08T19:19:44.9270717+01:00||;True|2024-12-08T19:17:20.8569676+01:00||;True|2024-12-08T19:12:22.8924679+01:00||;True|2024-12-08T19:11:29.7400136+01:00||;False|2024-12-08T19:11:16.7753896+01:00||;True|2024-12-08T19:04:12.1317951+01:00||;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source = %28DESCRIPTION = %28ADDRESS_LIST = %28ADDRESS = %28PROTOCOL = TCP%29%28HOST = FEI-SQL3.UPCEUCEBNY.CZ%29%28PORT = 1521%29%29%29%28CONNECT_DATA=%28SID=BDAS%29%29%29%3b User Id = st69612%3b Password = hesloOracle%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

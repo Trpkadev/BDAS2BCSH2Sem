@@ -1,7 +1,6 @@
 using BCSH2BDAS2.Helpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace BCSH2BDAS2;
 
@@ -10,16 +9,10 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-        ConfigureServices(builder.Services, builder.Configuration);
+        ConfigureServices(builder);
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
         ConfigureMiddleware(app);
-
-        app.UseRequestLocalization("en-UK");
 
         app.Run();
     }
@@ -31,7 +24,6 @@ public static class Program
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
         }
-
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
@@ -42,30 +34,33 @@ public static class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}");
+        app.UseRequestLocalization("en-UK");
     }
 
-    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureServices(WebApplicationBuilder builder)
     {
-        services.AddControllersWithViews().AddCookieTempDataProvider();
-        services.AddSession(options =>
+        builder.WebHost.ConfigureKestrel((context, options) => options.Configure(context.Configuration.GetSection("Kestrel")));
+
+        builder.Services.AddControllersWithViews().AddCookieTempDataProvider();
+        builder.Services.AddSession(options =>
         {
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });
 
-        services.AddDbContext<TransportationContext>(options =>
+        builder.Services.AddDbContext<TransportationContext>(options =>
 #if DEBUG
-            options.UseOracle(configuration.GetConnectionString("DebugConnection")));
+            options.UseOracle(builder.Configuration.GetConnectionString("DebugConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false););
 #elif RELEASE
-            options.UseOracle(configuration.GetConnectionString("DefaultConnection")));
+            options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging(false).EnableDetailedErrors(false));
 #endif
-        services.AddResponseCompression(options =>
+        builder.Services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
             options.Providers.Add<BrotliCompressionProvider>();
             options.Providers.Add<GzipCompressionProvider>();
         });
 
-        services.AddHttpContextAccessor();
+        builder.Services.AddHttpContextAccessor();
     }
 }
