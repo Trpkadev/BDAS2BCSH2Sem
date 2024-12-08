@@ -15,13 +15,13 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="NazevZastavky" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdZastavka, ViewBag.Zastavky as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdZastavka, ViewBag.Zastavky as SelectList, "Vyberte zastávku", new { @class = "form-control" })
                     <span asp-validation-for="IdZastavka" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="IdSpoj" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdSpoj, ViewBag.Spoje as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdSpoj, ViewBag.Spoje as SelectList, "Vyberte spoj", new { @class = "form-control" })
                     <span asp-validation-for="IdSpoj" class="text-danger"></span>
                 </div>
 

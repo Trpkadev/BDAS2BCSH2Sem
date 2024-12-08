@@ -31,9 +31,10 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (encryptedId == null)
             {
                 ViewBag.Garaze = new SelectList(garaze, "IdGaraz", "");
-                ViewBag.Modely = new SelectList(modely, "IdGaraz", "");
+                ViewBag.Modely = new SelectList(modely, "IdModel", "");
                 return View(new Vozidlo());
             }
+
             int id = GetDecryptedId(encryptedId);
             var vozidlo = await _context.GetVozidloByIdAsync(id);
             if (vozidlo != null)
@@ -67,7 +68,7 @@ public class VehiclesController(TransportationContext context, IHttpContextAcces
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), vozidlo);
+                return View(nameof(CreateEdit), vozidlo);
             }
 
             if (vozidlo.IdVozidlo != 0 && await _context.GetVozidloByIdAsync(vozidlo.IdVozidlo) == null)

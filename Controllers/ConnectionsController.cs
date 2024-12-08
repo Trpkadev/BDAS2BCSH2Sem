@@ -26,16 +26,20 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Linky = new SelectList(await _context.GetLinkyAsync(), "IdLinka", "");
-
+            var linky = await _context.GetLinkyAsync() ?? [];
             if (encryptedId == null)
+            {
+                ViewBag.Linky = new SelectList(linky, "IdLinka", "");
                 return View(new Spoj());
+            }
 
             int id = GetDecryptedId(encryptedId);
             var spoj = await _context.GetSpojByIdAsync(id);
             if (spoj != null)
+            {
+                ViewBag.Linky = new SelectList(linky, "IdLinka", "", spoj.IdLinka);
                 return View(spoj);
-
+            }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -61,7 +65,7 @@ public class ConnectionsController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), spoj);
+                return View(nameof(CreateEdit), spoj);
             }
 
             if (spoj.IdSpoj != 0 && await _context.GetSpojByIdAsync(spoj.IdSpoj) == null)

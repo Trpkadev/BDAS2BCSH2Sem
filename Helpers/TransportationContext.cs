@@ -303,14 +303,15 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLVozidlaAsync(Vozidlo vozidlo)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idVozidlo,:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel);";
+        string sql = $"{ConvertDMLMethodName()}(:idVozidlo,:rokVyroby, :najeteKilometry, :kapacita, :maKlimatizaci, :idGaraz, :idModel, :spz);";
         OracleParameter[] sqlParams = [ new("idVozidlo", ConvertId(vozidlo.IdVozidlo)),
                                         new("rokVyroby", vozidlo.RokVyroby),
                                         new("najeteKilometry", vozidlo.NajeteKilometry),
                                         new("kapacita", vozidlo.Kapacita),
                                         new("maKlimatizaci", vozidlo.MaKlimatizaci ? 1 : 0),
                                         new("idGaraz", vozidlo.IdGaraz),
-                                        new("idModel", vozidlo.IdModel)];
+                                        new("idModel", vozidlo.IdModel),
+                                        new("spz", vozidlo.SPZ)];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 

@@ -26,15 +26,20 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync(), "IdTypVozidla", "");
-
+            var typyVozidel = await _context.GetTypy_VozidelAsync() ?? [];
             if (encryptedId == null)
+            {
+                ViewBag.TypyVozidel = new SelectList(typyVozidel, "IdTypVozidla", "");
                 return View(new Linka());
+            }
 
             int id = GetDecryptedId(encryptedId);
             var linka = await _context.GetLinkaByIdAsync(id);
             if (linka != null)
+            {
+                ViewBag.TypyVozidel = new SelectList(typyVozidel, "IdTypVozidla", "", linka.IdTypVozidla);
                 return View(linka);
+            }
 
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
@@ -61,7 +66,7 @@ public class RoutesController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), linka);
+                return View(nameof(CreateEdit), linka);
             }
 
             if (linka.IdLinka != 0 && await _context.GetLinkaByIdAsync(linka.IdLinka) == null)

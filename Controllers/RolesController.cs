@@ -56,7 +56,7 @@ public class RolesController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), role);
+                return View(nameof(CreateEdit), role);
             }
 
             if (role.IdRole != 0 && await _context.GetRoleByIdAsync(role.IdRole) == null)

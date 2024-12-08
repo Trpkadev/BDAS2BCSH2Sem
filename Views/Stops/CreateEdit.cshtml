@@ -33,7 +33,7 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="IdPasmo" class="control-label">Tarifní pásmo</label>
-                    @Html.DropDownList("IdPasmo", (SelectList)ViewBag.Pasma, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdPasmo, (SelectList)ViewBag.Pasma, "Vyberte pásmo", new { @class = "form-control" })
                     <span asp-validation-for="IdPasmo" class="text-danger"></span>
                 </div>
 

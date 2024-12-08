@@ -21,13 +21,13 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="ZnackaNazev" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdZnacka, ViewBag.Znacky as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdZnacka, ViewBag.Znacky as SelectList, "Vyberte značku", new { @class = "form-control" })
                     <span asp-validation-for="IdZnacka" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="TypVozidlaNazev" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdTypVozidla, ViewBag.TypyVozidel as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdTypVozidla, ViewBag.TypyVozidel as SelectList, "Vyberte typ vozidla", new { @class = "form-control" })
                     <span asp-validation-for="IdTypVozidla" class="text-danger"></span>
                 </div>
 

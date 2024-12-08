@@ -56,7 +56,7 @@ public class TypesController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), typVozidla);
+                return View(nameof(CreateEdit), typVozidla);
             }
 
             if (typVozidla.IdTypVozidla != 0 && await _context.GetTyp_VozidlaByIdAsync(typVozidla.IdTypVozidla) == null)

@@ -43,7 +43,6 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
                 ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "", jizdniRad.IdSpoj);
                 return View(jizdniRad);
             }
-
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -69,7 +68,7 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), jizdniRad);
+                return View(nameof(CreateEdit), jizdniRad);
             }
 
             if (jizdniRad.IdJizdniRad != 0 && await _context.GetJizdniRadByIdAsync(jizdniRad.IdJizdniRad) == null)
@@ -214,9 +213,8 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToHome();
 
-            var spoje = await _context.GetSpojeAsync();
+            var spoje = await _context.GetSpojeAsync() ?? [];
             ViewBag.Spoje = new SelectList(spoje, "IdSpoj", "");
-
             return View();
         }
         catch (Exception)

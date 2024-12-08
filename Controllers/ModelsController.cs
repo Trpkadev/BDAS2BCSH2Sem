@@ -26,15 +26,23 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Znacky = new SelectList(await _context.GetZnackyAsync(), "IdZnacka", "");
-            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync(), "IdTypVozidla", "");
-
+            var znacky = await _context.GetZnackyAsync() ?? [];
+            var typVozidlel = await _context.GetTypy_VozidelAsync() ?? [];
             if (encryptedId == null)
+            {
+                ViewBag.Znacky = new SelectList(znacky, "IdZnacka", "");
+                ViewBag.TypyVozidel = new SelectList(typVozidlel, "IdTypVozidla", "");
                 return View(new Model());
+            }
+
             int id = GetDecryptedId(encryptedId);
             var model = await _context.GetModelByIdAsync(id);
             if (model != null)
+            {
+                ViewBag.Znacky = new SelectList(znacky, "IdZnacka", "", model.IdZnacka);
+                ViewBag.TypyVozidel = new SelectList(typVozidlel, "IdTypVozidla", "", model.IdTypVozidla);
                 return View(model);
+            }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -55,7 +63,7 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
             if (ActingUser == null || !ActingUser.HasMaintainerRights())
                 return RedirectToHome();
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(CreateEdit), model);
+                return View(nameof(CreateEdit), model);
 
             if (model.IdModel != 0 && await _context.GetModelByIdAsync(model.IdModel) == null)
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);

@@ -26,23 +26,11 @@ public class ImportExportController(TransportationContext context, IHttpContextA
             }
 
             var objekty = await _context.GetDBObjektyAsync();
-            var tabulky = objekty.Where(o => o.Typ is "TABLE" or "VIEW");
+            var tabulky = objekty.Where(o => o.Typ is "TABLE" or "VIEW") ?? [];
             ViewBag.Tabulky = new SelectList(tabulky);
 
-            if (typ != null && nazev != null)
-            {
-                if (typ == "csv")
-                {
-                    var csv = await _context.GetTabulkaDoCsvAsync(nazev, oddelovac);
-                    ViewBag.Preview = csv;
-                }
-                else
-                {
-                    var json = await _context.GetTabulkaDoJsonAsync(nazev);
-                    ViewBag.Preview = json;
-                }
-            }
-
+            if (!string.IsNullOrEmpty(typ) && !string.IsNullOrEmpty(nazev))
+                ViewBag.Preview = typ == "csv" ? await _context.GetTabulkaDoCsvAsync(nazev, oddelovac) : await _context.GetTabulkaDoJsonAsync(nazev);
             return View();
         }
         catch (Exception)

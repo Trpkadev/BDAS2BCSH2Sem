@@ -45,13 +45,13 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="IdGaraz" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdGaraz, ViewBag.Garaze as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdGaraz, ViewBag.Garaze as SelectList, "Vyberte garáž", new { @class = "form-control" })
                     <span asp-validation-for="IdGaraz" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label asp-for="IdModel" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.IdModel, ViewBag.Modely as SelectList, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IdModel, ViewBag.Modely as SelectList, "Vyberte model", new { @class = "form-control" })
                     <span asp-validation-for="IdModel" class="text-danger"></span>
                 </div>
 

@@ -56,7 +56,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), schema);
+                return View(nameof(CreateEdit), schema);
             }
 
             if (schema.IdSchema != 0 && await _context.GetSchemaByIdAsync(schema.IdSchema) == null || schema.UploadedFile == null)

@@ -26,13 +26,19 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Pasma = new SelectList(await _context.GetTarifni_PasmaAsync(), "IdPasmo", "");
+            var pasma = await _context.GetTarifni_PasmaAsync();
             if (encryptedId == null)
+            {
+                ViewBag.Pasma = new SelectList(pasma, "IdPasmo", "");
                 return View(new Zastavka());
+            }
             int id = GetDecryptedId(encryptedId);
             var zastavka = await _context.GetZastavkaByIdAsync(id);
             if (zastavka != null)
+            {
+                ViewBag.Pasma = new SelectList(pasma, "IdPasmo", "", zastavka.IdPasmo);
                 return View(zastavka);
+            }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return RedirectToAction(nameof(Index));
         }
@@ -58,7 +64,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), zastavka);
+                return View(nameof(CreateEdit), zastavka);
             }
 
             if (zastavka.IdZastavka != 0 && await _context.GetZastavkaByIdAsync(zastavka.IdZastavka) == null)

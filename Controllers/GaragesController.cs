@@ -57,7 +57,7 @@ public class GaragesController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), garaz);
+                return View(nameof(CreateEdit), garaz);
             }
 
             if (garaz.IdGaraz != 0 && await _context.GetGarazByIdAsync(garaz.IdGaraz) == null)

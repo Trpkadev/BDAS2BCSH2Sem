@@ -70,7 +70,7 @@
                     <label asp-for="JmenoNadrizeneho" class="control-label"></label>
                     @if (((Uzivatel?)(ViewData[Resource.ACTING_USER]))?.HasManagerRights() == true)
                     {
-                        @Html.DropDownListFor(model => model.IdNadrizeny, ViewBag.Pracovnici as SelectList, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.IdNadrizeny, ViewBag.Pracovnici as SelectList, "Žádný", new { @class = "form-control" })
                     }
                     else
                     {
@@ -83,7 +83,7 @@
                     <label asp-for="UzivatelskeJmeno" class="control-label"></label>
                     @if (((Uzivatel?)(ViewData[Resource.ACTING_USER]))?.HasManagerRights() == true)
                     {
-                        @Html.DropDownListFor(model => model.IdUzivatel, ViewBag.Uzivatele as SelectList, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.IdUzivatel, ViewBag.Uzivatele as SelectList, "Žádný", new { @class = "form-control" })
                     }
                     else
                     {

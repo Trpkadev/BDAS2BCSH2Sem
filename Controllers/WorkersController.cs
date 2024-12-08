@@ -45,6 +45,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
+
             var uzivatele = await _context.GetUzivateleAsync();
             var pracovnici = await _context.GetPracovniciAsync();
             if (encryptedId == null)
@@ -53,6 +54,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 ViewBag.Pracovnici = new SelectList(pracovnici, "IdPracovnik", "");
                 return View(new Pracovnik());
             }
+
             int id = GetDecryptedId(encryptedId);
             var pracovnik = await _context.GetPracovnikByUserIdAsync(id);
             if (pracovnik != null)
@@ -85,7 +87,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(Index));
+                return View(nameof(CreateEdit), pracovnik);
             }
 
             if (pracovnik.IdPracovnik != 0 && await _context.GetPracovnikByIdAsync(pracovnik.IdPracovnik) == null)

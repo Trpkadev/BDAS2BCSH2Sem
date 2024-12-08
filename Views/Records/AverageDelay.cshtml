@@ -10,7 +10,7 @@
         <div class="card-body">
             <form>
                 <label for="cislo">Linka</label>
-                @Html.DropDownList("Cislo", (SelectList)ViewBag.Linky, new { @class = "form-control mb-3" })
+                @Html.DropDownList("Cislo", (SelectList)ViewBag.Linky, "Vyberte linku", new { @class = "form-control mb-3" })
 
                 <label for="pocetDni">Počet dní zpětně</label>
                 <input type="number" id="pocetDni" name="pocetDni" class="form-control mb-3" value="7" required />

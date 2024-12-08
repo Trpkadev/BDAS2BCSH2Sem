@@ -58,7 +58,7 @@ public class TariffController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), tarifniPasmo);
+                return View(nameof(CreateEdit), tarifniPasmo);
             }
 
             if (tarifniPasmo.IdPasmo != 0 && await _context.GetTarifniPasmoByIdAsync(tarifniPasmo.IdPasmo) == null)

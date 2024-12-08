@@ -8,7 +8,7 @@
 <form asp-action="MakeOfExistingSubmit" method="post">
     <div class="form-group mb-3">
         <label for="id_spoj" class="control-label">Referenční spoj</label>
-        @Html.DropDownList("IdSpoj", ViewBag.Spoje as SelectList, new { @class = "form-control" })
+        @Html.DropDownList("IdSpoj", ViewBag.Spoje as SelectList, "Vyberte spoj", new { @class = "form-control" })
     </div>
 
     <div class="form-group mb-3">

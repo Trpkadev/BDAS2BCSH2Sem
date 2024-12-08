@@ -19,7 +19,7 @@
 
                 <div class="form-group mb-3">
                     <label for="nazev" class="control-label">Tabulka nebo pohled</label>
-                    @Html.DropDownList("nazev", ViewBag.Tabulky as SelectList, new { @class = "form-control" })
+                    @Html.DropDownList("nazev", ViewBag.Tabulky as SelectList, "Vyberte tabulku", new { @class = "form-control" })
                 </div>
 
                 <div class="form-group mb-3">

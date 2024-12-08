@@ -16,7 +16,7 @@ public class Vozidlo
 
     [JsonRequired]
     [Column("SPZ")]
-    public string SPZ { get; set; }
+    public string SPZ { get; set; } = string.Empty;
 
     [JsonRequired]
     [Column("ROK_VYROBY")]
@@ -49,11 +49,11 @@ public class Vozidlo
 
     [Column("NAZEV_GARAZE")]
     [DisplayName("Garáž")]
-    public string? NazevGaraze { get; set; }
+    public string? NazevGaraze { get; set; } = string.Empty;
 
     [Column("NAZEV_MODELU")]
     [DisplayName("Model")]
-    public string? NazevModelu { get; set; }
+    public string? NazevModelu { get; set; } = string.Empty;
 
     public override string ToString() => SPZ;
 }

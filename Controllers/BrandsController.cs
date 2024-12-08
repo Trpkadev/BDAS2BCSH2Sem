@@ -56,7 +56,7 @@ public class BrandsController(TransportationContext context, IHttpContextAccesso
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), znacka);
+                return View(nameof(CreateEdit), znacka);
             }
 
             if (znacka.IdZnacka != 0 && await _context.GetZnackaByIdAsync(znacka.IdZnacka) == null)

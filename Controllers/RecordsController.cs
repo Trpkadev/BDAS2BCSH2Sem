@@ -26,16 +26,23 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.JizdniRady = new SelectList(await _context.GetJizdniRadyAsync(), "IdJizniRad", "");
-            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync(), "IdVozidlo", "");
-
+            var jizdniRady = await _context.GetJizdniRadyAsync() ?? [];
+            var vozidla = await _context.GetVozidlaAsync() ?? [];
             if (encryptedId == null)
+            {
+                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizniRad", "");
+                ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "");
                 return View(new ZaznamTrasy());
+            }
 
             int id = GetDecryptedId(encryptedId);
             var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
             if (zaznamTrasy != null)
+            {
+                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizniRad", "", zaznamTrasy.IdJizniRad);
+                ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "", zaznamTrasy.IdVozidlo);
                 return View(zaznamTrasy);
+            }
 
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             return View(nameof(Index));
@@ -62,7 +69,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), zaznamTrasy);
+                return View(nameof(CreateEdit), zaznamTrasy);
             }
 
             if (zaznamTrasy.IdZaznam != 0 && await _context.GetZaznam_TrasyByIdAsync(zaznamTrasy.IdZaznam) == null)
@@ -190,8 +197,8 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             }
             var udrzby = await _context.GetUdrzbyAsync();
             var zaznamyTras = await _context.GetZaznamy_TrasyAsync() ?? [];
-            foreach (var zaznamTrasy in zaznamyTras)            
-                zaznamTrasy.UdrzbaInvalid = !udrzby.Select(item => item.IdVozidlo).Contains(zaznamTrasy.IdVozidlo);            
+            foreach (var zaznamTrasy in zaznamyTras)
+                zaznamTrasy.UdrzbaInvalid = !udrzby.Select(item => item.IdVozidlo).Contains(zaznamTrasy.IdVozidlo);
             return View(zaznamyTras);
         }
         catch (Exception)

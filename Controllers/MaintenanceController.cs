@@ -26,12 +26,15 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync(), "IdVozidlo", "");
+            var vozidla = await _context.GetVozidlaAsync() ?? [];
             ViewBag.Oprava = new Oprava();
             ViewBag.Cisteni = new Cisteni();
-
             if (encryptedId == null)
+            {
+                ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "");
                 return View(new Udrzba() { Datum = DateTime.Now });
+            }
+
             int id = GetDecryptedId(encryptedId);
             var udrzba = await _context.GetUdrzbaByIdAsync(id);
             if (udrzba != null)
@@ -46,6 +49,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                         ViewBag.Oprava = oprava;
                         break;
                 }
+                ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "", udrzba.IdVozidlo);
                 return View(udrzba);
             }
             SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
@@ -73,7 +77,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (!ModelState.IsValid)
             {
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                return RedirectToAction(nameof(CreateEdit), udrzba);
+                return View(nameof(CreateEdit), udrzba);
             }
 
             if (udrzba.IdUdrzba != 0 && await _context.GetUdrzbaByIdAsync(udrzba.IdUdrzba) == null)
@@ -87,7 +91,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                     if (UmytoVMycce == null || CistenoOzonem == null)
                     {
                         SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                        return RedirectToAction(nameof(CreateEdit), udrzba);
+                        return View(nameof(CreateEdit), udrzba);
                     }
                     var cisteni = new Cisteni
                     {
@@ -107,7 +111,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                     if (PopisUkonu == null || Cena == null)
                     {
                         SetErrorMessage(Resource.INVALID_REQUEST_DATA);
-                        return RedirectToAction(nameof(CreateEdit), udrzba);
+                        return View(nameof(CreateEdit), udrzba);
                     }
                     var oprava = new Oprava
                     {

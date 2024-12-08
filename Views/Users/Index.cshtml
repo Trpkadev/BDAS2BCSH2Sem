@@ -29,7 +29,7 @@
                     }
                     else
                     {
-                        <td>@Html.DropDownListFor(modelItem => uzivatel.IdRole, ViewBag.Role as SelectList, new { @class = "form-control", @onchange = $"submitRoleChange(this, '{HttpUtility.JavaScriptStringEncode(encryptedUserId)}')" })</td>
+                        <td>@Html.DropDownListFor(modelItem => uzivatel.IdRole, ViewBag.Role as SelectList, "Vyberte roli", new { @class = "form-control", @onchange = $"submitRoleChange(this, '{HttpUtility.JavaScriptStringEncode(encryptedUserId)}')" })</td>
                     }
 
                     <td class="d-inline-flex gap-3 p-2 w-100">
