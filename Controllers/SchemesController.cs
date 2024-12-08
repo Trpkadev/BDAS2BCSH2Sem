@@ -69,6 +69,7 @@ public class SchemesController(TransportationContext context, IHttpContextAccess
                 schema.NazevSouboru = schema.UploadedFile.FileName;
                 schema.TypSouboru = schema.UploadedFile.ContentType;
                 schema.VelikostSouboru = (int)memoryStream.Length;
+                schema.DatumZmeny = DateTime.Now;
                 schema.IdUzivatel = ActingUser.IdUzivatel;
                 await _context.DMLSchemataAsync(schema);
                 SetSuccessMessage();

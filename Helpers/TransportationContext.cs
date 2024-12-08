@@ -245,13 +245,19 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
 
     public async Task DMLSpojeAsync(Spoj spoj)
     {
-        string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
-        OracleParameter[] sqlParams = [ new("idSpoj", ConvertId(spoj.IdSpoj)),
-                                        new("idLinka", spoj.IdLinka),
-                                        new("jedeVeVsedniDen", ConvertBool(spoj.JedeVeVsedniDen)),
-                                        new("jedeVSobotu", ConvertBool(spoj.JedeVSobotu)),
-                                        new("jedeVNedeli", ConvertBool(spoj.JedeVNedeli)),
-                                        new("garantovaneNizkopodlazni", ConvertBool(spoj.GarantovaneNizkopodlazni))];
+
+        string sql =
+            $"{ConvertDMLMethodName()}(:idSpoj, :cislo, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
+        OracleParameter[] sqlParams =
+        [
+            new("idSpoj", ConvertId(spoj.IdSpoj)),
+                new("cislo", spoj.Cislo),
+                new("idLinka", spoj.IdLinka),
+                new("jedeVeVsedniDen", ConvertBool(spoj.JedeVeVsedniDen)),
+                new("jedeVSobotu", ConvertBool(spoj.JedeVSobotu)),
+                new("jedeVNedeli", ConvertBool(spoj.JedeVNedeli)),
+                new("garantovaneNizkopodlazni", ConvertBool(spoj.GarantovaneNizkopodlazni))
+        ];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
