@@ -9,7 +9,7 @@
     <table class="table text-nowrap w-auto m-auto">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.IdJizniRad)</th>
+                <th>@Html.DisplayNameFor(model => model.IdJizdniRad)</th>
                 <th>@Html.DisplayNameFor(model => model.NazevVozidla)</th>
                 <th>@Html.DisplayNameFor(model => model.CasPrijezdu)</th>
                 <th>@Html.DisplayNameFor(model => model.CasOdjezdu)</th>
@@ -25,7 +25,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-controller="Timetables" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdJizniRad)">@Html.DisplayNameFor(model => model.IdJizniRad)</a>
+                        <a asp-controller="Timetables" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdJizdniRad)">@Html.DisplayNameFor(model => model.IdJizdniRad)</a>
                     </td>
                     <td>
                         <a asp-controller="Vehicles" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdVozidlo)">@Html.DisplayFor(_ => item.NazevVozidla)</a>

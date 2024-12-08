@@ -55,5 +55,5 @@ public class Vozidlo
     [DisplayName("Model")]
     public string? NazevModelu { get; set; } = string.Empty;
 
-    public override string ToString() => SPZ;
+    public override string ToString() => $"{NazevModelu} {SPZ}";
 }

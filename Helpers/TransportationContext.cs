@@ -337,7 +337,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     {
         string sql = $"{ConvertDMLMethodName()}(:idZaznam, :idJizdniRad, :idVozidlo, :casPrijezdu, :casOdjezdu);";
         OracleParameter[] sqlParams = [ new("idZaznam", ConvertId(zaznamTrasy.IdZaznam)),
-                                        new("idJizdniRad", zaznamTrasy.IdJizniRad),
+                                        new("idJizdniRad", zaznamTrasy.IdJizdniRad),
                                         new("idVozidlo", zaznamTrasy.IdVozidlo),
                                         new("casPrijezdu", zaznamTrasy.CasPrijezdu),
                                         new("casOdjezdu", zaznamTrasy.CasOdjezdu)];

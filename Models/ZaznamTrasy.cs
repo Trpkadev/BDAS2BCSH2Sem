@@ -26,12 +26,13 @@ public class ZaznamTrasy
 
     [JsonRequired]
     [Column("ID_VOZIDLO")]
+    [DisplayName("Vozidlo")]
     public int IdVozidlo { get; set; }
 
     [JsonRequired]
     [Column("ID_JIZDNI_RAD")]
     [DisplayName("Jízdní řád")]
-    public int IdJizniRad { get; set; }
+    public int IdJizdniRad { get; set; }
 
     [Column("NAZEV_VOZIDLA")]
     [DisplayName("Vozidlo")]

@@ -32,7 +32,7 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             if (encryptedId == null)
             {
                 ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "");
-                return View(new Udrzba() { Datum = DateTime.Now });
+                return View(new Udrzba());
             }
 
             int id = GetDecryptedId(encryptedId);

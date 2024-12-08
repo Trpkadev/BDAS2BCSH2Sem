@@ -30,7 +30,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             var vozidla = await _context.GetVozidlaAsync() ?? [];
             if (encryptedId == null)
             {
-                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizniRad", "");
+                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizdniRad", "");
                 ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "");
                 return View(new ZaznamTrasy());
             }
@@ -39,7 +39,7 @@ public class RecordsController(TransportationContext context, IHttpContextAccess
             var zaznamTrasy = await _context.GetZaznam_TrasyByIdAsync(id);
             if (zaznamTrasy != null)
             {
-                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizniRad", "", zaznamTrasy.IdJizniRad);
+                ViewBag.JizdniRady = new SelectList(jizdniRady, "IdJizdniRad", "", zaznamTrasy.IdJizdniRad);
                 ViewBag.Vozidla = new SelectList(vozidla, "IdVozidlo", "", zaznamTrasy.IdVozidlo);
                 return View(zaznamTrasy);
             }

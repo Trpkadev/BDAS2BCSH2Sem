@@ -61,9 +61,16 @@
                         <td></td>
                     }
 
-                    <td>
-                        <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">@Html.DisplayFor(_ => item.UzivatelskeJmeno)</a>
-                    </td>
+                    @if (item.IdUzivatel != null)
+                    {
+                        <td>
+                            <a asp-controller="Users" asp-action="Detail" asp-route-encryptedId="@OurCryptography.Instance.EncryptId(item.IdUzivatel)">@Html.DisplayFor(_ => item.UzivatelskeJmeno)</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                     @await Html.PartialAsync("IndexActionButtons", item.IdPracovnik)
                 </tr>
             }

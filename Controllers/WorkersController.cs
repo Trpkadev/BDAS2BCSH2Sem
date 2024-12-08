@@ -56,7 +56,8 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
             }
 
             int id = GetDecryptedId(encryptedId);
-            var pracovnik = await _context.GetPracovnikByUserIdAsync(id);
+            var pracovnik = await _context.GetPracovnikByIdAsync(id) ?? await _context.GetPracovnikByUserIdAsync(id);
+
             if (pracovnik != null)
             {
                 ViewBag.Uzivatele = new SelectList(uzivatele, "IdUzivatel", "", pracovnik.IdUzivatel);
@@ -156,7 +157,7 @@ public class WorkersController(TransportationContext context, IHttpContextAccess
                 SetErrorMessage(Resource.DB_DATA_NOT_EXIST);
             else
             {
-                await _context.DeleteFromTableAsync("PRACOVNICI", [("ID_UZIVATEL", idPracovnik.ToString())]);
+                await _context.DeleteFromTableAsync("PRACOVNICI", [("ID_PRACOVNIK", idPracovnik.ToString())]);
                 SetSuccessMessage();
             }
             return RedirectToAction(nameof(Index));

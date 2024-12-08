@@ -44,16 +44,18 @@
 
                 <div id="typUdrzbyO" style="display:none;">
                     @{
-                        Oprava oprava = (Oprava)ViewBag.Cisteni;
+                        Oprava oprava = (Oprava)ViewBag.Oprava;
+                        var PopisUkonu = oprava.PopisUkonu;
+                        var Cena = oprava.Cena;
                         <div class="form-group mb-3">
-                            <label asp-for=@oprava.PopisUkonu class="control-label"></label>
-                            <input asp-for=@oprava.PopisUkonu class="form-control" />
-                            <span asp-validation-for=@oprava.PopisUkonu class="text-danger"></span>
+                            <label asp-for=@PopisUkonu class="control-label"></label>
+                            <input asp-for=@PopisUkonu class="form-control" />
+                            <span asp-validation-for=@PopisUkonu class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for=@oprava.Cena class="control-label"></label>
-                            <input asp-for=@oprava.Cena class="form-control" />
-                            <span asp-validation-for=@oprava.Cena class="text-danger"></span>
+                            <label asp-for=@Cena class="control-label"></label>
+                            <input asp-for=@Cena class="form-control" />
+                            <span asp-validation-for=@Cena class="text-danger"></span>
                         </div>
                     }
                 </div>
@@ -61,15 +63,17 @@
                 <div id="typUdrzbyC" style="display:none;">
                     @{
                         Cisteni cisteni = (Cisteni)ViewBag.Cisteni;
+                        var UmytoVMycce = cisteni.UmytoVMycce;
+                        var CistenoOzonem = cisteni.CistenoOzonem;
                         <div class="form-group mb-3">
-                            <label asp-for=@cisteni.UmytoVMycce class="control-label"></label>
-                            <input asp-for=@cisteni.UmytoVMycce class="form-check-input" type="checkbox" />
-                            <span asp-validation-for=@cisteni.UmytoVMycce class="text-danger"></span>
+                            <label asp-for=@UmytoVMycce class="control-label"></label>
+                            <input asp-for=@UmytoVMycce class="form-check-input" type="checkbox" />
+                            <span asp-validation-for=@UmytoVMycce class="text-danger"></span>
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for=@cisteni.CistenoOzonem class="control-label"></label>
-                            <input asp-for=@cisteni.CistenoOzonem class="form-check-input" type="checkbox" />
-                            <span asp-validation-for=@cisteni.CistenoOzonem class="text-danger"></span>
+                            <label asp-for=@CistenoOzonem class="control-label"></label>
+                            <input asp-for=@CistenoOzonem class="form-check-input" type="checkbox" />
+                            <span asp-validation-for=@CistenoOzonem class="text-danger"></span>
                         </div>
                     }
                 </div>
