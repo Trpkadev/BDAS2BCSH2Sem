@@ -68,12 +68,12 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         await DBPLSQLCallAsync(sql, sqlParams: sqlParams);
     }
 
-    public async Task PlanovaniJrAsync(int idSpoj, TimeOnly from, TimeOnly to, int interval)
+    public async Task PlanovaniJrAsync(int idSpoj, string from, string to, int interval)
     {
         const string sql = "PROCEDURY.PLANOVANI_JR(:p_id_spoj, POM_FCE.CAS_NA_DATE(:p_od), POM_FCE.CAS_NA_DATE(:p_do), :p_interval);";
         OracleParameter[] sqlParams = [ new("p_id_spoj", idSpoj),
-                                        new("p_od", from.ToString("t")),
-                                        new("p_do", to.ToString("t")),
+                                        new("p_od", from),
+                                        new("p_do", to),
                                         new("p_interval", interval)];
         await DBPLSQLCallAsync(sql, sqlParams: sqlParams);
     }
@@ -119,7 +119,7 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
                                     v_result NUMBER;
                                 BEGIN
                                     v_result := FUNKCE.PRUM_ZPOZDENI(:id_linka, :pocet_dni, :hodina);
-                                    :p_result := v_result_json;
+                                    :p_result := v_result;
                                 END;";
             OracleParameter[] sqlParams =
             [

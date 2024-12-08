@@ -1,6 +1,7 @@
 using BCSH2BDAS2.Helpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace BCSH2BDAS2;
 
@@ -17,6 +18,8 @@ public static class Program
 
         // Configure the HTTP request pipeline.
         ConfigureMiddleware(app);
+
+        app.UseRequestLocalization("en-UK");
 
         app.Run();
     }

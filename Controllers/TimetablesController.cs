@@ -224,16 +224,16 @@ public class TimetablesController(TransportationContext context, IHttpContextAcc
         }
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("MakeOfExistingSubmit")]
-    public async Task<IActionResult> MakeOfExistingSubmit(int idSpoj, TimeOnly od, TimeOnly _do, int interval)
+    public async Task<IActionResult> MakeOfExistingSubmit(int idSpoj, string casOd, string casDo, int interval)
     {
         try
         {
             if (ActingUser == null || !ActingUser.HasDispatchRights())
                 return RedirectToHome();
 
-            await _context.PlanovaniJrAsync(idSpoj, od, _do, interval);
+            await _context.PlanovaniJrAsync(idSpoj, casOd, casDo, interval);
 
             SetSuccessMessage("Úspěšně vytvořeno");
             return RedirectToAction(nameof(MakeOfExisting));

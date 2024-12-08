@@ -8,21 +8,28 @@
 <div class="justify-content-center m-auto" style="width:fit-content">
     <div class="card shadow-sm">
         <div class="card-body">
-            <form asp-action="ImportRecordsSubmit" method="post" enctype="multipart/form-data">
-                <div class="form-group mb-3">
-                    <label for="soubor" class="control-label">Soubor CSV</label>
-                    <input type="file" name="soubor" id="soubor" class="form-control" accept="text/csv" required />
-                </div>
+	        <form asp-action="ImportRecordsSubmit" method="post" enctype="multipart/form-data">
+		        <div class="form-group mb-3">
+			        <label for="soubor" class="control-label">Soubor CSV</label>
+			        <input type="file" name="soubor" id="soubor" class="form-control" accept="text/csv" required />
+		        </div>
 
-                <div class="form-group mb-3">
-                    <label for="oddelovac" class="control-label">Oddělovač hodnot</label>
-                    <input type="text" name="oddelovac" id="oddelovac" class="form-control" value=";" />
-                </div>
+		        <div class="form-group mb-3">
+			        <label for="oddelovac" class="control-label">Oddělovač hodnot</label>
+			        <input type="text" name="oddelovac" id="oddelovac" class="form-control" value=";" />
+		        </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Importovat" class="btn btn-primary" />
-                </div>
-            </form>
+		        <div class="form-group">
+			        <input type="submit" value="Importovat" class="btn btn-primary" />
+		        </div>
+	        </form>
+			<br/>
+	        <p>Soubor CSV nahrávejte v následujícím formátu (bez hlavičky):</p>
+	        <pre>
+cas_prijezdu;cas_odjezdu;id_vozidlo;id_jizdni_rad
+2024-12-01 12:07:00;2024-01-01 12:07:10;2;168
+2024-12-01 12:08:00;2024-01-01 12:08:10;2;169
+2024-12-01 12:09:00;2024-01-01 12:09:10;2;170</pre>
         </div>
     </div>
 </div>
