@@ -27,8 +27,8 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
             }
 
             ViewBag.Vozidla = new SelectList(await _context.GetVozidlaAsync(), "IdVozidlo", "");
-            ViewData["o"] = new Oprava();
-            ViewData["c"] = new Cisteni();
+            ViewBag.Oprava = new Oprava();
+            ViewBag.Cisteni = new Cisteni();
 
             if (encryptedId == null)
                 return View(new Udrzba() { Datum = DateTime.Now });
@@ -39,11 +39,11 @@ public class MaintenanceController(TransportationContext context, IHttpContextAc
                 switch (udrzba)
                 {
                     case Cisteni cisteni:
-                        ViewData["c"] = cisteni;
+                        ViewBag.Cisteni = cisteni;
                         break;
 
                     case Oprava oprava:
-                        ViewData["o"] = oprava;
+                        ViewBag.Oprava = oprava;
                         break;
                 }
                 return View(udrzba);

@@ -34,7 +34,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
                 SetErrorMessage(Resource.INVALID_REQUEST_DATA);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["zastavky"] = await _context.GetZastavkyAsync() ?? [];
+            ViewBag.Zastavky = await _context.GetZastavkyAsync() ?? [];
             return View();
         }
         catch (Exception)
@@ -64,7 +64,7 @@ public class HomeController(TransportationContext context, IHttpContextAccessor 
             }
 
             var a = (await _context.VyhledaniSpojeAsync(idZastavkaFrom, idZastavkaTo, DateTime.Parse(time, CultureInfo.CurrentCulture)))?.AsEnumerable().Reverse();
-            ViewData["zastavky"] = await _context.GetZastavkyAsync() ?? [];
+            ViewBag.Zastavky = await _context.GetZastavkyAsync() ?? [];
             return View(model: a);
         }
         catch (Exception)

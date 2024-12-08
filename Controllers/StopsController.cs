@@ -26,7 +26,7 @@ public class StopsController(TransportationContext context, IHttpContextAccessor
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Pasma"] = new SelectList(await _context.GetTarifni_PasmaAsync(), "IdPasmo", "");
+            ViewBag.Pasma = new SelectList(await _context.GetTarifni_PasmaAsync(), "IdPasmo", "");
             if (encryptedId == null)
                 return View(new Zastavka());
             int id = GetDecryptedId(encryptedId);

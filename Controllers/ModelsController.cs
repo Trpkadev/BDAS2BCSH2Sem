@@ -26,8 +26,8 @@ public class ModelsController(TransportationContext context, IHttpContextAccesso
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Znacky"] = new SelectList(await _context.GetZnackyAsync(), "IdZnacka", "");
-            ViewData["TypyVozidel"] = new SelectList(await _context.GetTypy_VozidelAsync(), "IdTypVozidla", "");
+            ViewBag.Znacky = new SelectList(await _context.GetZnackyAsync(), "IdZnacka", "");
+            ViewBag.TypyVozidel = new SelectList(await _context.GetTypy_VozidelAsync(), "IdTypVozidla", "");
 
             if (encryptedId == null)
                 return View(new Model());
