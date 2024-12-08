@@ -198,10 +198,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
     {
         string sql = $"{ConvertDMLMethodName()}(:idModel, :nazev, :jeNizkopodlazni, :idZnacka, :idTypVozidla);";
         OracleParameter[] sqlParams = [ new("idModel", ConvertId(model.IdModel)),
-                                        new("nazev", model.Nazev),
-                                        new("idTypVozidla", model.IdTypVozidla),
+                                        new("nazev",model.Nazev),
+                                        new("jeNizkopodlazni", ConvertBool(model.JeNizkopodlazni)),
                                         new("idZnacka", model.IdZnacka),
-                                        new("jeNizkopodlazni", ConvertBool(model.JeNizkopodlazni))];
+                                        new("idTypVozidla", model.IdTypVozidla)];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
@@ -248,10 +248,10 @@ public class TransportationContext(DbContextOptions<TransportationContext> optio
         string sql = $"{ConvertDMLMethodName()}(:idSpoj, :idLinka, :jedeVeVsedniDen, :jedeVSobotu, :jedeVNedeli, :garantovaneNizkopodlazni);";
         OracleParameter[] sqlParams = [ new("idSpoj", ConvertId(spoj.IdSpoj)),
                                         new("idLinka", spoj.IdLinka),
-                                        new("garantovaneNizkopodlazni", ConvertBool(spoj.GarantovaneNizkopodlazni)),
                                         new("jedeVeVsedniDen", ConvertBool(spoj.JedeVeVsedniDen)),
                                         new("jedeVSobotu", ConvertBool(spoj.JedeVSobotu)),
-                                        new("jedeVNedeli", ConvertBool(spoj.JedeVNedeli))];
+                                        new("jedeVNedeli", ConvertBool(spoj.JedeVNedeli)),
+                                        new("garantovaneNizkopodlazni", ConvertBool(spoj.GarantovaneNizkopodlazni))];
         await DMLPackageCallAsync(sql, sqlParams);
     }
 
